@@ -127,10 +127,35 @@
 
         </div>
 
-        <!-- SONUÇ EKRANI (Radar Grafiği) -->
-        <div id="sonuc-ekrani" class="soru-kart hidden">
-            <h2>Sonuçlar</h2>
-            <canvas id="radar-grafigi"></canvas>
+        <!-- 3. SORU (Dinleme + Bellek) -->
+        <div id="soru-3" class="soru-kart hidden">
+            <div id="soru3-giris">
+                <p class="soru3-yonerge">Şimdi bir ses kaydını dinleyeceksiniz.</p>
+                <button type="button" class="btn btn-primary" id="soru3-basla">Dinlemeye Başla</button>
+            </div>
+
+            <div id="soru3-dinleme" class="hidden">
+                <p class="soru3-yonerge">Lütfen ses kaydını dikkatlice dinleyin.</p>
+                <audio id="soru3-ses" src="audio/soru3.mp3" preload="auto"></audio>
+            </div>
+
+            <div id="soru3-sorular" class="hidden">
+                <p class="soru3-yonerge">
+                    Oturmak istediği masanın üstünde bulunan nesneleri yazınız.
+                </p>
+                <p class="soru3-uyari">Aklınıza geldikçe kutu ekleyebilirsiniz.</p>
+
+                <div id="soru3-kutular" class="soru3-kutular">
+                    <div class="soru3-satir">
+                        <input type="text" class="soru3-kutu" placeholder="Nesne 1" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="soru3-aksiyonlar">
+                    <button type="button" class="btn btn-outline-primary" id="soru3-ekle">+ Kutu Ekle</button>
+                    <button type="button" class="btn btn-success" id="soru3-tamam">Tamam (Tıkla)</button>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -144,5 +169,6 @@
     <!-- Soru JS dosyaları -->
     <script src="js/soru1_siralama.js"></script>
     <script src="js/soru2_test.js"></script>
+    <script src="js/soru3.js"></script>
 </body>
 </html>

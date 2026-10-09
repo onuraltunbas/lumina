@@ -228,3 +228,44 @@ body {
     font-size: 1rem;
 }
 
+.soru3-yonerge {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.soru3-uyari {
+    color: #475569;
+    margin-bottom: 1.25rem;
+}
+
+.soru3-kutular {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.soru3-satir {
+    width: 100%;
+}
+
+.soru3-kutu {
+    width: 100%;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.soru3-kutu:focus {
+    border-color: var(--renk-ana);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+.soru3-aksiyonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
