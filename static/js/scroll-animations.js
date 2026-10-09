@@ -85,9 +85,6 @@
       { sel: '.doodle-wave', y: -60, rot: 15 },
       { sel: '.doodle-heart', y: 30, rot: -20 },
       { sel: '.doodle-arrow', y: -40, rot: 25 },
-      { sel: '.doodle-scribble', y: -55, rot: -15 },
-      { sel: '.doodle-shine-pink', y: 45, rot: 30 },
-      { sel: '.doodle-clink', y: -35, rot: -25 },
       { sel: '.doodle-cloud', y: 50, rot: 10 }
     ];
 
@@ -132,46 +129,6 @@
         },
         rotation: 360,
         ease: 'none'
-      });
-    }
-
-    const blueStar = document.querySelector('.star-badge-blue');
-    if (blueStar) {
-      gsap.set(blueStar, { rotation: 0, transformOrigin: 'center center' });
-      gsap.to(blueStar, {
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.8
-        },
-        rotation: 360,
-        ease: 'none'
-      });
-    }
-
-    // =========================================================================
-    // 3. (ÖĞE 4): BAŞARI TAKTİKLERİ KARTLARI GİRİŞ EFEKTİ (SLIDE & POP)
-    // =========================================================================
-    const tacticItems = document.querySelectorAll('.portfolio-grid .w-dyn-item');
-    if (tacticItems.length > 0) {
-      tacticItems.forEach((item, idx) => {
-        const fromLeft = idx % 2 === 0;
-        gsap.from(item, {
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          },
-          x: fromLeft ? -45 : 45,
-          y: 30,
-          opacity: 0,
-          rotation: fromLeft ? -2.5 : 2.5,
-          scale: 0.94,
-          duration: 0.75,
-          delay: (idx % 2) * 0.1,
-          ease: 'back.out(1.4)'
-        });
       });
     }
 

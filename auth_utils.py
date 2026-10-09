@@ -4,7 +4,6 @@ Lumina Studio - Kimlik Doğrulama & Oturum Yardımcıları
 PBKDF2-HMAC-SHA256 ile güvenli parola özetleme, kriptografik oturum token üretimi ve doğrulama.
 """
 
-import os
 import hashlib
 import hmac
 import secrets

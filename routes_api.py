@@ -6,7 +6,7 @@ Lumina Studio - API Route'ları
 
 import re
 import datetime
-from typing import Optional, List
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session

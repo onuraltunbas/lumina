@@ -127,6 +127,10 @@
       border-color: #1D1D1D;
       background: #FFFDF5;
     }
+    .auth-input::placeholder {
+      color: #9CA3AF;
+      font-size: 15px;
+    }
     .auth-checkbox-row {
       display: flex;
       align-items: center;
@@ -242,23 +246,11 @@
     <!-- Navbar / Üst Kısım -->
     <header class="navbar border-bottom">
       <div class="navbar-space"></div>
-      <div class="navbar-inner w-nav" role="banner">
-        <div class="container">
-          <div class="navbar-wrapper">
-            <nav class="nav-menu-wrapper w-nav-menu" role="navigation">
-              <div class="nav-menu-grid">
-                <a class="w-nav-brand" href="/">
-                  <img alt="Lumina" class="logo" loading="lazy" src="/static/images/644290cf40e714e0668a1a45_logo.svg"/>
-                </a>
-                <ul class="nav-menu w-list-unstyled" role="list">
-                  <li><a class="nav-link" href="/#home">Ana Sayfa</a></li>
-                  <li><a class="nav-link" href="/#services">Öğrenme Modelleri</a></li>
-                  <li><a class="nav-link" href="/#about">Farkındalık</a></li>
-                  <li><a class="nav-link" href="/test">Nasıl Öğreniyorum?</a></li>
-                </ul>
-              </div>
-            </nav>
-          </div>
+      <div class="container">
+        <div style="display: flex; align-items: center;">
+          <a class="w-nav-brand" href="/" aria-label="Ana Sayfa" style="display: inline-flex; align-items: center;">
+            <img alt="Lumina" class="logo" loading="lazy" src="/static/images/644290cf40e714e0668a1a45_logo.svg"/>
+          </a>
         </div>
       </div>
       <div class="navbar-space"></div>
@@ -272,7 +264,7 @@
 
       <div class="auth-card">
         <div class="auth-header-doodle">
-          <span>🧠</span> Lumina Kimlik
+          Lumina Kimlik
         </div>
 
         <div style="text-align: center; margin-bottom: 24px;">
@@ -302,17 +294,17 @@
         <form id="form-register" autocomplete="on">
           <div class="auth-form-group">
             <label class="auth-label" for="reg-username">👤 Kullanıcı Adı</label>
-            <input class="auth-input" id="reg-username" name="username" type="text" placeholder="Örn: onur_ogrenci" required minlength="3" maxlength="30" autocomplete="username"/>
+            <input class="auth-input" id="reg-username" name="username" type="text" placeholder="Kullanıcı adınızı belirleyin" required minlength="3" maxlength="30" autocomplete="username"/>
           </div>
 
           <div class="auth-form-group">
             <label class="auth-label" for="reg-password">🔒 Şifre (En az 4 karakter)</label>
-            <input class="auth-input" id="reg-password" name="password" type="password" placeholder="••••••••" required minlength="4" maxlength="128" autocomplete="new-password"/>
+            <input class="auth-input" id="reg-password" name="password" type="password" placeholder="En az 4 karakterli şifreniz" required minlength="4" maxlength="128" autocomplete="new-password"/>
           </div>
 
           <div class="auth-form-group">
             <label class="auth-label" for="reg-password-confirm">🔒 Şifre Tekrar</label>
-            <input class="auth-input" id="reg-password-confirm" name="password_confirm" type="password" placeholder="••••••••" required minlength="4" maxlength="128" autocomplete="new-password"/>
+            <input class="auth-input" id="reg-password-confirm" name="password_confirm" type="password" placeholder="Şifrenizi tekrar girin" required minlength="4" maxlength="128" autocomplete="new-password"/>
           </div>
 
           <button type="submit" class="auth-submit-btn button w-inline-block">
