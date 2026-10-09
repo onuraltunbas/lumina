@@ -30,6 +30,15 @@ def index_page():
 
 
 # =====================================================================
+# ÖĞRENME STİLİ TESTİ
+# =====================================================================
+@router.api_route("/test", methods=["GET", "HEAD"], response_class=HTMLResponse)
+def test_page():
+    content = get_template("test.html")
+    return HTMLResponse(content=content)
+
+
+# =====================================================================
 # PORTFÖY PROJE DETAY SAYFALARI
 # =====================================================================
 PROJECT_MAP = {

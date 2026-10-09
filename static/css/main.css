@@ -4169,3 +4169,176 @@ figcaption {
     margin-left: auto !important;
   }
 }
+
+/* =====================================================================
+   CARTOON / COMIC STYLE ENHANCEMENTS
+   ===================================================================== */
+:root {
+  --comic-border: 2.5px solid #1D1D1D;
+  --comic-shadow: 4px 4px 0px #1D1D1D;
+  --comic-shadow-lg: 6px 6px 0px #1D1D1D;
+  --comic-shadow-hover: 7px 7px 0px #1D1D1D;
+}
+
+/* Comic Badges */
+.badge {
+  border: var(--comic-border) !important;
+  box-shadow: 3px 3px 0px #1D1D1D !important;
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  letter-spacing: 0.5px;
+  font-size: 15px !important;
+}
+
+/* Comic Buttons */
+.button {
+  transition: transform 0.15s ease !important;
+}
+
+.button-front {
+  border: var(--comic-border) !important;
+  box-shadow: var(--comic-shadow) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.button:hover .button-front {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: var(--comic-shadow-hover) !important;
+}
+
+.button:active .button-front {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0px #1D1D1D !important;
+}
+
+.button-edge {
+  border: var(--comic-border) !important;
+}
+
+/* Comic Cards */
+.card {
+  border: var(--comic-border) !important;
+  box-shadow: var(--comic-shadow) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  border-radius: 14px !important;
+}
+
+.card:hover {
+  transform: translate(-3px, -3px) !important;
+  box-shadow: var(--comic-shadow-hover) !important;
+}
+
+/* Comic Image Frames */
+.image-frame,
+.hero-image,
+.about-image {
+  border: var(--comic-border) !important;
+  box-shadow: var(--comic-shadow-lg) !important;
+  border-radius: 14px !important;
+}
+
+/* Contact Card */
+.contact-card {
+  border: var(--comic-border) !important;
+  box-shadow: 8px 8px 0px #1D1D1D !important;
+  border-radius: 16px !important;
+}
+
+/* Form Inputs */
+.text-field, 
+.textarea {
+  border: var(--comic-border) !important;
+  box-shadow: 3px 3px 0px rgba(29, 29, 29, 0.15) !important;
+  border-radius: 10px !important;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+.text-field:focus, 
+.textarea:focus {
+  box-shadow: 4px 4px 0px #1D1D1D !important;
+  outline: none !important;
+}
+
+.star-badge {
+  border: var(--comic-border) !important;
+  box-shadow: 3px 3px 0px #1D1D1D !important;
+}
+
+/* =====================================================================
+   COMIC COMPARISON MODAL
+   ===================================================================== */
+.comic-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(29, 29, 29, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.comic-modal-window {
+  background: #ffffff;
+  border: 3px solid #1D1D1D;
+  box-shadow: 8px 8px 0px #1D1D1D;
+  border-radius: 18px;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 35px;
+  position: relative;
+  box-sizing: border-box;
+}
+.comic-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.comic-modal-close {
+  background: #FF8585;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  color: #1D1D1D;
+  font-size: 18px;
+  font-weight: 900;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.comic-modal-close:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #1D1D1D;
+}
+.comic-diff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+.comic-diff-card {
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 4px 4px 0px #1D1D1D;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+}
+.comic-diff-card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+.comic-diff-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}

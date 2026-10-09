@@ -127,15 +127,56 @@
     }
   }
 
+  // Differences Modal
+  function initDiffModal() {
+    const openBtn = document.getElementById('btn-open-diff') || document.querySelector('.btn-diff-modal');
+    const modal = document.getElementById('diff-modal');
+    const closeBtn = document.getElementById('close-diff-modal');
+
+    if (!modal) return;
+
+    if (openBtn) {
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+    }
+
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.style.display === 'flex') {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initContactForm();
       initSmoothScroll();
+      initDiffModal();
       initEngineRefresh();
     });
   } else {
     initContactForm();
     initSmoothScroll();
+    initDiffModal();
     initEngineRefresh();
   }
 })();
