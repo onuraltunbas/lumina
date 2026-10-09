@@ -1,0 +1,15 @@
+[Unit]
+Description=Lumina Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/lumina
+ExecStart=/usr/bin/python3 -m uvicorn server:app --host 127.0.0.1 --port 8002
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
