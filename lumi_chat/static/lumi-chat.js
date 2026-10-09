@@ -545,13 +545,14 @@
       var sel = [
         // Sitedeki tüm çizgiler ve ayırıcılar
         'hr', '[class*="line"]', '[class*="divider"]', '[class*="separator"]', '[class*="border"]',
+        '.border-top', '.border-bottom', '[style*="border"]',
         // Progress barlar ve göstergeler
         '[class*="progress"]', '.progress-bar', '[class*="bar"]',
         // Kartlar, kutular ve paneller
         '.card', '[class*="card"]', '.box', '[class*="box"]', '.panel', '[class*="panel"]',
         '.widget', '[class*="widget"]', '.container', '[class*="wrapper"]', 'fieldset',
         // Dashboard özel bileşenleri
-        '.dashboard-hero-card', '.dashboard-score-card', '.dashboard-waiting-box', '.dashboard-stat-tag',
+        '.dashboard-hero-card', '.dashboard-score-card', '.dashboard-waiting-box', '.dashboard-stat-tag', '.badge',
         // Tablolar ve veri listeleri
         'table', 'thead', 'tr', 'th', 'ul', 'ol',
         // Menüler, başlıklar ve barlar
@@ -577,8 +578,8 @@
         if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
 
         var r = el.getBoundingClientRect();
-        // Ekranda görünür olmalı: genişlik >= 24px, yükseklik >= 1px (hr/çizgileri kapsar), ekranda olmalı
-        if (r.width >= 24 && r.height >= 1 && r.bottom > 15 && r.top < vH - 35) {
+        // Ekranda görünür olmalı: genişlik >= 20px, yükseklik >= 1px (hr/çizgileri kapsar), ekranda olmalı
+        if (r.width >= 20 && r.height >= 1 && r.bottom > 15 && r.top < vH - 35) {
           platforms.push({
             el: el,
             top: r.top,
@@ -593,8 +594,8 @@
       return platforms;
     }
 
-    // Ayağın altındaki en yakın zemini (platform veya ekran altı) hesaplar
-    function findFloorUnder(footX, currentFootY) {
+    // Ayağın altındaki en yakın zemini (platform veya ekran altı) hesaplar (Lumi posY koordinat uzayı)
+    function findFloorUnder(footX, currentPosY) {
       var sz = getCharSize();
       var defaultFloor = Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
       var platforms = getCandidatePlatforms();
@@ -604,13 +605,13 @@
 
       for (var i = 0; i < platforms.length; i++) {
         var p = platforms[i];
-        // Ayak platformun yatay sınırları içinde mi? (14px tolerans ile)
-        if (footX >= p.left - 14 && footX <= p.right + 14) {
+        // Ayak platformun yatay sınırları içinde mi? (25px tolerans ile)
+        if (footX >= p.left - 25 && footX <= p.right + 25) {
           var surfaceY = p.top - sz.h + 8; // Çizgi veya kartın tam üstüne oturt
-          // Platform ayağın altında veya hemen hizasında olmalı (-24px snapping toleransı)
-          if (surfaceY >= currentFootY - 24 && surfaceY <= defaultFloor) {
-            var dist = surfaceY - currentFootY;
-            if (dist >= -24 && dist < minDistance) {
+          // Platform ayağın altında veya hemen hizasında olmalı (-40px snapping toleransı)
+          if (surfaceY >= currentPosY - 40 && surfaceY <= defaultFloor) {
+            var dist = surfaceY - currentPosY;
+            if (dist >= -40 && dist < minDistance) {
               minDistance = dist;
               bestFloor = surfaceY;
               bestPlatform = p;
@@ -954,7 +955,7 @@
         if (posX < 8) { posX = 8; velocityX *= -0.5; }
         if (posX > maxW) { posX = maxW; velocityX *= -0.5; }
 
-        var floorInfo = findFloorUnder(footX, posY + sz.h - 12);
+        var floorInfo = findFloorUnder(footX, posY);
 
         if (posY >= floorInfo.floorY) {
           posY = floorInfo.floorY;
@@ -982,7 +983,7 @@
         if (posX < 10) { posX = 10; velocityX *= -1; setFacing(1); }
         if (posX > maxW) { posX = maxW; velocityX *= -1; setFacing(-1); }
 
-        var floorInfo = findFloorUnder(footX, posY + sz.h - 12);
+        var floorInfo = findFloorUnder(footX, posY);
 
         if (posY >= floorInfo.floorY) {
           posY = floorInfo.floorY;
@@ -1259,14 +1260,48 @@
           setLumiMood('merakli');
           showBubble('Duvara tutundum! 🧗', 2000);
         } else {
-          // Zemin veya kart/çizgi platformu üstüne bırakıldı
-          var floorInfo = findFloorUnder(footX, posY + sz.h - 12);
-          if (posY < floorInfo.floorY - 6) {
-            behavior = 'falling';
-            shimeji.classList.add('is-falling');
-            velocityY = 0;
-            velocityX = 0;
-          } else {
+          // Bırakılan noktanın altındaki elemanı doğrudan sorgula (Direct element probe)
+          var probeY = posY + sz.h;
+          var probedPlatform = null;
+          try {
+            shimeji.style.display = 'none';
+            var underEls = document.elementsFromPoint(footX, probeY);
+            shimeji.style.display = '';
+            if (underEls) {
+              for (var u = 0; u < underEls.length; u++) {
+                var uEl = underEls[u];
+                if (root.contains(uEl) || uEl === document.body || uEl === document.documentElement) continue;
+                var uR = uEl.getBoundingClientRect();
+                if (uR.width >= 20 && uR.bottom > 15) {
+                  probedPlatform = {
+                    el: uEl,
+                    top: uR.top,
+                    bottom: uR.bottom,
+                    left: uR.left,
+                    right: uR.right,
+                    width: uR.width,
+                    height: uR.height
+                  };
+                  break;
+                }
+              }
+            }
+          } catch (_) {
+            shimeji.style.display = '';
+          }
+
+          var floorInfo = findFloorUnder(footX, posY);
+
+          // Eğer doğrudan bir elemanın/çizginin üzerine bırakıldıysa onu önceliklendir
+          if (probedPlatform) {
+            var probedFloorY = probedPlatform.top - sz.h + 8;
+            if (Math.abs(posY - probedFloorY) <= 50 || (posY < probedFloorY && probedFloorY < floorInfo.floorY)) {
+              floorInfo = { floorY: probedFloorY, platform: probedPlatform };
+            }
+          }
+
+          // Çizgiye veya platforma yakın bırakıldıysa doğrudan çizginin üstüne oturt
+          if (Math.abs(posY - floorInfo.floorY) <= 40) {
             posY = floorInfo.floorY;
             currentPlatform = floorInfo.platform;
             behavior = 'idle';
@@ -1275,6 +1310,19 @@
             setTimeout(function () { shimeji.classList.remove('is-landing'); }, 420);
             setLumiMood('normal');
             scheduleBehavior(2500);
+          } else if (posY < floorInfo.floorY - 40) {
+            // Yüksekten bırakıldıysa çizgiye doğru süzülsün
+            behavior = 'falling';
+            shimeji.classList.add('is-falling');
+            velocityY = 0;
+            velocityX = 0;
+          } else {
+            // Zemin hizası
+            posY = floorInfo.floorY;
+            currentPlatform = floorInfo.platform;
+            behavior = 'idle';
+            updateTransform();
+            scheduleBehavior(2000);
           }
         }
       }
