@@ -14,7 +14,7 @@ env/
 !.env.example
 
 # Veritabanı Dosyaları (SQLite)
-*.db
+# *.db
 *.sqlite
 *.sqlite3
 *.db-journal
