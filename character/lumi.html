@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumi - İnteraktif Dijital Asistan & Karakter Stüdyosu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+        :root {
+            /* Renk Paleti */
+            --bg-night: #060b19;
+            --bg-night-light: #121f3d;
+            --lumi-cream: #FFF4EA;
+            --lumi-ivory: #FFFAF5;
+            --lumi-sky: #A9D3FF;
+            --lumi-blue-tip: #82B9F5;
+            --lumi-navy: #18264A;
+            --lumi-iris: #405B9B;
+            --lumi-pink: #FFA9BD;
+            --lumi-gold: #FFE49A;
+            --lumi-mouth: #663C4A;
+            --lumi-purple: #7934ED;
+
+            /* Animasyon Ayarları */
+            --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --trans-speed: 0.5s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 30%, var(--bg-night-light) 0%, var(--bg-night) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-family: 'Nunito', sans-serif;
+            overflow-x: hidden;
+            color: white;
+            padding: 20px;
+        }
+
+        /* Arka Plan Yıldızları */
+        .stars-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        #app-container {
+            position: relative;
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            gap: 16px;
+        }
+
+        header.title-bar {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        header.title-bar h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFE49A 0%, #A9D3FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        header.title-bar p {
+            font-size: 0.95rem;
+            color: #94A3B8;
+        }
+
+        /* Konuşma Balonu */
+        .speech-bubble-container {
+            width: 90%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 90px;
+            position: relative;
+        }
+
+        .speech-bubble {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+            border-radius: 20px;
+            padding: 14px 22px;
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #FFFAF5;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .speech-tail {
+            width: 16px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.12);
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-right: 1.5px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            transform: translateY(-8px) rotate(45deg);
+            z-index: -1;
+        }
+
+        @keyframes bubbleUpdate {
+            0% { transform: scale(0.96); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Lumi Sahnesi */
+        #lumi-stage {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        svg#lumi {
+            width: 100%;
+            height: auto;
+            max-height: 48vh;
+            filter: drop-shadow(0 25px 25px rgba(0,0,0,0.55));
+            overflow: visible;
+        }
+
+        /* Transform Pivot Merkezleri */
+        #lumi-body { transform-origin: 400px 600px; }
+        #lumi-head-group { transform-origin: 400px 480px; }
+        #lumi-arm-l { transform-origin: 290px 520px; }
+        #lumi-arm-r { transform-origin: 510px 520px; }
+        #lumi-tuft-l { transform-origin: 200px 350px; }
+        #lumi-tuft-r { transform-origin: 600px 350px; }
+        #lumi-eyes { transform-origin: 400px 360px; }
+        #lumi-antenna { transform-origin: 400px 150px; }
+
+        .anim-part {
+            transition: transform var(--trans-speed) var(--bounce),
+                        opacity 0.22s ease,
+                        fill 0.4s ease,
+                        stroke 0.4s ease;
+        }
+
+        .smooth-part {
+            transition: all 0.7s ease-in-out;
+        }
+
+        /* Yüz Elemanları Transform Düzeltmesi (SVG fill-box merkezi) */
+        .cheek, .brow, .mouth-shape, .eye-happy, .eye-closed,
+        .eyes-blink, .orb-wrap, #orb-core, .lid, .pupils-group, .emotion-effect {
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .brow { transform-origin: 50% 70%; }
+
+        /* Temel Animasyonlar */
+        @keyframes idleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-14px); }
+        }
+
+        @keyframes blink {
+            0%, 93%, 100% { transform: scaleY(1); }
+            96% { transform: scaleY(0.06); }
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); filter: url(#glow-orb); }
+            50% { transform: scale(1.12); filter: url(#glow-orb-bright); }
+        }
+
+        @keyframes orbNeuralPulse {
+            0%, 100% { transform: scale(1); filter: url(#glow-orb-purple); }
+            50% { transform: scale(1.25); filter: url(#glow-orb-bright); }
+        }
+
+        @keyframes sleepPulse {
+            0%, 100% { transform: scale(0.92); opacity: 0.6; filter: url(#glow-orb-dim); }
+            50% { transform: scale(1.02); opacity: 0.9; filter: url(#glow-orb); }
+        }
+
+        @keyframes excitedJump {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            40% { transform: translateY(-35px) scaleY(1.05); }
+            80% { transform: translateY(4px) scaleY(0.96); }
+        }
+
+        @keyframes zzzFloat {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-16px); opacity: 1; }
+        }
+
+        /* Varsayılan Animasyonlar */
+        #lumi-master { animation: idleFloat 4s ease-in-out infinite; }
+        .eyes-blink { animation: blink 5.5s infinite; }
+        #orb-core { animation: orbPulse 3.5s ease-in-out infinite; }
+
+        /* Ortak Gizli Parçalar */
+        .mouth-shape, .emotion-effect, .eye-closed, .eye-happy { opacity: 0; }
+        .brow { opacity: 0.12; }
+        .lid { transform: translateY(-30px); } /* Göz kapağı gizli */
+
+        /* =========================================================
+           12 DUYGU DURUMU (CSS STATE MAKİNESİ)
+           ========================================================= */
+
+        /* 1. NORMAL (Varsayılan Dostça) */
+        [data-state="normal"] #mouth-smile { opacity: 1; }
+        [data-state="normal"] .cheek { opacity: 0.8; }
+
+        /* 2. DİNLİYOR (Kullanıcı yazarken) */
+        [data-state="dinliyor"] #lumi-head-group { transform: rotate(7deg) translateY(-4px); }
+        [data-state="dinliyor"] #mouth-smile { opacity: 1; transform: scale(1.05); }
+        [data-state="dinliyor"] .pupils-group { transform: translate(3px, 3px); }
+        [data-state="dinliyor"] #brow-r { opacity: 0.5; transform: translateY(-6px); }
+        [data-state="dinliyor"] #lumi-arm-l { transform: rotate(12deg) translateY(-6px); }
+        [data-state="dinliyor"] #orb-core { filter: url(#glow-orb-bright); transform: scale(1.1); }
+
+        /* 3. DÜŞÜNÜYOR / AI CEVAP ÜRETİYOR (Nöral Sinaps Halesi) */
+        [data-state="dusunuyor"] #lumi-head-group { transform: rotate(10deg) translateY(-8px); }
+        [data-state="dusunuyor"] .pupils-group { transform: translate(10px, -12px); }
+        [data-state="dusunuyor"] #lid-l { transform: translateY(18px) rotate(4deg); }
+        [data-state="dusunuyor"] #brow-r { opacity: 0.7; transform: translateY(-12px) rotate(10deg); }
+        [data-state="dusunuyor"] #brow-l { opacity: 0.4; transform: translateY(4px); }
+        [data-state="dusunuyor"] #mouth-o { opacity: 1; transform: scale(0.65); }
+        [data-state="dusunuyor"] #lumi-arm-l { transform: rotate(35deg) translateY(-18px) translateX(8px); }
+        [data-state="dusunuyor"] #orb-core { fill: #C084FC; animation: orbNeuralPulse 1.4s ease-in-out infinite; }
+
+        /* 4. TAKTİK / FİKİR ("Aha! Buldum!" - Ampul gibi parlayan küre) */
+        [data-state="taktik"] #lumi-head-group { transform: translateY(-10px); }
+        [data-state="taktik"] #mouth-smile { opacity: 1; transform: scale(1.15); }
+        [data-state="taktik"] #brow-l, [data-state="taktik"] #brow-r { opacity: 0.7; transform: translateY(-16px); }
+        [data-state="taktik"] #lumi-arm-r { transform: rotate(-45deg) translateY(-25px); }
+        [data-state="taktik"] #orb-core { fill: #FFFFFF; filter: url(#glow-orb-bright); transform: scale(1.35); animation: none; }
+        [data-state="taktik"] .cheek { opacity: 1; transform: scale(1.1); }
+        [data-state="taktik"] #efx-stars { opacity: 1; }
+
+        /* 5. MUTLU (Anime ^^ Gözler) */
+        [data-state="mutlu"] #mouth-happy { opacity: 1; }
+        [data-state="mutlu"] .eye-open-parts { opacity: 0; }
+        [data-state="mutlu"] .eye-happy { opacity: 1; }
+        [data-state="mutlu"] #lumi-arm-l { transform: rotate(18deg); }
+        [data-state="mutlu"] #lumi-arm-r { transform: rotate(-18deg); }
+        [data-state="mutlu"] .cheek { opacity: 1; transform: scale(1.2) translateY(-4px); }
+        [data-state="mutlu"] #orb-core { animation: orbPulse 2s ease-in-out infinite; fill: #FFE49A; }
+
+        /* 6. HEYECANLI (Zıplama ve Yıldızlar) */
+        [data-state="heyecanli"] #lumi-master { animation: excitedJump 0.85s var(--bounce) infinite; }
+        [data-state="heyecanli"] #mouth-happy { opacity: 1; transform: scale(1.3); }
+        [data-state="heyecanli"] .eye-open-parts { opacity: 0; }
+        [data-state="heyecanli"] .eye-happy { opacity: 1; transform: scale(1.08); }
+        [data-state="heyecanli"] .cheek { opacity: 1; transform: scale(1.25); }
+        [data-state="heyecanli"] #brow-l, [data-state="heyecanli"] #brow-r { opacity: 0.7; transform: translateY(-16px); }
+        [data-state="heyecanli"] #lumi-arm-l { transform: rotate(50deg) translateY(-22px); }
+        [data-state="heyecanli"] #lumi-arm-r { transform: rotate(-50deg) translateY(-22px); }
+        [data-state="heyecanli"] #orb-core { filter: url(#glow-orb-bright); fill: #FFFFFF; transform: scale(1.35); animation: none; }
+        [data-state="heyecanli"] #efx-stars { opacity: 1; }
+
+        /* 7. MERAKLI (Soru İşareti Efx) */
+        [data-state="merakli"] #lumi-head-group { transform: rotate(12deg); }
+        [data-state="merakli"] #mouth-o { opacity: 1; transform: scale(0.75); }
+        [data-state="merakli"] #brow-r { opacity: 0.85; transform: translateY(-16px) rotate(10deg); }
+        [data-state="merakli"] #brow-l { opacity: 0.55; transform: translateY(8px) rotate(6deg); }
+        [data-state="merakli"] #lid-l { transform: translateY(20px) rotate(6deg); }
+        [data-state="merakli"] .pupils-group { transform: translate(6px, -6px); }
+        [data-state="merakli"] #orb-core { animation-duration: 1.6s; }
+        [data-state="merakli"] #efx-question { opacity: 1; transform: translateY(-18px); }
+
+        /* 8. ŞAŞKIN ('O' Ağız) */
+        [data-state="saskin"] #lumi-head-group { transform: translateY(-15px); }
+        [data-state="saskin"] #lumi-eyes { transform: scale(1.14); }
+        [data-state="saskin"] #mouth-o { opacity: 1; transform: scale(1.25); }
+        [data-state="saskin"] #brow-l, [data-state="saskin"] #brow-r { opacity: 0.9; transform: translateY(-24px); }
+        [data-state="saskin"] #orb-core { filter: url(#glow-orb-bright); transform: scale(1.35); animation: none; }
+        [data-state="saskin"] #lumi-arm-l, [data-state="saskin"] #lumi-arm-r { transform: translateY(-12px); }
+
+        /* 9. MAHCUP (Kızarık Allık, Kaçık Bakış) */
+        [data-state="mahcup"] #lumi-head-group { transform: rotate(-8deg) translateY(8px); }
+        [data-state="mahcup"] #mouth-smile { opacity: 1; transform: scale(0.75); }
+        [data-state="mahcup"] .cheek { opacity: 1; fill: url(#cheek-grad-strong); transform: scale(1.4); }
+        [data-state="mahcup"] .pupils-group { transform: translate(-10px, 6px); }
+        [data-state="mahcup"] .lid { transform: translateY(26px); }
+        [data-state="mahcup"] #brow-l { opacity: 0.5; transform: translateY(-4px) rotate(-8deg); }
+        [data-state="mahcup"] #brow-r { opacity: 0.5; transform: translateY(-4px) rotate(8deg); }
+        [data-state="mahcup"] #lumi-arm-l { transform: rotate(-25deg) translateX(15px); }
+        [data-state="mahcup"] #lumi-arm-r { transform: rotate(25deg) translateX(-15px); }
+        [data-state="mahcup"] #orb-core { fill: #FFA9BD; filter: url(#glow-orb); }
+
+        /* 10. TESELLİ / ÜZGÜN (Empati, Düşük Kulaklar) */
+        [data-state="teselli"], [data-state="uzgun"] #lumi-head-group { transform: translateY(14px); }
+        [data-state="teselli"] #mouth-sad, [data-state="uzgun"] #mouth-sad { opacity: 1; }
+        [data-state="teselli"] #brow-l, [data-state="uzgun"] #brow-l { opacity: 0.85; transform: translateY(-6px) rotate(-18deg); }
+        [data-state="teselli"] #brow-r, [data-state="uzgun"] #brow-r { opacity: 0.85; transform: translateY(-6px) rotate(18deg); }
+        [data-state="teselli"] #lid-l, [data-state="uzgun"] #lid-l { transform: translateY(26px) rotate(-14deg); }
+        [data-state="teselli"] #lid-r, [data-state="uzgun"] #lid-r { transform: translateY(26px) rotate(14deg); }
+        [data-state="teselli"] .pupils-group, [data-state="uzgun"] .pupils-group { transform: translateY(8px); }
+        [data-state="teselli"] #lumi-tuft-l, [data-state="uzgun"] #lumi-tuft-l { transform: rotate(16deg); }
+        [data-state="teselli"] #lumi-tuft-r, [data-state="uzgun"] #lumi-tuft-r { transform: rotate(-16deg); }
+        [data-state="teselli"] #orb-core, [data-state="uzgun"] #orb-core { animation: sleepPulse 4s infinite; fill: var(--lumi-gold); }
+
+        /* 11. UYARI / KORUMA (Kızgın/Çatık, Kırmızı Küre) */
+        [data-state="uyari"], [data-state="kizgin"] #lumi-head-group { transform: translateY(4px); }
+        [data-state="uyari"] #mouth-flat, [data-state="kizgin"] #mouth-flat { opacity: 1; transform: scale(1.15); }
+        [data-state="uyari"] #brow-l, [data-state="kizgin"] #brow-l { opacity: 1; transform: translateY(16px) rotate(22deg); stroke-width: 14; }
+        [data-state="uyari"] #brow-r, [data-state="kizgin"] #brow-r { opacity: 1; transform: translateY(16px) rotate(-22deg); stroke-width: 14; }
+        [data-state="uyari"] #lid-l, [data-state="kizgin"] #lid-l { transform: translateY(32px) rotate(18deg); }
+        [data-state="uyari"] #lid-r, [data-state="kizgin"] #lid-r { transform: translateY(32px) rotate(-18deg); }
+        [data-state="uyari"] #lumi-arm-l, [data-state="kizgin"] #lumi-arm-l { transform: rotate(-20deg) translateX(10px); }
+        [data-state="uyari"] #lumi-arm-r, [data-state="kizgin"] #lumi-arm-r { transform: rotate(20deg) translateX(-10px); }
+        [data-state="uyari"] #orb-core, [data-state="kizgin"] #orb-core { fill: #FFAAA6; filter: url(#glow-orb-red); animation: none; }
+        [data-state="uyari"] .cheek, [data-state="kizgin"] .cheek { opacity: 0.2; }
+
+        /* 12. UYKULU (Esneyen, ZzZ Balonları) */
+        [data-state="uykulu"] #lumi-master { animation: idleFloat 6.5s ease-in-out infinite; }
+        [data-state="uykulu"] #lumi-head-group { transform: translateY(22px) rotate(6deg); }
+        [data-state="uykulu"] #lumi-body { transform: scaleY(0.95) translateY(8px); }
+        [data-state="uykulu"] .eyes-blink { animation: blink 3s infinite; }
+        [data-state="uykulu"] .lid { transform: translateY(58px); }
+        [data-state="uykulu"] #mouth-flat { opacity: 1; transform: scale(0.65); }
+        [data-state="uykulu"] #lumi-arm-l, [data-state="uykulu"] #lumi-arm-r { transform: translateY(14px); }
+        [data-state="uykulu"] #orb-core { animation: sleepPulse 5s infinite; fill: #FFE0B2; }
+        [data-state="uykulu"] #efx-zzz { opacity: 1; animation: zzzFloat 3s ease-in-out infinite; }
+
+        /* Kontrol Paneli */
+        #controls-panel {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .btn-emotion {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #d1d5db;
+            padding: 10px 8px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-emotion:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-emotion.active {
+            background: linear-gradient(135deg, rgba(169, 211, 255, 0.45) 0%, rgba(130, 185, 245, 0.45) 100%);
+            border-color: rgba(169, 211, 255, 0.7);
+            color: #fff;
+            box-shadow: 0 0 18px rgba(169, 211, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 680px) {
+            #controls-panel { grid-template-columns: repeat(3, 1fr); }
+            svg#lumi { max-height: 42vh; }
+        }
+        @media (max-width: 460px) {
+            #controls-panel { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars-bg"></div>
+
+    <div id="app-container">
+        
+        <header class="title-bar">
+            <h1>Lumi Karakter Stüdyosu 💡</h1>
+            <p>12 Canlı Duygu Durumu • Chatbot Entegre Animasyonları</p>
+        </header>
+
+        <!-- Konuşma Balonu -->
+        <div class="speech-bubble-container">
+            <div class="speech-bubble" id="speech-text">
+                Merhaba! Ben Lumi, senin kişisel çalışma arkadaşınım! ✨
+            </div>
+            <div class="speech-tail"></div>
+        </div>
+
+        <div id="lumi-stage" data-state="normal">
+            <svg id="lumi" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Gövde Gradienti -->
+                    <radialGradient id="body-grad" cx="50%" cy="40%" r="65%">
+                        <stop offset="0%" stop-color="var(--lumi-ivory)"/>
+                        <stop offset="40%" stop-color="var(--lumi-cream)"/>
+                        <stop offset="85%" stop-color="#EBE3D9"/>
+                        <stop offset="100%" stop-color="#D4C8C1"/>
+                    </radialGradient>
+
+                    <!-- Kulak/Tüy Uzantıları Gradienti -->
+                    <linearGradient id="tuft-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="var(--lumi-ivory)"/>
+                        <stop offset="35%" stop-color="var(--lumi-cream)"/>
+                        <stop offset="70%" stop-color="var(--lumi-sky)"/>
+                        <stop offset="100%" stop-color="var(--lumi-blue-tip)"/>
+                    </linearGradient>
+                    
+                    <linearGradient id="tuft-grad-r" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="var(--lumi-ivory)"/>
+                        <stop offset="35%" stop-color="var(--lumi-cream)"/>
+                        <stop offset="70%" stop-color="var(--lumi-sky)"/>
+                        <stop offset="100%" stop-color="var(--lumi-blue-tip)"/>
+                    </linearGradient>
+
+                    <!-- Kol Gradienti -->
+                    <radialGradient id="arm-grad" cx="40%" cy="30%" r="70%">
+                        <stop offset="0%" stop-color="var(--lumi-ivory)"/>
+                        <stop offset="70%" stop-color="var(--lumi-cream)"/>
+                        <stop offset="100%" stop-color="#D4C8C1"/>
+                    </radialGradient>
+
+                    <!-- Cam Derinlikli Göz Gradienti -->
+                    <radialGradient id="eye-grad" cx="45%" cy="65%" r="80%">
+                        <stop offset="0%" stop-color="var(--lumi-iris)"/>
+                        <stop offset="50%" stop-color="#2D437A"/>
+                        <stop offset="85%" stop-color="var(--lumi-navy)"/>
+                        <stop offset="100%" stop-color="#0A1124"/>
+                    </radialGradient>
+
+                    <!-- Yanak Allık Gradienti (Yumuşak) -->
+                    <radialGradient id="cheek-grad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="var(--lumi-pink)" stop-opacity="0.85"/>
+                        <stop offset="45%" stop-color="var(--lumi-pink)" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="var(--lumi-pink)" stop-opacity="0"/>
+                    </radialGradient>
+
+                    <!-- Mahcup Kızarık Allık Gradienti -->
+                    <radialGradient id="cheek-grad-strong" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#FF7A9E" stop-opacity="0.95"/>
+                        <stop offset="45%" stop-color="#FF7A9E" stop-opacity="0.55"/>
+                        <stop offset="100%" stop-color="#FF7A9E" stop-opacity="0"/>
+                    </radialGradient>
+
+                    <!-- Göz Kapağı Maskeleri -->
+                    <clipPath id="eye-clip-l"><ellipse cx="300" cy="360" rx="46" ry="66"/></clipPath>
+                    <clipPath id="eye-clip-r"><ellipse cx="500" cy="360" rx="46" ry="66"/></clipPath>
+
+                    <!-- Işık Küresi Filtreleri -->
+                    <filter id="glow-orb" x="-150%" y="-150%" width="400%" height="400%">
+                        <feGaussianBlur stdDeviation="14" result="blur1"/>
+                        <feGaussianBlur stdDeviation="24" result="blur2"/>
+                        <feMerge>
+                            <feMergeNode in="blur2"/>
+                            <feMergeNode in="blur1"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    
+                    <filter id="glow-orb-bright" x="-200%" y="-200%" width="500%" height="500%">
+                        <feGaussianBlur stdDeviation="18" result="blur1"/>
+                        <feGaussianBlur stdDeviation="38" result="blur2"/>
+                        <feGaussianBlur stdDeviation="58" result="blur3"/>
+                        <feMerge>
+                            <feMergeNode in="blur3"/>
+                            <feMergeNode in="blur2"/>
+                            <feMergeNode in="blur1"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <filter id="glow-orb-purple" x="-150%" y="-150%" width="400%" height="400%">
+                        <feGaussianBlur stdDeviation="16" result="blur1"/>
+                        <feGaussianBlur stdDeviation="30" result="blur2"/>
+                        <feColorMatrix type="matrix" values="0.8 0 0 0 0  0 0.4 0 0 0  1 0 1 0 0  0 0 0 1 0" in="blur2" result="purpTint"/>
+                        <feMerge>
+                            <feMergeNode in="purpTint"/>
+                            <feMergeNode in="blur1"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <filter id="glow-orb-dim" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="10" result="blur1"/>
+                        <feMerge>
+                            <feMergeNode in="blur1"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <filter id="glow-orb-red" x="-150%" y="-150%" width="400%" height="400%">
+                        <feGaussianBlur stdDeviation="16" result="blur1"/>
+                        <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.2 0 0 0  0 0.2 0 0 0  0 0 0 1 0" in="blur1" result="redTint"/>
+                        <feMerge>
+                            <feMergeNode in="redTint"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <!-- Hacim Gölgeleri -->
+                    <filter id="shadow-drop">
+                        <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#060b19" flood-opacity="0.25"/>
+                    </filter>
+                    
+                    <filter id="shadow-limb">
+                        <feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="#060b19" flood-opacity="0.3"/>
+                    </filter>
+                </defs>
+
+                <!-- Ana Hareket Grubu -->
+                <g id="lumi-master" class="smooth-part">
+                    
+                    <!-- Bacaklar -->
+                    <g id="lumi-legs" filter="url(#shadow-drop)">
+                        <path class="anim-part" d="M 310,650 C 270,650 280,710 320,715 C 360,720 370,660 350,650 Z" fill="url(#body-grad)"/>
+                        <path class="anim-part" d="M 490,650 C 530,650 520,710 480,715 C 440,720 430,660 450,650 Z" fill="url(#body-grad)"/>
+                    </g>
+
+                    <!-- Gövde -->
+                    <g id="lumi-body" class="anim-part" filter="url(#shadow-drop)">
+                        <path d="M 310,480 
+                                 C 200,530 220,680 400,680 
+                                 C 580,680 600,530 490,480 
+                                 C 450,460 350,460 310,480 Z" 
+                              fill="url(#body-grad)"/>
+                    </g>
+
+                    <!-- Kollar -->
+                    <g id="lumi-arms">
+                        <g id="lumi-arm-l" class="anim-part" filter="url(#shadow-limb)">
+                            <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#arm-grad)"/>
+                        </g>
+                        <g id="lumi-arm-r" class="anim-part" filter="url(#shadow-limb)">
+                            <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#arm-grad)"/>
+                        </g>
+                    </g>
+
+                    <!-- BAŞ GRUBU -->
+                    <g id="lumi-head-group" class="anim-part">
+                        
+                        <!-- Yan Uzantılar (Kulaklar / Tuft) -->
+                        <g id="lumi-tuft-l" class="anim-part" filter="url(#shadow-limb)">
+                            <path d="M 230,300 
+                                     C 100,300 80,450 110,520 
+                                     C 120,540 145,555 160,530 
+                                     C 175,560 205,560 215,530 
+                                     C 230,555 260,540 255,500 
+                                     C 250,420 280,360 230,300 Z" 
+                                  fill="url(#tuft-grad)"/>
+                        </g>
+                        <g id="lumi-tuft-r" class="anim-part" filter="url(#shadow-limb)">
+                            <path d="M 570,300 
+                                     C 700,300 720,450 690,520 
+                                     C 680,540 655,555 640,530 
+                                     C 625,560 595,560 585,530 
+                                     C 570,555 540,540 545,500 
+                                     C 550,420 520,360 570,300 Z" 
+                                  fill="url(#tuft-grad-r)"/>
+                        </g>
+
+                        <!-- Ana Baş Şekli -->
+                        <path d="M 400,160 
+                                 C 640,160 670,430 590,510 
+                                 C 530,570 270,570 210,510 
+                                 C 130,430 160,160 400,160 Z" 
+                              fill="url(#body-grad)" filter="url(#shadow-drop)"/>
+
+                        <!-- Yanaklar (Allık) -->
+                        <circle class="anim-part cheek" cx="250" cy="420" r="45" fill="url(#cheek-grad)"/>
+                        <circle class="anim-part cheek" cx="550" cy="420" r="45" fill="url(#cheek-grad)"/>
+
+                        <!-- Kaşlar -->
+                        <path id="brow-l" class="anim-part brow" d="M 255,275 Q 300,255 345,278" fill="none" stroke="var(--lumi-navy)" stroke-width="10" stroke-linecap="round"/>
+                        <path id="brow-r" class="anim-part brow" d="M 545,275 Q 500,255 455,278" fill="none" stroke="var(--lumi-navy)" stroke-width="10" stroke-linecap="round"/>
+
+                        <!-- YÜZ: Gözler -->
+                        <g id="lumi-eyes" class="anim-part">
+                          <g class="eyes-blink">
+                            <!-- Sol Göz -->
+                            <g>
+                                <g class="anim-part pupils-group">
+                                    <g class="eye-open-parts anim-part">
+                                        <ellipse cx="300" cy="360" rx="45" ry="65" fill="url(#eye-grad)"/>
+                                        <circle cx="315" cy="325" r="18" fill="#FFFFFF"/>
+                                        <circle cx="285" cy="390" r="8" fill="#FFFFFF" opacity="0.8"/>
+                                        <circle cx="325" cy="380" r="4" fill="#FFFFFF" opacity="0.5"/>
+                                    </g>
+                                </g>
+                                <g clip-path="url(#eye-clip-l)">
+                                    <g id="lid-l" class="lid anim-part">
+                                        <rect x="235" y="190" width="130" height="105" fill="var(--lumi-cream)"/>
+                                        <line x1="235" y1="295" x2="365" y2="295" stroke="var(--lumi-navy)" stroke-width="7" stroke-linecap="round"/>
+                                    </g>
+                                </g>
+                                <path class="eye-happy anim-part" d="M 260,375 Q 300,325 340,375" fill="none" stroke="var(--lumi-navy)" stroke-width="13" stroke-linecap="round"/>
+                            </g>
+                            
+                            <!-- Sağ Göz -->
+                            <g>
+                                <g class="anim-part pupils-group">
+                                    <g class="eye-open-parts anim-part">
+                                        <ellipse cx="500" cy="360" rx="45" ry="65" fill="url(#eye-grad)"/>
+                                        <circle cx="485" cy="325" r="18" fill="#FFFFFF"/>
+                                        <circle cx="515" cy="390" r="8" fill="#FFFFFF" opacity="0.8"/>
+                                        <circle cx="475" cy="380" r="4" fill="#FFFFFF" opacity="0.5"/>
+                                    </g>
+                                </g>
+                                <g clip-path="url(#eye-clip-r)">
+                                    <g id="lid-r" class="lid anim-part">
+                                        <rect x="435" y="190" width="130" height="105" fill="var(--lumi-cream)"/>
+                                        <line x1="435" y1="295" x2="565" y2="295" stroke="var(--lumi-navy)" stroke-width="7" stroke-linecap="round"/>
+                                    </g>
+                                </g>
+                                <path class="eye-happy anim-part" d="M 460,375 Q 500,325 540,375" fill="none" stroke="var(--lumi-navy)" stroke-width="13" stroke-linecap="round"/>
+                            </g>
+                          </g>
+                        </g>
+
+                        <!-- Ağız Şekilleri -->
+                        <g id="lumi-mouth">
+                            <path id="mouth-smile" class="mouth-shape anim-part" d="M 380,420 Q 400,440 420,420" fill="none" stroke="var(--lumi-mouth)" stroke-width="8" stroke-linecap="round"/>
+                            <path id="mouth-happy" class="mouth-shape anim-part" d="M 370,415 Q 400,465 430,415 Z" fill="var(--lumi-mouth)" stroke="var(--lumi-mouth)" stroke-width="5" stroke-linejoin="round"/>
+                            <ellipse id="mouth-o" class="mouth-shape anim-part" cx="400" cy="428" rx="12" ry="18" fill="var(--lumi-mouth)"/>
+                            <path id="mouth-sad" class="mouth-shape anim-part" d="M 380,438 Q 400,420 420,438" fill="none" stroke="var(--lumi-mouth)" stroke-width="8" stroke-linecap="round"/>
+                            <path id="mouth-flat" class="mouth-shape anim-part" d="M 385,428 L 415,428" fill="none" stroke="var(--lumi-mouth)" stroke-width="8" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Anten ve Işık Küresi -->
+                        <g id="lumi-antenna" class="anim-part">
+                            <path d="M 400,175 Q 390,110 400,70" fill="none" stroke="var(--lumi-ivory)" stroke-width="10" stroke-linecap="round" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))"/>
+                            <g class="orb-wrap smooth-part">
+                                <circle id="orb-core" class="smooth-part" cx="400" cy="55" r="30" fill="var(--lumi-gold)" filter="url(#glow-orb)"/>
+                                <circle cx="400" cy="55" r="14" fill="#FFFFFF" opacity="0.9" filter="drop-shadow(0 0 8px #FFFFFF)"/>
+                            </g>
+                        </g>
+                        
+                        <!-- Özel Efektler -->
+                        <g id="efx-zzz" class="emotion-effect">
+                            <text x="560" y="200" fill="var(--lumi-sky)" font-size="40" font-weight="bold" font-family="Nunito" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">Z</text>
+                            <text x="610" y="150" fill="var(--lumi-sky)" font-size="30" font-weight="bold" font-family="Nunito" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">z</text>
+                            <text x="650" y="110" fill="var(--lumi-sky)" font-size="20" font-weight="bold" font-family="Nunito" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">z</text>
+                        </g>
+                        
+                        <g id="efx-question" class="emotion-effect anim-part">
+                            <text x="540" y="220" fill="var(--lumi-gold)" font-size="70" font-weight="900" font-family="Nunito" filter="drop-shadow(0 4px 8px rgba(0,0,0,0.6))">?</text>
+                        </g>
+
+                        <g id="efx-stars" class="emotion-effect anim-part">
+                            <path d="M 160,120 L 170,150 L 200,160 L 170,170 L 160,200 L 150,170 L 120,160 L 150,150 Z" fill="var(--lumi-gold)" filter="drop-shadow(0 0 10px var(--lumi-gold))"/>
+                            <path d="M 620,160 L 625,175 L 640,180 L 625,185 L 620,200 L 615,185 L 600,180 L 615,175 Z" fill="#FFF" filter="drop-shadow(0 0 8px #FFF)"/>
+                        </g>
+                        
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <!-- 12 Duygu Durumu Seçici -->
+        <div id="controls-panel">
+            <button class="btn-emotion active" data-target="normal">✨ Normal</button>
+            <button class="btn-emotion" data-target="dinliyor">👂 Dinliyor</button>
+            <button class="btn-emotion" data-target="dusunuyor">🧠 Düşünüyor</button>
+            <button class="btn-emotion" data-target="taktik">💡 Taktik / Buldum</button>
+            <button class="btn-emotion" data-target="mutlu">😊 Mutlu</button>
+            <button class="btn-emotion" data-target="heyecanli">🎉 Heyecanlı</button>
+            <button class="btn-emotion" data-target="merakli">🤔 Meraklı</button>
+            <button class="btn-emotion" data-target="saskin">😲 Şaşkın</button>
+            <button class="btn-emotion" data-target="mahcup">😳 Mahcup</button>
+            <button class="btn-emotion" data-target="teselli">😔 Teselli</button>
+            <button class="btn-emotion" data-target="uyari">🛡️ Koruma / Uyarı</button>
+            <button class="btn-emotion" data-target="uykulu">💤 Uykulu</button>
+        </div>
+    </div>
+
+    <script>
+        const dialogs = {
+            "normal": "Merhaba! Ben Lumi, senin kişisel çalışma arkadaşınım! ✨",
+            "dinliyor": "Seni pür dikkat dinliyorum, kafandaki soruyu yaz gelsin! 👂",
+            "dusunuyor": "Hmm... Nöral loblarımı çalıştırıyorum, en iyi yöntemi tarıyorum... 🧠",
+            "taktik": "Aha! İşte tam senin profiline göre altın değerinde bir çalışma taktiği! 💡",
+            "mutlu": "Harika gidiyorsun! Seninle çalışmak gerçekten çok keyifli 💙",
+            "heyecanli": "Vay canına! İnanılmaz bir odaklanma puanı! Böyle devam! 🎉🚀",
+            "merakli": "Hmm... Bu öğrenme stili nasıl bir sonuç verecek acaba? İnceleyelim mi? 🤔",
+            "saskin": "Vay canına! Bunu hiç beklemiyordum, çok ilginç bir teknik! 😲",
+            "mahcup": "Şey... güzel sözlerin için teşekkürler, beni biraz utandırdın 😳💖",
+            "teselli": "Bazen odaklanmak zor olabilir, hiç canını sıkma. 5 dakika mola verip baştan deneyelim 🤝",
+            "uyari": "Hop! Kişisel verilerini korumam ve kurallara uymam gerekiyor, bunu yapamam 🛡️🔒",
+            "uykulu": "Bugün çok verimli çalıştık ama göz kapaklarım ağırlaşıyor... ZzZz 💤"
+        };
+
+        const stage = document.getElementById('lumi-stage');
+        const speechBubble = document.getElementById('speech-text');
+        const buttons = document.querySelectorAll('.btn-emotion');
+
+        function setLumiState(newState) {
+            if (!dialogs[newState]) return;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === newState));
+            stage.setAttribute('data-state', newState);
+            updateSpeechBubble(dialogs[newState]);
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => setLumiState(btn.dataset.target));
+        });
+
+        function updateSpeechBubble(text) {
+            speechBubble.style.animation = 'none';
+            speechBubble.offsetHeight;
+            speechBubble.innerText = text;
+            speechBubble.style.animation = 'bubbleUpdate 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+        }
+
+        // Test kolaylığı: URL param desteği (?state=dusunuyor)
+        const param = new URLSearchParams(location.search).get('state');
+        if (param && dialogs[param]) setLumiState(param);
+    </script>
+</body>
+</html>
