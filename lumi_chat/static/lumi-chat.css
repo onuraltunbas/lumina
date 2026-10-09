@@ -29,7 +29,7 @@ html.dark-theme #lumi-root {
 }
 
 /* =========================================================
-   CANLI KARAKTER SVG ANİMASYONLARI & MOTORU
+   CANLI KARAKTER SVG ANİMASYONLARI & ANATOMİK PİVOT MOTORU
    ========================================================= */
 
 .lumi-character-svg {
@@ -40,18 +40,35 @@ html.dark-theme #lumi-root {
   display: block;
 }
 
-/* Transform Pivot Merkezleri */
+/* Kesin Vektörel Koordinat Pivot Noktaları (Göz kayması ve deformasyonu önler) */
 .lumi-character-svg #lumi-body { transform-origin: 400px 600px; }
 .lumi-character-svg #lumi-head-group { transform-origin: 400px 480px; }
 .lumi-character-svg #lumi-arm-l { transform-origin: 290px 520px; }
 .lumi-character-svg #lumi-arm-r { transform-origin: 510px 520px; }
-.lumi-character-svg #lumi-tuft-l { transform-origin: 200px 350px; }
-.lumi-character-svg #lumi-tuft-r { transform-origin: 600px 350px; }
+.lumi-character-svg #lumi-tuft-l { transform-origin: 230px 320px; }
+.lumi-character-svg #lumi-tuft-r { transform-origin: 570px 320px; }
 .lumi-character-svg #lumi-eyes { transform-origin: 400px 360px; }
-.lumi-character-svg #lumi-antenna { transform-origin: 400px 150px; }
+.lumi-character-svg .eyes-blink { transform-origin: 400px 360px; }
+.lumi-character-svg #eye-wrap-l { transform-origin: 300px 360px; }
+.lumi-character-svg #eye-wrap-r { transform-origin: 500px 360px; }
+.lumi-character-svg #pupils-l { transform-origin: 300px 360px; }
+.lumi-character-svg #pupils-r { transform-origin: 500px 360px; }
+.lumi-character-svg #lid-l { transform-origin: 300px 360px; }
+.lumi-character-svg #lid-r { transform-origin: 500px 360px; }
+.lumi-character-svg #eye-happy-l { transform-origin: 300px 360px; }
+.lumi-character-svg #eye-happy-r { transform-origin: 500px 360px; }
+.lumi-character-svg #brow-l { transform-origin: 300px 270px; }
+.lumi-character-svg #brow-r { transform-origin: 500px 270px; }
+.lumi-character-svg #cheek-l { transform-origin: 250px 420px; }
+.lumi-character-svg #cheek-r { transform-origin: 550px 420px; }
+.lumi-character-svg .mouth-shape { transform-origin: 400px 428px; }
+.lumi-character-svg #lumi-antenna { transform-origin: 400px 175px; }
+.lumi-character-svg .orb-wrap { transform-origin: 400px 55px; }
+.lumi-character-svg #orb-core { transform-origin: 400px 55px; }
+.lumi-character-svg .emotion-effect { transform-origin: center; transform-box: fill-box; }
 
 .lumi-character-svg .anim-part {
-  transition: transform 0.45s var(--bounce),
+  transition: transform 0.42s var(--bounce),
               opacity 0.2s ease,
               fill 0.35s ease,
               stroke 0.35s ease;
@@ -60,23 +77,6 @@ html.dark-theme #lumi-root {
 .lumi-character-svg .smooth-part {
   transition: all 0.6s ease-in-out;
 }
-
-/* SVG Fill-box merkezleri */
-.lumi-character-svg .cheek,
-.lumi-character-svg .brow,
-.lumi-character-svg .mouth-shape,
-.lumi-character-svg .eye-happy,
-.lumi-character-svg .eye-closed,
-.lumi-character-svg .eyes-blink,
-.lumi-character-svg .orb-wrap,
-.lumi-character-svg #orb-core,
-.lumi-character-svg .lid,
-.lumi-character-svg .pupils-group,
-.lumi-character-svg .emotion-effect {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.lumi-character-svg .brow { transform-origin: 50% 70%; }
 
 /* Temel Döngüler */
 @keyframes lumi-idleFloat {
@@ -90,159 +90,205 @@ html.dark-theme #lumi-root {
 }
 
 @keyframes lumi-orbPulse {
-  0%, 100% { transform: scale(1); filter: url(#lumi-glow-orb); }
-  50% { transform: scale(1.14); filter: url(#lumi-glow-orb-bright); }
+  0%, 100% { transform: scale(1); filter: var(--orb-filter-norm, url(#go_norm)); }
+  50% { transform: scale(1.14); filter: var(--orb-filter-bright, url(#gob_norm)); }
 }
 
 @keyframes lumi-orbNeural {
-  0%, 100% { transform: scale(1); filter: url(#lumi-glow-orb-purple); }
-  50% { transform: scale(1.26); filter: url(#lumi-glow-orb-bright); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.24); }
 }
 
 @keyframes lumi-sleepPulse {
-  0%, 100% { transform: scale(0.92); opacity: 0.6; filter: url(#lumi-glow-orb-dim); }
-  50% { transform: scale(1.02); opacity: 0.9; filter: url(#lumi-glow-orb); }
+  0%, 100% { transform: scale(0.92); opacity: 0.6; }
+  50% { transform: scale(1.02); opacity: 0.9; }
 }
 
 @keyframes lumi-excitedJump {
   0%, 100% { transform: translateY(0) scaleY(1); }
-  40% { transform: translateY(-24px) scaleY(1.05); }
+  40% { transform: translateY(-26px) scaleY(1.05); }
   80% { transform: translateY(3px) scaleY(0.96); }
 }
 
 @keyframes lumi-zzz {
   0%, 100% { transform: translateY(0); opacity: 0.5; }
-  50% { transform: translateY(-12px); opacity: 1; }
+  50% { transform: translateY(-14px); opacity: 1; }
 }
 
 .lumi-character-svg #lumi-master { animation: lumi-idleFloat 3.8s ease-in-out infinite; }
 .lumi-character-svg .eyes-blink { animation: lumi-blink 5.5s infinite; }
 .lumi-character-svg #orb-core { animation: lumi-orbPulse 3.5s ease-in-out infinite; }
 
-/* Gizli Varsayılan Parçalar */
-.lumi-character-svg .mouth-shape,
+/* Varsayılan Gizlilik / Görünürlük */
+.lumi-character-svg .mouth-shape {
+  opacity: 0;
+  transition: opacity 0.12s ease, transform 0.35s var(--bounce);
+  pointer-events: none;
+}
 .lumi-character-svg .emotion-effect,
 .lumi-character-svg .eye-closed,
-.lumi-character-svg .eye-happy { opacity: 0; }
-.lumi-character-svg .brow { opacity: 0.15; }
-.lumi-character-svg .lid { transform: translateY(-30px); }
+.lumi-character-svg .eye-happy {
+  opacity: 0;
+  pointer-events: none;
+}
+.lumi-character-svg .brow {
+  opacity: 0.22;
+  transition: opacity 0.25s ease, transform 0.42s var(--bounce), stroke-width 0.3s ease;
+}
+.lumi-character-svg .lid {
+  transform: translateY(-12px); /* Gözün üzerinde gizli */
+  transition: transform 0.42s var(--bounce), opacity 0.2s ease;
+}
+
+/* Pozlanmış mimiklerde göz kırpma animasyonunu durdur (Esneme/bozulmaları önler) */
+[data-state="mutlu"] .eyes-blink,
+[data-state="heyecanli"] .eyes-blink,
+[data-state="dusunuyor"] .eyes-blink,
+[data-state="saskin"] .eyes-blink,
+[data-state="merakli"] .eyes-blink,
+[data-state="mahcup"] .eyes-blink,
+[data-state="teselli"] .eyes-blink,
+[data-state="uzgun"] .eyes-blink,
+[data-state="uyari"] .eyes-blink,
+[data-state="kizgin"] .eyes-blink,
+[data-state="uykulu"] .eyes-blink {
+  animation: none;
+}
 
 /* =========================================================
-   KARAKTER DUYGU DURUMLARI (STATE RULES)
+   12 KUSURSUZ DUYGU DURUMU (STATE RULES)
    ========================================================= */
 
-/* 1. NORMAL */
-[data-state="normal"] #mouth-smile { opacity: 1; }
-[data-state="normal"] .cheek { opacity: 0.8; }
+/* 1. NORMAL (Doğal, Dostça) */
+[data-state="normal"] #mouth-smile { opacity: 1; transform: scale(1); }
+[data-state="normal"] #cheek-l, [data-state="normal"] #cheek-r { opacity: 0.8; }
+[data-state="normal"] #lid-l, [data-state="normal"] #lid-r { transform: translateY(-12px); }
 
-/* 2. DİNLİYOR */
-[data-state="dinliyor"] #lumi-head-group { transform: rotate(7deg) translateY(-4px); }
-[data-state="dinliyor"] #mouth-smile { opacity: 1; transform: scale(1.05); }
-[data-state="dinliyor"] .pupils-group { transform: translate(3px, 3px); }
-[data-state="dinliyor"] #brow-r { opacity: 0.55; transform: translateY(-6px); }
-[data-state="dinliyor"] #lumi-arm-l { transform: rotate(14deg) translateY(-6px); }
-[data-state="dinliyor"] #orb-core { filter: url(#lumi-glow-orb-bright); transform: scale(1.12); }
+/* 2. DİNLİYOR (Kullanıcı Yazarken - Dikkatli Dinleme) */
+[data-state="dinliyor"] #lumi-head-group { transform: rotate(8deg) translateY(-4px); }
+[data-state="dinliyor"] #mouth-smile { opacity: 1; transform: scale(1.06); }
+[data-state="dinliyor"] #pupils-l, [data-state="dinliyor"] #pupils-r { transform: translate(4px, 4px); }
+[data-state="dinliyor"] #brow-r { opacity: 0.75; transform: translateY(-10px); }
+[data-state="dinliyor"] #brow-l { opacity: 0.45; }
+[data-state="dinliyor"] #lid-l { transform: translateY(16px); }
+[data-state="dinliyor"] #lid-r { transform: translateY(-12px); }
+[data-state="dinliyor"] #lumi-arm-l { transform: rotate(15deg) translateY(-6px); }
+[data-state="dinliyor"] #orb-core { transform: scale(1.12); }
 
-/* 3. DÜŞÜNÜYOR (Nöral Nabız + Yukarı Bakan Gözler) */
+/* 3. DÜŞÜNÜYOR (Yapay Zeka Cevabı Hazırlarken - Nöral Mor Halesi & Yukarı Bakan Gözler) */
 [data-state="dusunuyor"] #lumi-head-group { transform: rotate(10deg) translateY(-8px); }
-[data-state="dusunuyor"] .pupils-group { transform: translate(10px, -12px); }
-[data-state="dusunuyor"] #lid-l { transform: translateY(18px) rotate(4deg); }
-[data-state="dusunuyor"] #brow-r { opacity: 0.7; transform: translateY(-12px) rotate(10deg); }
-[data-state="dusunuyor"] #brow-l { opacity: 0.4; transform: translateY(4px); }
-[data-state="dusunuyor"] #mouth-o { opacity: 1; transform: scale(0.65); }
-[data-state="dusunuyor"] #lumi-arm-l { transform: rotate(35deg) translateY(-18px) translateX(8px); }
+[data-state="dusunuyor"] #pupils-l, [data-state="dusunuyor"] #pupils-r { transform: translate(10px, -12px); }
+[data-state="dusunuyor"] #lid-l { transform: translateY(28px) rotate(6deg); }
+[data-state="dusunuyor"] #lid-r { transform: translateY(16px); }
+[data-state="dusunuyor"] #brow-r { opacity: 0.85; transform: translateY(-16px) rotate(12deg); }
+[data-state="dusunuyor"] #brow-l { opacity: 0.65; transform: translateY(4px) rotate(-6deg); }
+[data-state="dusunuyor"] #mouth-o { opacity: 1; transform: scale(0.68); }
+[data-state="dusunuyor"] #lumi-arm-l { transform: rotate(38deg) translateY(-24px) translateX(12px); }
 [data-state="dusunuyor"] #orb-core { fill: #C084FC; animation: lumi-orbNeural 1.3s ease-in-out infinite; }
 
-/* 4. TAKTİK / FİKİR (Ampul Gibi Parlayan Küre + Yıldızlar) */
+/* 4. TAKTİK / FİKİR (Çalışma Yöntemi Verirken - Ampul Gibi Parlayan Küre & Yıldızlar) */
 [data-state="taktik"] #lumi-head-group { transform: translateY(-8px); }
-[data-state="taktik"] #mouth-smile { opacity: 1; transform: scale(1.15); }
-[data-state="taktik"] #brow-l, [data-state="taktik"] #brow-r { opacity: 0.7; transform: translateY(-14px); }
-[data-state="taktik"] #lumi-arm-r { transform: rotate(-45deg) translateY(-22px); }
-[data-state="taktik"] #orb-core { fill: #FFFFFF; filter: url(#lumi-glow-orb-bright); transform: scale(1.35); animation: none; }
-[data-state="taktik"] .cheek { opacity: 1; transform: scale(1.1); }
+[data-state="taktik"] #mouth-smile { opacity: 1; transform: scale(1.18); }
+[data-state="taktik"] #brow-l, [data-state="taktik"] #brow-r { opacity: 0.85; transform: translateY(-16px); }
+[data-state="taktik"] #lid-l, [data-state="taktik"] #lid-r { transform: translateY(-12px); }
+[data-state="taktik"] #lumi-arm-r { transform: rotate(-48deg) translateY(-26px); }
+[data-state="taktik"] #orb-core { fill: #FFFFFF; transform: scale(1.4); animation: none; }
+[data-state="taktik"] #cheek-l, [data-state="taktik"] #cheek-r { opacity: 1; transform: scale(1.15); }
 [data-state="taktik"] #efx-stars { opacity: 1; }
 
-/* 5. MUTLU */
-[data-state="mutlu"] #mouth-happy { opacity: 1; }
+/* 5. MUTLU (Anime ^^ Gözler & Tatlı Gülüş) */
+[data-state="mutlu"] #lumi-head-group { transform: translateY(-4px); }
 [data-state="mutlu"] .eye-open-parts { opacity: 0; }
-[data-state="mutlu"] .eye-happy { opacity: 1; }
+[data-state="mutlu"] .lid { opacity: 0; }
+[data-state="mutlu"] #eye-happy-l, [data-state="mutlu"] #eye-happy-r { opacity: 1; }
+[data-state="mutlu"] #brow-l, [data-state="mutlu"] #brow-r { opacity: 0.8; transform: translateY(-12px); }
+[data-state="mutlu"] #mouth-happy { opacity: 1; transform: scale(1); }
 [data-state="mutlu"] #lumi-arm-l { transform: rotate(18deg); }
 [data-state="mutlu"] #lumi-arm-r { transform: rotate(-18deg); }
-[data-state="mutlu"] .cheek { opacity: 1; transform: scale(1.2) translateY(-4px); }
+[data-state="mutlu"] #cheek-l, [data-state="mutlu"] #cheek-r { opacity: 1; transform: scale(1.25) translateY(-4px); }
 [data-state="mutlu"] #orb-core { animation: lumi-orbPulse 2s ease-in-out infinite; fill: #FFE49A; }
 
-/* 6. HEYECANLI */
+/* 6. HEYECANLI (Sevinçten Zıplama & Başarı Kutlama) */
 [data-state="heyecanli"] #lumi-master { animation: lumi-excitedJump 0.85s var(--bounce) infinite; }
-[data-state="heyecanli"] #mouth-happy { opacity: 1; transform: scale(1.25); }
 [data-state="heyecanli"] .eye-open-parts { opacity: 0; }
-[data-state="heyecanli"] .eye-happy { opacity: 1; transform: scale(1.08); }
-[data-state="heyecanli"] .cheek { opacity: 1; transform: scale(1.25); }
-[data-state="heyecanli"] #brow-l, [data-state="heyecanli"] #brow-r { opacity: 0.7; transform: translateY(-16px); }
+[data-state="heyecanli"] .lid { opacity: 0; }
+[data-state="heyecanli"] #eye-happy-l, [data-state="heyecanli"] #eye-happy-r { opacity: 1; transform: scale(1.08); }
+[data-state="heyecanli"] #mouth-happy { opacity: 1; transform: scale(1.28); }
+[data-state="heyecanli"] #cheek-l, [data-state="heyecanli"] #cheek-r { opacity: 1; transform: scale(1.3); }
+[data-state="heyecanli"] #brow-l, [data-state="heyecanli"] #brow-r { opacity: 0.9; transform: translateY(-18px); }
+[data-state="heyecanli"] #lumi-tuft-l { transform: rotate(-8deg) translateY(-6px); }
+[data-state="heyecanli"] #lumi-tuft-r { transform: rotate(8deg) translateY(-6px); }
 [data-state="heyecanli"] #lumi-arm-l { transform: rotate(50deg) translateY(-22px); }
 [data-state="heyecanli"] #lumi-arm-r { transform: rotate(-50deg) translateY(-22px); }
-[data-state="heyecanli"] #orb-core { filter: url(#lumi-glow-orb-bright); fill: #FFFFFF; transform: scale(1.35); animation: none; }
+[data-state="heyecanli"] #orb-core { fill: #FFFFFF; transform: scale(1.35); animation: none; }
 [data-state="heyecanli"] #efx-stars { opacity: 1; }
 
-/* 7. MERAKLI */
+/* 7. MERAKLI (Soru İşareti & Eğik Baş) */
 [data-state="merakli"] #lumi-head-group { transform: rotate(12deg); }
 [data-state="merakli"] #mouth-o { opacity: 1; transform: scale(0.75); }
-[data-state="merakli"] #brow-r { opacity: 0.85; transform: translateY(-16px) rotate(10deg); }
-[data-state="merakli"] #brow-l { opacity: 0.55; transform: translateY(8px) rotate(6deg); }
-[data-state="merakli"] #lid-l { transform: translateY(20px) rotate(6deg); }
-[data-state="merakli"] .pupils-group { transform: translate(6px, -6px); }
+[data-state="merakli"] #brow-r { opacity: 0.95; transform: translateY(-20px) rotate(12deg); }
+[data-state="merakli"] #brow-l { opacity: 0.6; transform: translateY(6px) rotate(4deg); }
+[data-state="merakli"] #lid-l { transform: translateY(24px) rotate(6deg); }
+[data-state="merakli"] #lid-r { transform: translateY(-12px); }
+[data-state="merakli"] #pupils-l, [data-state="merakli"] #pupils-r { transform: translate(8px, -8px); }
 [data-state="merakli"] #orb-core { animation-duration: 1.6s; }
 [data-state="merakli"] #efx-question { opacity: 1; transform: translateY(-18px); }
 
-/* 8. ŞAŞKIN */
+/* 8. ŞAŞKIN (Kocaman Açılmış Gözler & 'O' Ağız) */
 [data-state="saskin"] #lumi-head-group { transform: translateY(-14px); }
-[data-state="saskin"] #lumi-eyes { transform: scale(1.14); }
-[data-state="saskin"] #mouth-o { opacity: 1; transform: scale(1.25); }
-[data-state="saskin"] #brow-l, [data-state="saskin"] #brow-r { opacity: 0.9; transform: translateY(-24px); }
-[data-state="saskin"] #orb-core { filter: url(#lumi-glow-orb-bright); transform: scale(1.35); animation: none; }
+[data-state="saskin"] #eye-wrap-l, [data-state="saskin"] #eye-wrap-r { transform: scale(1.15); }
+[data-state="saskin"] #mouth-o { opacity: 1; transform: scale(1.28); }
+[data-state="saskin"] #brow-l, [data-state="saskin"] #brow-r { opacity: 0.95; transform: translateY(-24px); }
+[data-state="saskin"] #lid-l, [data-state="saskin"] #lid-r { transform: translateY(-15px); }
+[data-state="saskin"] #orb-core { transform: scale(1.35); animation: none; }
 [data-state="saskin"] #lumi-arm-l, [data-state="saskin"] #lumi-arm-r { transform: translateY(-12px); }
 
-/* 9. MAHCUP */
+/* 9. MAHCUP (Kızarık Allık & Çekingen Bakış) */
 [data-state="mahcup"] #lumi-head-group { transform: rotate(-8deg) translateY(8px); }
 [data-state="mahcup"] #mouth-smile { opacity: 1; transform: scale(0.75); }
-[data-state="mahcup"] .cheek { opacity: 1; fill: url(#lumi-cheek-strong); transform: scale(1.4); }
-[data-state="mahcup"] .pupils-group { transform: translate(-10px, 6px); }
-[data-state="mahcup"] .lid { transform: translateY(26px); }
-[data-state="mahcup"] #brow-l { opacity: 0.5; transform: translateY(-4px) rotate(-8deg); }
-[data-state="mahcup"] #brow-r { opacity: 0.5; transform: translateY(-4px) rotate(8deg); }
+[data-state="mahcup"] #cheek-l, [data-state="mahcup"] #cheek-r { opacity: 1; transform: scale(1.45); }
+[data-state="mahcup"] #pupils-l, [data-state="mahcup"] #pupils-r { transform: translate(-10px, 8px); }
+[data-state="mahcup"] #lid-l, [data-state="mahcup"] #lid-r { transform: translateY(32px); }
+[data-state="mahcup"] #brow-l { opacity: 0.6; transform: translateY(-2px) rotate(-8deg); }
+[data-state="mahcup"] #brow-r { opacity: 0.6; transform: translateY(-2px) rotate(8deg); }
 [data-state="mahcup"] #lumi-arm-l { transform: rotate(-25deg) translateX(15px); }
 [data-state="mahcup"] #lumi-arm-r { transform: rotate(25deg) translateX(-15px); }
-[data-state="mahcup"] #orb-core { fill: #FFA9BD; filter: url(#lumi-glow-orb); }
+[data-state="mahcup"] #orb-core { fill: #FFA9BD; }
 
-/* 10. TESELLİ */
-[data-state="teselli"] #lumi-head-group { transform: translateY(14px); }
-[data-state="teselli"] #mouth-sad { opacity: 1; }
-[data-state="teselli"] #brow-l { opacity: 0.85; transform: translateY(-6px) rotate(-18deg); }
-[data-state="teselli"] #brow-r { opacity: 0.85; transform: translateY(-6px) rotate(18deg); }
-[data-state="teselli"] #lid-l { transform: translateY(26px) rotate(-14deg); }
-[data-state="teselli"] #lid-r { transform: translateY(26px) rotate(14deg); }
-[data-state="teselli"] .pupils-group { transform: translateY(8px); }
-[data-state="teselli"] #lumi-tuft-l { transform: rotate(16deg); }
-[data-state="teselli"] #lumi-tuft-r { transform: rotate(-16deg); }
-[data-state="teselli"] #orb-core { animation: lumi-sleepPulse 4s infinite; fill: var(--lumi-gold); }
+/* 10. TESELLİ (Empati & Düşük Kulaklar) */
+[data-state="teselli"] #lumi-head-group, [data-state="uzgun"] #lumi-head-group { transform: translateY(12px); }
+[data-state="teselli"] #mouth-sad, [data-state="uzgun"] #mouth-sad { opacity: 1; transform: scale(0.9); }
+[data-state="teselli"] #brow-l, [data-state="uzgun"] #brow-l { opacity: 0.95; transform: translateY(-8px) rotate(-16deg); }
+[data-state="teselli"] #brow-r, [data-state="uzgun"] #brow-r { opacity: 0.95; transform: translateY(-8px) rotate(16deg); }
+[data-state="teselli"] #lid-l, [data-state="uzgun"] #lid-l { transform: translateY(36px) rotate(-12deg); }
+[data-state="teselli"] #lid-r, [data-state="uzgun"] #lid-r { transform: translateY(36px) rotate(12deg); }
+[data-state="teselli"] #pupils-l, [data-state="teselli"] #pupils-r,
+[data-state="uzgun"] #pupils-l, [data-state="uzgun"] #pupils-r { transform: translateY(6px); }
+[data-state="teselli"] #lumi-tuft-l, [data-state="uzgun"] #lumi-tuft-l { transform: rotate(16deg); }
+[data-state="teselli"] #lumi-tuft-r, [data-state="uzgun"] #lumi-tuft-r { transform: rotate(-16deg); }
+[data-state="teselli"] #lumi-arm-l { transform: rotate(12deg) translateY(-6px); }
+[data-state="teselli"] #lumi-arm-r { transform: rotate(-12deg) translateY(-6px); }
+[data-state="teselli"] #orb-core, [data-state="uzgun"] #orb-core { animation: lumi-sleepPulse 4s infinite; fill: var(--lumi-gold); }
 
-/* 11. UYARI / KORUMA */
-[data-state="uyari"] #lumi-head-group { transform: translateY(4px); }
-[data-state="uyari"] #mouth-flat { opacity: 1; transform: scale(1.15); }
-[data-state="uyari"] #brow-l { opacity: 1; transform: translateY(16px) rotate(22deg); stroke-width: 14; }
-[data-state="uyari"] #brow-r { opacity: 1; transform: translateY(16px) rotate(-22deg); stroke-width: 14; }
-[data-state="uyari"] #lid-l { transform: translateY(32px) rotate(18deg); }
-[data-state="uyari"] #lid-r { transform: translateY(32px) rotate(-18deg); }
-[data-state="uyari"] #lumi-arm-l { transform: rotate(-20deg) translateX(10px); }
-[data-state="uyari"] #lumi-arm-r { transform: rotate(20deg) translateX(-10px); }
-[data-state="uyari"] #orb-core { fill: #FFAAA6; filter: url(#lumi-glow-orb-red); animation: none; }
-[data-state="uyari"] .cheek { opacity: 0.2; }
+/* 11. UYARI / KORUMA MODU (Kırmızı Küre & Çatık Kaşlar) */
+[data-state="uyari"] #lumi-head-group, [data-state="kizgin"] #lumi-head-group { transform: translateY(4px); }
+[data-state="uyari"] #mouth-flat, [data-state="kizgin"] #mouth-flat { opacity: 1; transform: scale(1.15); }
+[data-state="uyari"] #brow-l, [data-state="kizgin"] #brow-l { opacity: 1; transform: translateY(14px) rotate(22deg); stroke-width: 14; }
+[data-state="uyari"] #brow-r, [data-state="kizgin"] #brow-r { opacity: 1; transform: translateY(14px) rotate(-22deg); stroke-width: 14; }
+[data-state="uyari"] #lid-l, [data-state="kizgin"] #lid-l { transform: translateY(44px) rotate(16deg); }
+[data-state="uyari"] #lid-r, [data-state="kizgin"] #lid-r { transform: translateY(44px) rotate(-16deg); }
+[data-state="uyari"] #lumi-arm-l, [data-state="kizgin"] #lumi-arm-l { transform: rotate(-22deg) translateX(12px); }
+[data-state="uyari"] #lumi-arm-r, [data-state="kizgin"] #lumi-arm-r { transform: rotate(22deg) translateX(-12px); }
+[data-state="uyari"] #orb-core, [data-state="kizgin"] #orb-core { fill: #FFAAA6; animation: none; }
+[data-state="uyari"] .cheek, [data-state="kizgin"] .cheek { opacity: 0.15; }
 
-/* 12. UYKULU */
+/* 12. UYKULU (Esneyen & Yarı Kapalı Gözler) */
 [data-state="uykulu"] #lumi-master { animation: lumi-idleFloat 6.5s ease-in-out infinite; }
 [data-state="uykulu"] #lumi-head-group { transform: translateY(22px) rotate(6deg); }
 [data-state="uykulu"] #lumi-body { transform: scaleY(0.95) translateY(8px); }
-[data-state="uykulu"] .eyes-blink { animation: lumi-blink 3s infinite; }
-[data-state="uykulu"] .lid { transform: translateY(58px); }
+[data-state="uykulu"] #brow-l, [data-state="uykulu"] #brow-r { opacity: 0.45; transform: translateY(8px); }
+[data-state="uykulu"] #lid-l, [data-state="uykulu"] #lid-r { transform: translateY(82px); }
+[data-state="uykulu"] #pupils-l, [data-state="uykulu"] #pupils-r { transform: translateY(12px); }
 [data-state="uykulu"] #mouth-flat { opacity: 1; transform: scale(0.65); }
 [data-state="uykulu"] #lumi-arm-l, [data-state="uykulu"] #lumi-arm-r { transform: translateY(14px); }
 [data-state="uykulu"] #orb-core { animation: lumi-sleepPulse 5s infinite; fill: #FFE0B2; }
@@ -255,8 +301,8 @@ html.dark-theme #lumi-root {
 
 /* Canlı Launcher Butonu (Sağ Alttaki Balon) */
 #lumi-fab {
-  width: 70px;
-  height: 70px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: var(--lumi-yellow);
   border: 2.5px solid #1D1D1D;
@@ -279,8 +325,8 @@ html.dark-theme #lumi-root {
   box-shadow: 1px 1px 0 #1D1D1D;
 }
 #lumi-fab .fab-character-wrap {
-  width: 86px;
-  height: 86px;
+  width: 88px;
+  height: 88px;
   margin-top: 14px;
   pointer-events: none;
 }
@@ -292,7 +338,7 @@ html.dark-theme #lumi-root {
 #lumi-panel {
   position: absolute;
   right: 0;
-  bottom: 86px;
+  bottom: 88px;
   width: 480px;
   max-width: calc(100vw - 28px);
   height: min(740px, calc(100vh - 95px));
@@ -319,8 +365,8 @@ html.dark-theme #lumi-root {
 .lumi-header {
   background: var(--lumi-purple);
   color: #fff;
-  padding: 14px 16px 12px;
-  min-height: 145px;
+  padding: 14px 16px 14px;
+  min-height: 148px;
   border-bottom: 2.5px solid var(--lumi-ink);
   display: flex;
   flex-direction: column;
@@ -331,8 +377,8 @@ html.dark-theme #lumi-root {
 }
 
 .lumi-header-hero {
-  width: 170px;
-  height: 125px;
+  width: 175px;
+  height: 128px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -352,10 +398,10 @@ html.dark-theme #lumi-root {
   background: rgba(0, 0, 0, 0.2);
   border: 1.5px solid rgba(255, 255, 255, 0.35);
   color: #fff;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
   cursor: pointer;
   display: flex;
@@ -370,7 +416,7 @@ html.dark-theme #lumi-root {
   background: rgba(0, 0, 0, 0.4);
 }
 
-/* Hafif Ruh Hali Rozeti (Karakterin Altında Zarifçe) */
+/* Ruh Hali Rozeti (Karakterin Altında) */
 .lumi-mood-pill {
   position: absolute;
   bottom: 8px;
@@ -433,8 +479,8 @@ html.dark-theme #lumi-root {
 
 /* Bot Mesajı İçindeki Canlı Karakter */
 .lumi-msg-char-wrap {
-  width: 82px;
-  height: 76px;
+  width: 84px;
+  height: 78px;
   display: flex;
   align-items: center;
   justify-content: center;

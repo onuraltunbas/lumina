@@ -136,16 +136,16 @@
       '        <path d="M 570,300 C 700,300 720,450 690,520 C 680,540 655,555 640,530 C 625,560 595,560 585,530 C 570,555 540,540 545,500 C 550,420 520,360 570,300 Z" fill="url(#tgr_' + sid + ')"/>' +
       '      </g>' +
       '      <path d="M 400,160 C 640,160 670,430 590,510 C 530,570 270,570 210,510 C 130,430 160,160 400,160 Z" fill="url(#bg_' + sid + ')"/>' +
-      '      <circle class="anim-part cheek" cx="250" cy="420" r="45" fill="url(#cg_' + sid + ')"/>' +
-      '      <circle class="anim-part cheek" cx="550" cy="420" r="45" fill="url(#cg_' + sid + ')"/>' +
+      '      <circle id="cheek-l" class="anim-part cheek" cx="250" cy="420" r="45" fill="url(#cg_' + sid + ')"/>' +
+      '      <circle id="cheek-r" class="anim-part cheek" cx="550" cy="420" r="45" fill="url(#cg_' + sid + ')"/>' +
       '      <path id="brow-l" class="anim-part brow" d="M 255,275 Q 300,255 345,278" fill="none" stroke="#18264A" stroke-width="10" stroke-linecap="round"/>' +
       '      <path id="brow-r" class="anim-part brow" d="M 545,275 Q 500,255 455,278" fill="none" stroke="#18264A" stroke-width="10" stroke-linecap="round"/>' +
       '      <g id="lumi-eyes" class="anim-part">' +
       '        <g class="eyes-blink">' +
-      '          <g>' +
-      '            <g class="anim-part pupils-group">' +
-      '              <g class="eye-open-parts anim-part">' +
-      '                <ellipse cx="300" cy="360" rx="45" ry="65" fill="url(#eg_' + sid + ')"/>' +
+      '          <g id="eye-wrap-l">' +
+      '            <g class="eye-open-parts anim-part">' +
+      '              <ellipse cx="300" cy="360" rx="45" ry="65" fill="url(#eg_' + sid + ')"/>' +
+      '              <g id="pupils-l" class="anim-part pupils-group">' +
       '                <circle cx="315" cy="325" r="18" fill="#FFFFFF"/>' +
       '                <circle cx="285" cy="390" r="8" fill="#FFFFFF" opacity="0.8"/>' +
       '                <circle cx="325" cy="380" r="4" fill="#FFFFFF" opacity="0.5"/>' +
@@ -153,16 +153,16 @@
       '            </g>' +
       '            <g clip-path="url(#cl_' + sid + ')">' +
       '              <g id="lid-l" class="lid anim-part">' +
-      '                <rect x="235" y="190" width="130" height="105" fill="#FFF4EA"/>' +
-      '                <line x1="235" y1="295" x2="365" y2="295" stroke="#18264A" stroke-width="7" stroke-linecap="round"/>' +
+      '                <rect x="200" y="140" width="200" height="155" fill="#FFF4EA"/>' +
+      '                <line x1="200" y1="295" x2="400" y2="295" stroke="#18264A" stroke-width="8" stroke-linecap="round"/>' +
       '              </g>' +
       '            </g>' +
-      '            <path class="eye-happy anim-part" d="M 260,375 Q 300,325 340,375" fill="none" stroke="#18264A" stroke-width="13" stroke-linecap="round"/>' +
+      '            <path id="eye-happy-l" class="eye-happy anim-part" d="M 260,375 Q 300,325 340,375" fill="none" stroke="#18264A" stroke-width="13" stroke-linecap="round"/>' +
       '          </g>' +
-      '          <g>' +
-      '            <g class="anim-part pupils-group">' +
-      '              <g class="eye-open-parts anim-part">' +
-      '                <ellipse cx="500" cy="360" rx="45" ry="65" fill="url(#eg_' + sid + ')"/>' +
+      '          <g id="eye-wrap-r">' +
+      '            <g class="eye-open-parts anim-part">' +
+      '              <ellipse cx="500" cy="360" rx="45" ry="65" fill="url(#eg_' + sid + ')"/>' +
+      '              <g id="pupils-r" class="anim-part pupils-group">' +
       '                <circle cx="485" cy="325" r="18" fill="#FFFFFF"/>' +
       '                <circle cx="515" cy="390" r="8" fill="#FFFFFF" opacity="0.8"/>' +
       '                <circle cx="475" cy="380" r="4" fill="#FFFFFF" opacity="0.5"/>' +
@@ -170,20 +170,20 @@
       '            </g>' +
       '            <g clip-path="url(#cr_' + sid + ')">' +
       '              <g id="lid-r" class="lid anim-part">' +
-      '                <rect x="435" y="190" width="130" height="105" fill="#FFF4EA"/>' +
-      '                <line x1="435" y1="295" x2="565" y2="295" stroke="#18264A" stroke-width="7" stroke-linecap="round"/>' +
+      '                <rect x="400" y="140" width="200" height="155" fill="#FFF4EA"/>' +
+      '                <line x1="400" y1="295" x2="600" y2="295" stroke="#18264A" stroke-width="8" stroke-linecap="round"/>' +
       '              </g>' +
       '            </g>' +
-      '            <path class="eye-happy anim-part" d="M 460,375 Q 500,325 540,375" fill="none" stroke="#18264A" stroke-width="13" stroke-linecap="round"/>' +
+      '            <path id="eye-happy-r" class="eye-happy anim-part" d="M 460,375 Q 500,325 540,375" fill="none" stroke="#18264A" stroke-width="13" stroke-linecap="round"/>' +
       '          </g>' +
       '        </g>' +
       '      </g>' +
       '      <g id="lumi-mouth">' +
-      '        <path id="mouth-smile" class="mouth-shape anim-part" d="M 380,420 Q 400,440 420,420" fill="none" stroke="#663C4A" stroke-width="8" stroke-linecap="round"/>' +
-      '        <path id="mouth-happy" class="mouth-shape anim-part" d="M 370,415 Q 400,465 430,415 Z" fill="#663C4A" stroke="#663C4A" stroke-width="5" stroke-linejoin="round"/>' +
-      '        <ellipse id="mouth-o" class="mouth-shape anim-part" cx="400" cy="428" rx="12" ry="18" fill="#663C4A"/>' +
-      '        <path id="mouth-sad" class="mouth-shape anim-part" d="M 380,438 Q 400,420 420,438" fill="none" stroke="#663C4A" stroke-width="8" stroke-linecap="round"/>' +
-      '        <path id="mouth-flat" class="mouth-shape anim-part" d="M 385,428 L 415,428" fill="none" stroke="#663C4A" stroke-width="8" stroke-linecap="round"/>' +
+      '        <path id="mouth-smile" class="mouth-shape anim-part" d="M 375,420 Q 400,442 425,420" fill="none" stroke="#663C4A" stroke-width="8" stroke-linecap="round"/>' +
+      '        <path id="mouth-happy" class="mouth-shape anim-part" d="M 370,416 Q 400,465 430,416 Z" fill="#663C4A" stroke="#663C4A" stroke-width="5" stroke-linejoin="round"/>' +
+      '        <ellipse id="mouth-o" class="mouth-shape anim-part" cx="400" cy="428" rx="14" ry="19" fill="#663C4A"/>' +
+      '        <path id="mouth-sad" class="mouth-shape anim-part" d="M 375,436 Q 400,416 425,436" fill="none" stroke="#663C4A" stroke-width="8" stroke-linecap="round"/>' +
+      '        <path id="mouth-flat" class="mouth-shape anim-part" d="M 382,426 L 418,426" stroke="#663C4A" stroke-width="8" stroke-linecap="round"/>' +
       '      </g>' +
       '      <g id="lumi-antenna" class="anim-part">' +
       '        <path d="M 400,175 Q 390,110 400,70" fill="none" stroke="#FFFAF5" stroke-width="10" stroke-linecap="round"/>' +
@@ -299,6 +299,8 @@
 
     // Canlı Duygu / Mimik Güncelleyici (Tüm sahneleri senkronize eder)
     function setLumiMood(mood, tempDuration) {
+      if (mood === 'uzgun') mood = 'teselli';
+      if (mood === 'kizgin') mood = 'uyari';
       if (!MOOD_LABELS[mood]) mood = 'normal';
       state.currentMood = mood;
       if (stageHeader) stageHeader.setAttribute('data-state', mood);
