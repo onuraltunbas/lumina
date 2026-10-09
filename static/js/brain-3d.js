@@ -162,8 +162,8 @@ function initBrain() {
     const nodeRegions = [];
     const nodeActiveState = new Uint8Array(nodeCount);
 
-    // Nöron için Cel Shading (Çizgi Film) Materyali
-    const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
+    // Nöron için Cel Shading Materyali (Yumuşatılmış koyu gri dış çizgi)
+    const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x4B5563, side: THREE.BackSide });
     const fillMaterial = new THREE.MeshToonMaterial({ color: 0xffffff }); // Default Beyaz
 
     const nodeGeometry = new THREE.SphereGeometry(1, 8, 8);
@@ -247,9 +247,9 @@ function initBrain() {
 
     // --- BAĞLANTILAR (AKSONLAR) ---
     const lineMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x1D1D1D, // Çizgi roman koyu siyah
+        color: 0x71717A, // Yumuşak nöral gri (koyu siyah yerine estetik gri)
         transparent: true,
-        opacity: 0.45, // Dengeli ve net şeffaflık
+        opacity: 0.40, // Dengeli ve net şeffaflık
         depthWrite: false
     });
 
@@ -274,6 +274,16 @@ function initBrain() {
     const lines = new THREE.LineSegments(lineGeo, lineMaterial);
     lines.renderOrder = 1;
     brainGroup.add(lines);
+
+    // Tema durumuna göre çizgi ve hat tonunu dinamik uyarla
+    function syncLineTheme() {
+        const isDark = document.documentElement.classList.contains('dark-theme');
+        lineMaterial.color.setHex(isDark ? 0x94A3B8 : 0x71717A);
+        lineMaterial.opacity = isDark ? 0.35 : 0.40;
+        outlineMaterial.color.setHex(isDark ? 0x383452 : 0x4B5563);
+    }
+    syncLineTheme();
+    window.addEventListener('luminathemechange', syncLineTheme);
 
     outlineMesh.renderOrder = 2;
     instancedMesh.renderOrder = 3;
