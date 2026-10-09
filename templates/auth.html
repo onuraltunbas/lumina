@@ -21,12 +21,18 @@
     }
     .auth-container {
       max-width: 540px;
-      margin: 40px auto 60px auto;
+      margin: 125px auto 60px auto;
       padding: 0 20px;
       width: 100%;
       box-sizing: border-box;
       position: relative;
       z-index: 10;
+    }
+    @media screen and (max-width: 767px) {
+      .auth-container {
+        margin-top: 105px;
+        padding: 0 16px;
+      }
     }
     .auth-card {
       background: #FFFFFF;
@@ -270,9 +276,6 @@
         </div>
 
         <div style="text-align: center; margin-bottom: 24px;">
-          <div class="badge margin-bottom-15" style="display: inline-block;">
-            <div class="badge-text" id="auth-badge-text">✨ Kişisel Gelişim Portalı</div>
-          </div>
           <h1 class="display-3" id="auth-title" style="margin-bottom: 8px;">Öğrenme Yolculuğuna Başla</h1>
           <p style="color: #666; font-size: 15px; margin: 0 auto; max-width: 420px;" id="auth-subtitle">
             Kendi hesabını oluşturarak test sonuçlarını kaydet ve sana özel rehbere dilediğin an ulaş.
@@ -369,7 +372,7 @@
       <div class="wrapper background-purple border-top" style="padding: 25px 0;">
         <div class="container cc-narrow">
           <div style="text-align: center;">
-            <p class="margin-bottom-none" style="font-size: 14px; color: #1D1D1D;">© 2026 Lumina Design Studio. Tüm hakları saklıdır.</p>
+            <p class="margin-bottom-none" style="font-size: 14px; color: #1D1D1D;">© 2026 Lumina. Tüm hakları saklıdır.</p>
           </div>
         </div>
       </div>
