@@ -178,21 +178,35 @@
     // =========================================================================
     // 4. (ÖĞE 1): 5 ÖĞRENME MODELİ KARTLARI STAGGER POP (CARTOON ZIPLAMA)
     // =========================================================================
-    const modelCards = document.querySelectorAll('.services-grid .card');
+    const modelCards = document.querySelectorAll('.services-card-list .card, .services-grid .card');
     if (modelCards.length > 0) {
       gsap.from(modelCards, {
         scrollTrigger: {
-          trigger: '.services-grid',
+          trigger: '.services-card-list, .services-grid',
           start: 'top 80%',
           toggleActions: 'play none none none'
         },
-        y: 60,
+        y: 40,
         opacity: 0,
-        scale: 0.82,
-        rotation: (i) => (i % 2 === 0 ? -2 : 2),
-        duration: 0.7,
-        stagger: 0.12,
-        ease: 'back.out(1.7)' // Çizgi film yaylanma (bounce/pop) efekti
+        scale: 0.9,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'back.out(1.5)' // Çizgi film yaylanma efekti
+      });
+    }
+
+    const brainWrapper = document.querySelector('.brain-canvas-wrapper');
+    if (brainWrapper) {
+      gsap.from(brainWrapper, {
+        scrollTrigger: {
+          trigger: brainWrapper,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        },
+        scale: 0.9,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'back.out(1.4)'
       });
     }
 
