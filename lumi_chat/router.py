@@ -133,6 +133,7 @@ async def chat_send(payload: ChatIn, request: Request, db: Session = Depends(get
         system_instruction=build_system_prompt(user.username, result),
         max_output_tokens=CONFIG["max_output_tokens"],
         temperature=CONFIG["temperature"],
+        thinking_config=types.ThinkingConfig(thinking_budget=256),
     )
 
     user_msg = ChatMessage(user_id=user.id, role="user", content=text,
@@ -144,17 +145,36 @@ async def chat_send(payload: ChatIn, request: Request, db: Session = Depends(get
     async def stream():
         reply = ""
         try:
-            async for chunk in await client.aio.models.generate_content_stream(
-                model=CONFIG["model"], contents=contents, config=gen_cfg
-            ):
-                if chunk.text:
-                    reply += chunk.text
-                    yield chunk.text
-        except Exception as e:  # noqa: BLE001
-            print(f"[lumi_chat] Gemini hatası: {e}")
-            err = "\n\n⚠️ Şu an cevap veremiyorum, biraz sonra tekrar dener misin?"
-            reply += err
-            yield err
+            models_to_try = [CONFIG["model"]]
+            for fb in ["gemini-3.5-flash-lite", "gemini-3.8-flash"]:
+                if fb not in models_to_try:
+                    models_to_try.append(fb)
+
+            success = False
+            last_error = None
+            for m_name in models_to_try:
+                try:
+                    stream_call = await client.aio.models.generate_content_stream(
+                        model=m_name, contents=contents, config=gen_cfg
+                    )
+                    async for chunk in stream_call:
+                        if chunk.text:
+                            reply += chunk.text
+                            yield chunk.text
+                    success = True
+                    break
+                except Exception as e:
+                    last_error = e
+                    print(f"[lumi_chat] Model {m_name} hatası: {e}")
+                    if reply:
+                        break
+                    continue
+
+            if not success and not reply:
+                print(f"[lumi_chat] Tüm modeller başarısız oldu. Son hata: {last_error}")
+                err = "\n\n⚠️ Şu an cevap veremiyorum, biraz sonra tekrar dener misin?"
+                reply += err
+                yield err
         finally:
             # Akış bitince (veya istemci koparsa) cevabı kaydet
             s = Session_()

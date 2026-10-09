@@ -1,7 +1,7 @@
 {
-  "model": "gemini-3.8-flash",
+  "model": "gemini-3.5-flash",
   "temperature": 0.8,
-  "max_output_tokens": 800,
+  "max_output_tokens": 2048,
 
   "bot_name": "Lumi",
 
