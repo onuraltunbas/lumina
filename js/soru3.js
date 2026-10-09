@@ -85,7 +85,12 @@ function soru3Degerlendir() {
     ['kalem'].forEach(v => { if (cevaplar.has(v)) dogruSayisi += 1; });
 
     // 1) "fotoğraf makinesi" varyasyonlari (space/aksan)
-    const FOTO_VARYANT = new Set([
+
+    // Analiz
+    const DOGRU_L = ['semsiye', 'elma', 'fotoğraf makinesi', 'çorap', 'vida', 'kalem'];
+    const yazdik = Array.from(cevaplar);
+
+    const FOTO_VARYANT_SET = new Set([
         'fotograf makinesi',
         'fotoğraf makinesi',
         'foto makinesi',
@@ -95,26 +100,77 @@ function soru3Degerlendir() {
         'fotograf'
     ]);
 
-    // 2) eslestirme
-    cevaplar.forEach(v => {
-        if (v === 'semsiye') dogruFinal.add('semsiye');
-        if (v === 'elma') dogruFinal.add('elma');
-        if (FOTO_VARYANT.has(v)) dogruFinal.add('fotoğraf makinesi');
-        if (v === 'corap') dogruFinal.add('çorap');
-        if (v === 'vida') dogruFinal.add('vida');
-        if (v === 'kalem') dogruFinal.add('kalem');
+    const yazilanKabul = new Set();
+    yazdik.forEach(v => {
+        if (v === 'semsiye') yazilanKabul.add('semsiye');
+        if (v === 'elma') yazilanKabul.add('elma');
+        if (FOTO_VARYANT_SET.has(v)) yazilanKabul.add('fotoğraf makinesi');
+        if (v === 'corap') yazilanKabul.add('çorap');
+        if (v === 'vida') yazilanKabul.add('vida');
+        if (v === 'kalem') yazilanKabul.add('kalem');
     });
 
-    const dogruAdet = dogruFinal.size;
+    const dogruListesi = [];
+    const eksikListesi = [];
+    DOGRU_L.forEach(d => {
+        if (yazilanKabul.has(d)) dogruListesi.push(d);
+        else eksikListesi.push(d);
+    });
+
+    const yanlisListesi = [];
+    const farkli = [];
+    yazdik.forEach(v => {
+        let eslesti = false;
+        if (v === 'semsiye' || v === 'elma' || v === 'çorap' || v === 'vida' || v === 'kalem') eslesti = true;
+        if (FOTO_VARYANT_SET.has(v)) eslesti = true;
+        if (!eslesti) {
+            farkli.push(v);
+            yanlisListesi.push(v);
+        }
+    });
+
+    const dogruAdet = dogruListesi.length;
     const puan = Math.round((dogruAdet / 6) * 100);
 
     window.testSonuclari.cevaplar.soru3 = {
         cevaplar: Array.from(cevaplar),
         dogruAdet: dogruAdet,
-        puan: puan
+        puan: puan,
+        analiz: {
+            yazdik: yazdik,
+            dogru: dogruListesi,
+            yanlis: yanlisListesi,
+            eksik: eksikListesi
+        }
     };
 
-    soru3Tamamla(puan, 0); // görsel puan olarak kaydet
+    // Sonuç ekranını göster
+    document.getElementById('soru3-sorular').classList.add('hidden');
+    const sonuc = document.getElementById('soru3-sonuc');
+    if (sonuc) sonuc.classList.remove('hidden');
+
+    const analizDiv = document.getElementById('soru3-analiz');
+    if (analizDiv) {
+        analizDiv.innerHTML = '';
+        const ekle = (baslik, liste) => {
+            if (!liste.length) return;
+            const p = document.createElement('p');
+            p.innerHTML = '<strong>' + baslik + ':</strong> ' + liste.join(', ');
+            analizDiv.appendChild(p);
+        };
+        ekle('Doğru yazdıklarınız', dogruListesi);
+        ekle('Eksik bıraktıklarınız (doğru ama yazmamışsınız)', eksikListesi);
+        ekle('Yanlış yazdıklarınız', yanlisListesi);
+        if (farkli.length) ekle('Diğer yazdıklarınız (farklı terimler)', farkli);
+    }
+
+    const puanEl = document.getElementById('soru3-puan');
+    if (puanEl) puanEl.textContent = `Puanınız: ${puan} / 100 (Doğru: ${dogruAdet} / 6)`;
+
+    const devamBtn = document.getElementById('soru3-devam');
+    if (devamBtn) {
+        devamBtn.onclick = () => soru3Tamamla(puan, 0);
+    }
 }
 
 function soru3Tamamla(gorsel, deneyimsel) {
