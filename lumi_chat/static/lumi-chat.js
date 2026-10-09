@@ -791,14 +791,46 @@
       }, 180);
     }
 
+    var climbTargetPlatform = null;
+    var climbTargetY = 18;
+
+    // Tırmanırken çıkılacak hedefi seç (Ekrandaki herhangi bir çizgi/kat veya tavan)
+    function selectClimbTarget() {
+      var platforms = getCandidatePlatforms();
+      var sz = getCharSize();
+      // Lumi'nin mevcut posY'sinden yukarıda olan (top - sz.h + 8 < posY - 30) ve makul yükseklikteki platformlar
+      var higherPlatforms = platforms.filter(function (p) {
+        var pSurfY = p.top - sz.h + 8;
+        return pSurfY < posY - 30 && pSurfY > 35;
+      });
+
+      // %65 ihtimalle ekrandaki herhangi bir çizgiye/kata çıksın, %35 tavana çıksın
+      if (higherPlatforms.length > 0 && Math.random() < 0.65) {
+        var chosen = higherPlatforms[Math.floor(Math.random() * higherPlatforms.length)];
+        climbTargetPlatform = chosen;
+        climbTargetY = chosen.top - sz.h + 8;
+      } else {
+        climbTargetPlatform = null;
+        climbTargetY = 18; // En üst tavan
+      }
+    }
+
     // Duvara Sakin Koşup Tırmanma
-    function runToWallAndClimb(wallSide) {
+    function runToWallAndClimb(wallSide, specificTargetPlatform) {
       if (isDragging || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang') return;
       var sz = getCharSize();
       var maxW = Math.max(10, window.innerWidth - sz.w - 10);
       climbWall = wallSide || (posX < window.innerWidth / 2 ? 'left' : 'right');
       targetX = climbWall === 'left' ? 8 : maxW;
       behavior = 'walk';
+
+      if (specificTargetPlatform) {
+        climbTargetPlatform = specificTargetPlatform;
+        climbTargetY = specificTargetPlatform.top - sz.h + 8;
+      } else {
+        selectClimbTarget();
+      }
+
       shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop', 'is-hover-drop', 'bubble-below');
       shimeji.classList.add('is-running');
       setFacing(climbWall === 'left' ? -1 : 1);
@@ -864,26 +896,62 @@
           posX = maxW;
         }
 
-        // En üst tavana ulaştı mı?
-        if (posY <= 18) {
-          posY = 18;
-          behavior = 'hang';
-          shimeji.classList.remove('is-climbing', 'climb-left', 'climb-right');
-          shimeji.classList.add('is-hanging', 'bubble-below'); // En üst tavanda baloncuk tam altta olsun!
-          setLumiMood('mutlu');
-          showBubble('Tavandayım! Burası çok havalı! 🌟', 2400);
+        // Hedef yüksekliğe ulaştı mı?
+        if (posY <= climbTargetY) {
+          posY = climbTargetY;
 
-          setTimeout(function () {
-            if (behavior === 'hang') {
-              shimeji.classList.remove('is-hanging', 'bubble-below');
-              behavior = 'falling';
-              shimeji.classList.add('is-falling');
-              velocityY = 1.0;
-              velocityX = (climbWall === 'left' ? 2.6 : -2.6);
+          // Durum A: Hedef en üst tavan (climbTargetY <= 25)
+          if (climbTargetY <= 25) {
+            behavior = 'hang';
+            shimeji.classList.remove('is-climbing', 'climb-left', 'climb-right');
+            shimeji.classList.add('is-hanging', 'bubble-below'); // En üst tavanda baloncuk tam altta olsun!
+            setLumiMood('mutlu');
+            showBubble('Tavandayım! Burası çok havalı! 🌟', 2400);
+
+            setTimeout(function () {
+              if (behavior === 'hang') {
+                shimeji.classList.remove('is-hanging', 'bubble-below');
+                behavior = 'falling';
+                shimeji.classList.add('is-falling');
+                velocityY = 1.0;
+                velocityX = (climbWall === 'left' ? 2.6 : -2.6);
+                setFacing(climbWall === 'left' ? 1 : -1);
+                setLumiMood('heyecanli', 1800);
+              }
+            }, 2400);
+          }
+          // Durum B: Ekrandaki herhangi bir çizgi / platform / kata çıkış!
+          else if (climbTargetPlatform && climbTargetPlatform.el) {
+            var chosen = climbTargetPlatform;
+            shimeji.classList.remove('is-climbing', 'climb-left', 'climb-right', 'bubble-below');
+
+            var nearWall = (climbWall === 'left' && chosen.left <= 50) ||
+                           (climbWall === 'right' && chosen.right >= maxW - 40);
+
+            if (nearWall) {
+              // Doğrudan duvardan çizginin üzerine adım atar!
+              currentPlatform = chosen;
+              behavior = 'walk';
+              shimeji.classList.add('is-walking');
+              targetX = climbWall === 'left' ? Math.min(chosen.right - 20, chosen.left + 30) : Math.max(chosen.left + 20, chosen.right - 30);
               setFacing(climbWall === 'left' ? 1 : -1);
-              setLumiMood('heyecanli', 1800);
+              setLumiMood('mutlu', 1500);
+
+              var climbExitQuotes = [
+                'Bu çizgiye tırmandım! 🧗‍♂️✨',
+                'Kata ulaştım! Manzara harika! 🌟',
+                'İşte yeni bir zemin! 🔍',
+                'Duvardan kata geçtim! 🐾'
+              ];
+              showBubble(climbExitQuotes[Math.floor(Math.random() * climbExitQuotes.length)], 2200);
+            } else {
+              // Duvardan orta alandaki karta doğru sıçrar!
+              var tX = Math.max(chosen.left + 15, Math.min(chosen.right - sz.w - 15, (chosen.left + chosen.right) / 2));
+              jumpToTarget(tX, climbTargetY, chosen, 'heyecanli', 'Duvardan çizgiye sıçrıyorum! 🚀');
             }
-          }, 2400);
+          } else {
+            climbTargetY = 18; // Hedef yoksa tavana devam et
+          }
         }
         updateTransform();
       }
