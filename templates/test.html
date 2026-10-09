@@ -8,6 +8,39 @@
   <link href="/static/css/main.css" rel="stylesheet" type="text/css"/>
   <link href="/static/images/64427d8f1fc82a6fb0791e81_favicon.png" rel="shortcut icon" type="image/x-icon"/>
   <link href="/static/images/64427d923fb922a5adafc5ba_webclip.png" rel="apple-touch-icon"/>
+  <style>
+    .test-wrapper {
+      padding: 80px 0;
+    }
+    .test-card {
+      text-align: center;
+      padding: 60px 40px;
+    }
+    .test-waiting-box {
+      background: #F8F9FA;
+      border: 2.5px dashed #1D1D1D;
+      border-radius: 14px;
+      padding: 40px 25px;
+      margin: 30px 0;
+    }
+    @media screen and (max-width: 767px) {
+      .test-wrapper {
+        padding: 40px 0 !important;
+      }
+      .test-card {
+        padding: 30px 18px !important;
+        box-shadow: 5px 5px 0px #1D1D1D !important;
+      }
+      .test-waiting-box {
+        padding: 24px 16px !important;
+        margin: 20px 0 !important;
+      }
+      .test-card .display-2 {
+        font-size: 28px !important;
+        line-height: 1.2 !important;
+      }
+    }
+  </style>
 </head>
 <body class="body">
 
@@ -60,9 +93,9 @@
   </header>
 
   <section class="section">
-    <div class="wrapper background-purple border-bottom overflow-hidden" style="padding: 80px 0;">
+    <div class="wrapper background-purple border-bottom overflow-hidden test-wrapper">
       <div class="container cc-narrow">
-        <div class="card background-white" style="text-align: center; padding: 60px 40px;">
+        <div class="card background-white test-card">
           <div class="badge margin-bottom-30">
             <div class="badge-text"><span class="shape-label">      </span>Nasıl Öğreniyorum</div>
           </div>
@@ -72,7 +105,7 @@
           </p>
 
           <!-- Test Hazırlık Alanı (Sorular eklendiğinde buraya yerleşecek) -->
-          <div style="background: #F8F9FA; border: 2.5px dashed #1D1D1D; border-radius: 14px; padding: 40px 25px; margin: 30px 0;">
+          <div class="test-waiting-box">
             <div style="font-size: 48px; margin-bottom: 15px;">⏳</div>
             <h3 style="margin-bottom: 10px;">Test Soruları Hazırlanıyor!</h3>
             <p style="color: #666; max-width: 500px; margin: 0 auto 25px auto;">

@@ -188,12 +188,89 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+    .dashboard-brain-wrapper {
+      height: 580px;
+      box-shadow: 7px 7px 0px #1D1D1D;
+    }
     @media screen and (max-width: 991px) {
       .dashboard-grid {
         flex-direction: column;
       }
       .dashboard-col-right {
         position: static;
+      }
+      .dashboard-brain-wrapper {
+        height: 420px;
+        box-shadow: 5px 5px 0px #1D1D1D;
+      }
+    }
+    @media screen and (max-width: 767px) {
+      .dashboard-header {
+        padding: 12px 0;
+      }
+      .dashboard-header .logo {
+        height: 38px !important;
+      }
+      .dashboard-user-actions {
+        gap: 8px !important;
+      }
+      .dashboard-user-pill {
+        padding: 5px 12px;
+        font-size: 13.5px;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .dashboard-logout-btn {
+        padding: 6px 12px;
+        font-size: 13.5px;
+      }
+      .dashboard-hero-card {
+        padding: 22px 18px;
+        margin: 20px 0 16px 0;
+        box-shadow: 5px 5px 0px #1D1D1D;
+      }
+      .dashboard-hero-card h1 {
+        font-size: 28px !important;
+        line-height: 1.2 !important;
+      }
+      .dashboard-stats-row {
+        gap: 8px;
+      }
+      .dashboard-stat-tag {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
+      .dashboard-score-card {
+        padding: 16px 14px;
+        box-shadow: 3px 3px 0px #1D1D1D;
+      }
+      .score-card-title {
+        font-size: 16px;
+      }
+      .score-card-pct {
+        font-size: 16px;
+        padding: 2px 8px;
+      }
+      .dashboard-waiting-box {
+        padding: 30px 16px;
+        box-shadow: 4px 4px 0px #1D1D1D;
+      }
+      .dashboard-brain-wrapper {
+        height: 330px;
+        box-shadow: 4px 4px 0px #1D1D1D;
+      }
+    }
+    @media screen and (max-width: 479px) {
+      .dashboard-user-pill {
+        max-width: 110px;
+        font-size: 12.5px;
+        padding: 4px 8px;
+      }
+      .dashboard-logout-btn {
+        font-size: 12.5px;
+        padding: 4px 8px;
       }
     }
   </style>
@@ -208,7 +285,7 @@
           <img alt="Lumina" class="logo" height="48" src="/static/images/644290cf40e714e0668a1a45_logo.svg"/>
         </a>
 
-        <div style="display: flex; align-items: center; gap: 14px;">
+        <div class="dashboard-user-actions" style="display: flex; align-items: center; gap: 14px;">
           <div class="dashboard-user-pill">
             <span>👤</span>
             <span id="dash-username">Yükleniyor...</span>
@@ -386,7 +463,7 @@
 
       <!-- SAĞ SÜTUN: 3D NÖRAL BEYİN & YANIP SÖNEN LOBLAR -->
       <div class="dashboard-col-right">
-        <div class="brain-canvas-wrapper" style="height: 600px; box-shadow: 7px 7px 0px #1D1D1D;">
+        <div class="brain-canvas-wrapper dashboard-brain-wrapper">
           
           <div class="brain-info-pill">
             <span class="brain-info-dot" id="brain-glow-dot"></span>

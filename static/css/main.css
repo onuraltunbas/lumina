@@ -4687,3 +4687,251 @@ figcaption {
   box-shadow: 3.5px 3.5px 0px #1D1D1D;
 }
 
+/* =====================================================================
+   DETAYLI MOBİL GÖRÜNÜM VE DOKUNMATİK EKRAN OPTİMİZASYONLARI
+   ===================================================================== */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media screen and (max-width: 991px) {
+  .navbar-inner-mobile {
+    width: 100%;
+  }
+  .navbar-wrapper-mobile {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .menu-button {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .menu-button.w--open {
+    background-color: #F3E8FF;
+  }
+  .nav-menu-wrapper-mobile {
+    border: 2.5px solid #1D1D1D !important;
+    box-shadow: 4px 4px 0px #1D1D1D !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .nav-menu-flex-mobile {
+    padding: 16px 20px !important;
+  }
+  .nav-link-mobile {
+    font-size: 17px !important;
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #F3F4F6;
+    font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 700 !important;
+    color: #1D1D1D !important;
+    display: block !important;
+    text-decoration: none !important;
+  }
+  .nav-link-mobile:last-child {
+    border-bottom: none;
+  }
+  .nav-link-mobile:hover, .nav-link-mobile:active {
+    color: #7934ED !important;
+  }
+  .brain-canvas-wrapper {
+    height: 400px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hero-grid {
+    padding-top: 95px !important;
+    grid-row-gap: 28px !important;
+  }
+  .hero-image {
+    max-width: 320px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    box-shadow: 6px 6px 0px #1D1D1D !important;
+  }
+  .about-image {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    box-shadow: 6px 6px 0px #1D1D1D !important;
+  }
+  .star-badge {
+    bottom: -15px !important;
+    right: 10px !important;
+    transform: scale(0.85);
+  }
+  .display-1 {
+    font-size: 38px !important;
+    line-height: 1.15 !important;
+  }
+  .display-2 {
+    font-size: 30px !important;
+    line-height: 1.2 !important;
+  }
+  .display-3 {
+    font-size: 24px !important;
+    line-height: 1.25 !important;
+  }
+  .paragraph-large {
+    font-size: 17px !important;
+    line-height: 26px !important;
+  }
+  .badge {
+    padding: 6px 14px !important;
+  }
+  .badge-text {
+    font-size: 14px !important;
+  }
+  .button {
+    max-width: 100%;
+  }
+  .button-front {
+    padding: 12px 22px !important;
+  }
+  .button-text {
+    font-size: 16px !important;
+  }
+  .services {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  .service-model-card {
+    padding: 18px 16px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 4px 4px 0px #1D1D1D !important;
+    border-radius: 14px !important;
+  }
+  .service {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    text-align: left !important;
+  }
+  .service-model-card .icon {
+    width: 48px !important;
+    height: 48px !important;
+    flex-shrink: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .service-model-card h3 {
+    font-size: 17.5px !important;
+    margin-bottom: 4px !important;
+    line-height: 1.25 !important;
+  }
+  .service-model-card div {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+  .brain-canvas-wrapper {
+    height: 350px !important;
+    box-shadow: 5px 5px 0px #1D1D1D !important;
+  }
+  .brain-info-pill {
+    top: 10px !important;
+    left: 10px !important;
+    font-size: 12px !important;
+    padding: 5px 10px !important;
+  }
+  .brain-hint-badge {
+    bottom: 10px !important;
+    right: 10px !important;
+    font-size: 11.5px !important;
+    padding: 4px 8px !important;
+  }
+  .brain-active-regions-badge {
+    bottom: 10px !important;
+    left: 10px !important;
+    font-size: 12px !important;
+    padding: 5px 10px !important;
+    max-width: 60% !important;
+  }
+  .about {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  .experience-grid {
+    padding-top: 50px !important;
+    grid-row-gap: 35px !important;
+  }
+  .timeline-content h3 {
+    font-size: 19px !important;
+    margin-bottom: 6px !important;
+  }
+  .timeline-content p {
+    font-size: 14.5px !important;
+    line-height: 1.5 !important;
+  }
+  .footer-row {
+    text-align: center;
+  }
+  .site-details {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .hero-grid {
+    padding-top: 85px !important;
+    grid-row-gap: 22px !important;
+  }
+  .hero-image {
+    max-width: 260px !important;
+  }
+  .display-1 {
+    font-size: 30px !important;
+    line-height: 1.15 !important;
+  }
+  .display-2 {
+    font-size: 25px !important;
+    line-height: 1.2 !important;
+  }
+  .display-3 {
+    font-size: 21px !important;
+    line-height: 1.25 !important;
+  }
+  .paragraph-large {
+    font-size: 15.5px !important;
+    line-height: 24px !important;
+  }
+  .service-model-card {
+    padding: 14px 12px !important;
+  }
+  .service-model-card .icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .service-model-card h3 {
+    font-size: 16px !important;
+  }
+  .service-model-card div {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+  .brain-canvas-wrapper {
+    height: 310px !important;
+  }
+  .brain-info-pill {
+    font-size: 11px !important;
+  }
+  #brain-3d-container,
+  #brain-3d-container canvas {
+    touch-action: pan-y !important;
+  }
+}
+
+

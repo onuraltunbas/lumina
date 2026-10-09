@@ -89,6 +89,13 @@ function initBrain() {
     controls.minDistance = 5;
     controls.maxDistance = 35;
 
+    // Mobil dokunmatik cihazlarda sayfa kaydırmasını kilitlemeyi önle
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouchDevice) {
+        controls.enableZoom = false;
+    }
+    renderer.domElement.style.touchAction = 'pan-y';
+
     // Işıklandırma (Toon/Cel shading için yönlü ışık)
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);

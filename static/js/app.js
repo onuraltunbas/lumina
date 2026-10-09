@@ -88,15 +88,32 @@
     }
   }
 
+  // Mobil menü bağlantısına tıklandığında menüyü otomatik kapat
+  function initMobileNavAutoClose() {
+    const mobileLinks = document.querySelectorAll('.nav-link-mobile');
+    const menuButton = document.querySelector('.navbar-inner-mobile .menu-button');
+    if (!mobileLinks.length || !menuButton) return;
+
+    mobileLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (menuButton.classList.contains('w--open')) {
+          menuButton.click();
+        }
+      });
+    });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initSmoothScroll();
       initEngineRefresh();
       initNavbarAuth();
+      initMobileNavAutoClose();
     });
   } else {
     initSmoothScroll();
     initEngineRefresh();
     initNavbarAuth();
+    initMobileNavAutoClose();
   }
 })();
