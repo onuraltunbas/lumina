@@ -5796,6 +5796,294 @@ html.dark-theme .license-block {
   border-bottom: 2px dashed #383452 !important;
 }
 
+/* =====================================================================
+   ÇEREZ İZİN BANNERI & KVKK MODAL (LUMINA COMIC DESIGN SYSTEM)
+   ===================================================================== */
+.lumina-cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  max-width: 460px;
+  z-index: 99999;
+  background: #FFFFFF;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 6px 6px 0px #1D1D1D;
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lumina-cookie-banner-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lumina-cookie-text {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #374151;
+  margin: 0;
+}
+
+.lumina-cookie-text code {
+  background: #F3F4F6;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12px;
+  font-family: monospace;
+  color: #7934ED;
+}
+
+.lumina-cookie-btn-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.lumina-cookie-detail-link {
+  background: none;
+  border: none;
+  color: #7934ED;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 6px;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: color 0.15s ease;
+}
+
+.lumina-cookie-detail-link:hover {
+  color: #5B21B6;
+}
+
+/* KVKK Modal */
+.lumina-kvkk-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 23, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lumina-kvkk-card {
+  max-width: 660px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 3px solid #1D1D1D;
+  box-shadow: 8px 8px 0px #1D1D1D;
+  border-radius: 20px;
+  padding: 30px 28px;
+  box-sizing: border-box;
+  animation: scaleInModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleInModal {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.lumina-kvkk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.lumina-kvkk-close {
+  background: #FEE2E2;
+  border: 2px solid #1D1D1D;
+  box-shadow: 2.5px 2.5px 0px #1D1D1D;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+  color: #991B1B;
+  transition: all 0.15s ease;
+}
+
+.lumina-kvkk-close:hover {
+  background: #FCA5A5;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+
+.lumina-kvkk-body {
+  overflow-y: auto;
+  padding-right: 8px;
+  margin: 12px 0 20px 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #374151;
+}
+
+.lumina-cookie-table-wrapper {
+  overflow-x: auto;
+  margin: 14px 0;
+  border: 2px solid #1D1D1D;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #1D1D1D;
+}
+
+.lumina-cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  background: #FFFFFF;
+}
+
+.lumina-cookie-table th {
+  background: #F3F4F6;
+  border-bottom: 2px solid #1D1D1D;
+  padding: 10px 12px;
+  text-align: left;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 800;
+  color: #1D1D1D;
+}
+
+.lumina-cookie-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #E5E7EB;
+  color: #4B5563;
+}
+
+.lumina-cookie-table tr:last-child td {
+  border-bottom: none;
+}
+
+.lumina-cookie-table code {
+  background: #F3E8FF;
+  border: 1px solid #D8B4FE;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  color: #6B21A8;
+}
+
+.lumina-kvkk-footer {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 2px dashed #E5E7EB;
+}
+
+/* Dark Mode Uyumları */
+html.dark-theme .lumina-cookie-banner {
+  background: #1A1829;
+  border-color: #383452;
+  box-shadow: 6px 6px 0px #08070F;
+}
+
+html.dark-theme .lumina-cookie-text {
+  color: #D1D5DB;
+}
+
+html.dark-theme .lumina-cookie-text code {
+  background: #242038;
+  border-color: #4C466D;
+  color: #C4B5FD;
+}
+
+html.dark-theme .lumina-cookie-detail-link {
+  color: #A78BFA;
+}
+
+html.dark-theme .lumina-cookie-detail-link:hover {
+  color: #C4B5FD;
+}
+
+html.dark-theme .lumina-kvkk-card {
+  background: #1A1829;
+  border-color: #383452;
+  box-shadow: 8px 8px 0px #08070F;
+  color: #F1F5F9;
+}
+
+html.dark-theme .lumina-kvkk-body {
+  color: #CBD5E1;
+}
+
+html.dark-theme .lumina-cookie-table-wrapper {
+  border-color: #383452;
+  box-shadow: 3px 3px 0px #08070F;
+}
+
+html.dark-theme .lumina-cookie-table {
+  background: #141224;
+}
+
+html.dark-theme .lumina-cookie-table th {
+  background: #242038;
+  border-bottom-color: #383452;
+  color: #F1F5F9;
+}
+
+html.dark-theme .lumina-cookie-table td {
+  border-bottom-color: #2E2A45;
+  color: #94A3B8;
+}
+
+html.dark-theme .lumina-cookie-table code {
+  background: #2E1A47;
+  border-color: #7934ED;
+  color: #E9D5FF;
+}
+
+html.dark-theme .lumina-kvkk-footer {
+  border-top-color: #383452;
+}
+
+@media screen and (max-width: 767px) {
+  .lumina-cookie-banner {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    padding: 16px 18px;
+    box-shadow: 4px 4px 0px #1D1D1D;
+  }
+  html.dark-theme .lumina-cookie-banner {
+    box-shadow: 4px 4px 0px #08070F;
+  }
+  .lumina-kvkk-card {
+    padding: 22px 18px;
+    box-shadow: 5px 5px 0px #1D1D1D;
+  }
+  html.dark-theme .lumina-kvkk-card {
+    box-shadow: 5px 5px 0px #08070F;
+  }
+}
+
+
 
 
 
