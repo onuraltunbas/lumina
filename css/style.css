@@ -1,0 +1,99 @@
+/* ===== Ortak Tasarım ===== */
+:root {
+    --renk-ana: #4f46e5;
+    --renk-ikincil: #0ea5e9;
+    --renk-metin: #1e293b;
+    --renk-arka: #f8fafc;
+}
+
+body {
+    background-color: var(--renk-arka);
+    color: var(--renk-metin);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.soru-kart {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    animation: kart-gir 0.35s ease;
+}
+
+@keyframes kart-gir {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Tek Ortak Gizleme Kuralı ===== */
+.hidden {
+    display: none !important;
+}
+
+/* ===== 1. Soru: Kronolojik Sıralama ===== */
+.soru1-yonerge {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.soru1-sayac-kapsayici {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+}
+
+.soru1-sayac {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--renk-ana);
+    line-height: 1;
+}
+
+.soru1-sayac-birim {
+    color: #64748b;
+}
+
+.soru1-metin {
+    padding-left: 1.25rem;
+    line-height: 1.8;
+}
+
+.soru1-harf {
+    font-weight: 700;
+    color: var(--renk-ana);
+    margin-right: 0.25rem;
+}
+
+.soru1-kutular {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.soru1-kutu {
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.soru1-kutu:focus {
+    border-color: var(--renk-ana);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+

@@ -1,0 +1,15 @@
+# Bağımlılıklar
+node_modules/
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editör
+.vscode/
+.idea/
+
+# Ortam değişkenleri
+.env
+.env.local
