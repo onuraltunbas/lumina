@@ -1,4 +1,4 @@
-/* Lumi Chat — Lumina Comic/Doodle Stili + Entegre Karakter Widget'ı */
+/* Lumi Chat — Lumina Comic/Doodle Stili + Büyük Canlı Karakter Widget'ı */
 #lumi-root {
   --lumi-ink: #1D1D1D;
   --lumi-purple: #7934ED;
@@ -36,7 +36,7 @@ html.dark-theme #lumi-root {
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 6px 8px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.22));
   display: block;
 }
 
@@ -135,7 +135,7 @@ html.dark-theme #lumi-root {
 [data-state="normal"] #mouth-smile { opacity: 1; }
 [data-state="normal"] .cheek { opacity: 0.8; }
 
-/* 2. DİNLİYOR (Kullanıcı mesaj yazarken) */
+/* 2. DİNLİYOR */
 [data-state="dinliyor"] #lumi-head-group { transform: rotate(7deg) translateY(-4px); }
 [data-state="dinliyor"] #mouth-smile { opacity: 1; transform: scale(1.05); }
 [data-state="dinliyor"] .pupils-group { transform: translate(3px, 3px); }
@@ -143,7 +143,7 @@ html.dark-theme #lumi-root {
 [data-state="dinliyor"] #lumi-arm-l { transform: rotate(14deg) translateY(-6px); }
 [data-state="dinliyor"] #orb-core { filter: url(#lumi-glow-orb-bright); transform: scale(1.12); }
 
-/* 3. DÜŞÜNÜYOR (Gemini cevabı beklenirken) */
+/* 3. DÜŞÜNÜYOR (Nöral Nabız + Yukarı Bakan Gözler) */
 [data-state="dusunuyor"] #lumi-head-group { transform: rotate(10deg) translateY(-8px); }
 [data-state="dusunuyor"] .pupils-group { transform: translate(10px, -12px); }
 [data-state="dusunuyor"] #lid-l { transform: translateY(18px) rotate(4deg); }
@@ -153,7 +153,7 @@ html.dark-theme #lumi-root {
 [data-state="dusunuyor"] #lumi-arm-l { transform: rotate(35deg) translateY(-18px) translateX(8px); }
 [data-state="dusunuyor"] #orb-core { fill: #C084FC; animation: lumi-orbNeural 1.3s ease-in-out infinite; }
 
-/* 4. TAKTİK / FİKİR (Çalışma yöntemi verirken) */
+/* 4. TAKTİK / FİKİR (Ampul Gibi Parlayan Küre + Yıldızlar) */
 [data-state="taktik"] #lumi-head-group { transform: translateY(-8px); }
 [data-state="taktik"] #mouth-smile { opacity: 1; transform: scale(1.15); }
 [data-state="taktik"] #brow-l, [data-state="taktik"] #brow-r { opacity: 0.7; transform: translateY(-14px); }
@@ -171,7 +171,7 @@ html.dark-theme #lumi-root {
 [data-state="mutlu"] .cheek { opacity: 1; transform: scale(1.2) translateY(-4px); }
 [data-state="mutlu"] #orb-core { animation: lumi-orbPulse 2s ease-in-out infinite; fill: #FFE49A; }
 
-/* 6. HEYECANLI (Kutlama, yüksek puan) */
+/* 6. HEYECANLI */
 [data-state="heyecanli"] #lumi-master { animation: lumi-excitedJump 0.85s var(--bounce) infinite; }
 [data-state="heyecanli"] #mouth-happy { opacity: 1; transform: scale(1.25); }
 [data-state="heyecanli"] .eye-open-parts { opacity: 0; }
@@ -225,7 +225,7 @@ html.dark-theme #lumi-root {
 [data-state="teselli"] #lumi-tuft-r { transform: rotate(-16deg); }
 [data-state="teselli"] #orb-core { animation: lumi-sleepPulse 4s infinite; fill: var(--lumi-gold); }
 
-/* 11. UYARI / KORUMA (Filtre veya güvenlik) */
+/* 11. UYARI / KORUMA */
 [data-state="uyari"] #lumi-head-group { transform: translateY(4px); }
 [data-state="uyari"] #mouth-flat { opacity: 1; transform: scale(1.15); }
 [data-state="uyari"] #brow-l { opacity: 1; transform: translateY(16px) rotate(22deg); stroke-width: 14; }
@@ -237,7 +237,7 @@ html.dark-theme #lumi-root {
 [data-state="uyari"] #orb-core { fill: #FFAAA6; filter: url(#lumi-glow-orb-red); animation: none; }
 [data-state="uyari"] .cheek { opacity: 0.2; }
 
-/* 12. UYKULU (Bekleme modu) */
+/* 12. UYKULU */
 [data-state="uykulu"] #lumi-master { animation: lumi-idleFloat 6.5s ease-in-out infinite; }
 [data-state="uykulu"] #lumi-head-group { transform: translateY(22px) rotate(6deg); }
 [data-state="uykulu"] #lumi-body { transform: scaleY(0.95) translateY(8px); }
@@ -255,8 +255,8 @@ html.dark-theme #lumi-root {
 
 /* Canlı Launcher Butonu (Sağ Alttaki Balon) */
 #lumi-fab {
-  width: 68px;
-  height: 68px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: var(--lumi-yellow);
   border: 2.5px solid #1D1D1D;
@@ -279,8 +279,8 @@ html.dark-theme #lumi-root {
   box-shadow: 1px 1px 0 #1D1D1D;
 }
 #lumi-fab .fab-character-wrap {
-  width: 82px;
-  height: 82px;
+  width: 86px;
+  height: 86px;
   margin-top: 14px;
   pointer-events: none;
 }
@@ -288,18 +288,19 @@ html.dark-theme #lumi-root {
   transform: scale(0.92);
 }
 
-/* Chat Paneli */
+/* Chat Paneli (BÜYÜTÜLMÜŞ LÜKS BOYUT) */
 #lumi-panel {
   position: absolute;
   right: 0;
-  bottom: 84px;
-  width: 380px;
-  height: min(600px, calc(100vh - 120px));
+  bottom: 86px;
+  width: 480px;
+  max-width: calc(100vw - 28px);
+  height: min(740px, calc(100vh - 95px));
   background: var(--lumi-bg);
   color: var(--lumi-text);
   border: 2.5px solid var(--lumi-ink);
-  box-shadow: 7px 7px 0 var(--lumi-ink);
-  border-radius: 22px;
+  box-shadow: 8px 8px 0 var(--lumi-ink);
+  border-radius: 24px;
   display: none;
   flex-direction: column;
   overflow: hidden;
@@ -310,86 +311,90 @@ html.dark-theme #lumi-root {
   animation: lumi-pop .28s var(--bounce);
 }
 @keyframes lumi-pop {
-  from { transform: scale(.7); opacity: 0; }
+  from { transform: scale(.75); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Panel Başlığı ve Canlı Karakter Sahnesi */
+/* PANEL BAŞLIĞI: SADECE BÜYÜK VE NET KARAKTER SAHNESİ */
 .lumi-header {
   background: var(--lumi-purple);
   color: #fff;
-  padding: 10px 14px;
+  padding: 14px 16px 12px;
+  min-height: 145px;
   border-bottom: 2.5px solid var(--lumi-ink);
   display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.lumi-avatar-container {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: var(--lumi-yellow);
-  border: 2px solid #1D1D1D;
-  box-shadow: 2px 2px 0 #1D1D1D;
-  overflow: hidden;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  flex-shrink: 0;
-  cursor: pointer;
+  overflow: visible;
 }
-.lumi-avatar-container .avatar-svg-wrap {
-  width: 70px;
-  height: 70px;
-  margin-top: 12px;
-}
-.lumi-title-wrap {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-.lumi-title {
-  font-weight: 900;
-  font-size: 17px;
-  line-height: 1.1;
+
+.lumi-header-hero {
+  width: 170px;
+  height: 125px;
   display: flex;
   align-items: center;
-  gap: 6px;
-}
-.lumi-mood-pill {
-  font-size: 11px;
-  background: rgba(255,255,255,0.22);
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-weight: 700;
-  transition: all 0.3s ease;
-}
-.lumi-sub {
-  font-size: 12px;
-  opacity: .92;
-  margin-top: 2px;
-}
-.lumi-close {
-  background: transparent;
-  border: 0;
-  color: #fff;
-  font-size: 24px;
+  justify-content: center;
   cursor: pointer;
-  line-height: 1;
-  padding: 4px;
-  transition: transform .15s;
+  margin: 0 auto;
+  transition: transform .25s var(--bounce);
 }
-.lumi-close:hover { transform: scale(1.15); }
+.lumi-header-hero:hover {
+  transform: scale(1.06);
+}
+
+/* Kapatma Butonu (Sağ Üst Köşede) */
+.lumi-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: transform .15s, background .15s;
+  z-index: 10;
+}
+.lumi-close:hover {
+  transform: scale(1.12);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Hafif Ruh Hali Rozeti (Karakterin Altında Zarifçe) */
+.lumi-mood-pill {
+  position: absolute;
+  bottom: 8px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
 
 /* Bildirim Bandı */
 .lumi-notice {
   background: var(--lumi-yellow);
   color: #1D1D1D;
-  font-size: 12.5px;
-  padding: 8px 14px;
+  font-size: 13px;
+  padding: 9px 16px;
   border-bottom: 2px dashed #1D1D1D;
-  line-height: 1.35;
+  line-height: 1.4;
+  font-weight: 600;
 }
 .lumi-notice a { color: #7934ED; font-weight: 800; text-decoration: underline; }
 
@@ -397,37 +402,56 @@ html.dark-theme #lumi-root {
 .lumi-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 14px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 13px;
 }
 .lumi-msg {
-  max-width: 86%;
-  padding: 10px 14px;
+  max-width: 88%;
+  padding: 12px 16px;
   border: 2px solid var(--lumi-ink);
-  border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.45;
+  border-radius: 18px;
+  font-size: 14.5px;
+  line-height: 1.5;
   word-wrap: break-word;
 }
-.lumi-msg ul { margin: 5px 0; padding-left: 18px; }
-.lumi-msg li { margin: 2px 0; }
-.lumi-msg p { margin: 0 0 6px; }
+.lumi-msg ul { margin: 6px 0; padding-left: 20px; }
+.lumi-msg li { margin: 3px 0; }
+.lumi-msg p { margin: 0 0 7px; }
 .lumi-msg p:last-child { margin: 0; }
 
 .lumi-msg.bot {
   align-self: flex-start;
   background: var(--lumi-soft);
   border-bottom-left-radius: 4px;
-  box-shadow: 2.5px 2.5px 0 var(--lumi-ink);
+  box-shadow: 3px 3px 0 var(--lumi-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+/* Bot Mesajı İçindeki Canlı Karakter */
+.lumi-msg-char-wrap {
+  width: 82px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.lumi-msg-body {
+  width: 100%;
+}
+
 .lumi-msg.user {
   align-self: flex-end;
   background: var(--lumi-purple);
   color: #fff;
   border-bottom-right-radius: 4px;
-  box-shadow: 2.5px 2.5px 0 var(--lumi-ink);
+  box-shadow: 3px 3px 0 var(--lumi-ink);
 }
 .lumi-msg.blocked {
   background: #FEE2E2;
@@ -442,48 +466,39 @@ html.dark-theme #lumi-root {
   font-size: 13px;
   text-align: center;
   max-width: 95%;
-  border-radius: 12px;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-weight: 700;
 }
 .lumi-day {
   align-self: center;
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--lumi-muted);
-  margin: 4px 0;
+  margin: 6px 0;
   font-weight: 700;
 }
-
-/* Yazıyor Animasyonu */
-.lumi-typing { display: inline-flex; gap: 4px; align-items: center; }
-.lumi-typing span {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--lumi-purple);
-  animation: lumi-bounceDot 1s infinite;
-}
-.lumi-typing span:nth-child(2) { animation-delay: .15s; }
-.lumi-typing span:nth-child(3) { animation-delay: .3s; }
-.lumi-typing em { font-size: 12.5px; color: var(--lumi-muted); margin-left: 6px; font-style: normal; font-weight: 700; }
-@keyframes lumi-bounceDot { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
 
 /* Hızlı Butonlar */
 .lumi-quick {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 14px 10px;
+  gap: 7px;
+  padding: 0 16px 12px;
 }
 .lumi-chip {
   background: var(--lumi-bg);
   color: var(--lumi-text);
   border: 2px solid var(--lumi-ink);
   border-radius: 999px;
-  padding: 5px 12px;
-  font-size: 12px;
+  padding: 6px 14px;
+  font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 2px 2px 0 var(--lumi-ink);
   transition: transform .15s, background .15s;
 }
 .lumi-chip:hover {
-  transform: translate(-1px, -1px);
+  transform: translate(-1.5px, -1.5px);
   background: var(--lumi-yellow);
   color: #1D1D1D;
 }
@@ -492,21 +507,21 @@ html.dark-theme #lumi-root {
 /* Giriş Alanı */
 .lumi-input {
   border-top: 2.5px solid var(--lumi-ink);
-  padding: 10px 12px;
+  padding: 12px 14px;
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-end;
 }
 .lumi-input textarea {
   flex: 1;
   resize: none;
-  max-height: 110px;
-  min-height: 42px;
+  max-height: 120px;
+  min-height: 44px;
   border: 2px solid var(--lumi-ink);
-  border-radius: 12px;
-  padding: 9px 12px;
+  border-radius: 14px;
+  padding: 10px 14px;
   font: inherit;
-  font-size: 14px;
+  font-size: 14.5px;
   background: var(--lumi-bg);
   color: var(--lumi-text);
   outline: none;
@@ -515,13 +530,13 @@ html.dark-theme #lumi-root {
   box-shadow: 2.5px 2.5px 0 var(--lumi-purple);
 }
 .lumi-send {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: var(--lumi-yellow);
   border: 2px solid #1D1D1D;
   box-shadow: 2.5px 2.5px 0 #1D1D1D;
-  font-size: 18px;
+  font-size: 19px;
   cursor: pointer;
   transition: transform .15s;
 }
@@ -531,17 +546,17 @@ html.dark-theme #lumi-root {
 .lumi-footer {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--lumi-muted);
-  padding: 0 14px 8px;
-  font-weight: 600;
+  padding: 0 16px 10px;
+  font-weight: 700;
 }
 
 @media (max-width: 480px) {
-  #lumi-root { right: 14px; bottom: 14px; }
+  #lumi-root { right: 12px; bottom: 12px; }
   #lumi-panel {
     position: fixed;
-    inset: 10px 10px 90px 10px;
+    inset: 10px 10px 88px 10px;
     width: auto;
     height: auto;
   }
