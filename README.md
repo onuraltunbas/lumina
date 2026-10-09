@@ -1,9 +1,20 @@
-# Lumina — Creative Design Studio & Portfolio (FastAPI)
+# Lumina — Öğrenme Stilleri Keşif Platformu
 
-Modern, yüksek performanslı ve interaktif tasarım stüdyosu portföy web sitesi.
-FastAPI tabanlı asenkron backend, SQLite (SQLAlchemy) veritabanı, özel SVG animasyonları ve zengin tipografi desteği ile inşa edilmiştir.
+Lumina, bireylerin kendi benzersiz öğrenme stillerini (Görsel, İşitsel, Okuyarak/Yazarak, Deneyimsel / Kinestetik) keşfetmelerine yardımcı olmak için geliştirilen modern, interaktif ve samimi bir dijital platformdur.
 
-Mimari yapısı `/home/onur/opc-lisans-sunucu` referans alınarak modüler, genişletilebilir ve temiz bir şekilde yapılandırılmıştır.
+Tasarım dili; sıcak, eğlenceli ve samimi bir **"cartoon / doodle"** estetiği ile güçlü mikro etkileşimleri bir araya getirir.
+
+---
+
+## 🎯 Projenin Amacı ve Odak Alanları
+
+Platform, öğrenmeyi bir kalıba sokmak yerine bireylerin bilgiyi nasıl en verimli şekilde edindiğini anlamalarını sağlar:
+* 👁️ **Görsel Öğrenme (Visual):** İnfografikler, renk kodları, zihin haritaları ve şemalarla kavrama.
+* 🎧 **İşitsel Öğrenme (Auditory):** Dinleme, sesli anlatım, tartışmalar ve ritimlerle öğrenme.
+* 📖 **Okuyarak / Yazarak Öğrenme (Read/Write):** Not alma, listeleme, metin özetleme ve okuma odaklı yöntemler.
+* 🛠️ **Deneyimsel / Kinestetik Öğrenme (Kinesthetic):** Dokunarak, yaparak, deneyimleyerek ve hareketle kavrama.
+
+*(Not: İnteraktif test ve envanter soruları ilerleyen aşamada adım adım entegre edilecektir.)*
 
 ---
 
@@ -11,77 +22,48 @@ Mimari yapısı `/home/onur/opc-lisans-sunucu` referans alınarak modüler, geni
 
 ```
 lumina_onur/
-├── server.py              # FastAPI ana uygulama giriş noktası, CORS, middleware, hata yakalayıcılar
-├── main.py                # Uvicorn alternatif başlatıcı (uvicorn main:app)
-├── database.py            # SQLite veritabanı bağlantısı, SQLAlchemy ORM modelleri (lumina.db)
+├── server.py              # FastAPI ana sunucu giriş noktası, CORS, middleware, hata yönetimi
+├── main.py                # Uvicorn alternatif başlatıcı
+├── database.py            # SQLite + SQLAlchemy modelleri (lumina.db)
 ├── routes_api.py          # /api/contact, /api/newsletter, /api/health endpoint'leri
-├── routes_html.py         # /, /project/{slug}, /template/* HTML route'ları
-├── html_404.py            # Özel 404 sayfası render modülü
+├── routes_html.py         # Sayfa yönlendirmeleri (Canlı şablon okuma)
+├── html_404.py            # Özel 404 sayfası
 ├── templates/             # HTML şablonları
-│   ├── index.html         # Ana sayfa (Hero, Services, About, Testimonials, Portfolio, Contact)
-│   ├── project_sandbox.html
-│   ├── project_morello.html
-│   ├── project_snowlake.html
-│   ├── project_creatink.html
-│   ├── changelog.html
-│   ├── license.html
-│   ├── style_guide.html
+│   ├── index.html         # Ana sayfa (Hero, Öğrenme Stilleri, Hakkımızda, Yöntemler, İletişim)
+│   ├── project_*.html     # Örnek vaka ve detay sayfaları
 │   └── 404.html
-├── static/                # Tüm statik varlıklar (Yerel ve %100 bağımsız)
+├── static/                # %100 yerel statik varlıklar
 │   ├── css/               # Ana stil dosyası (main.css)
-│   ├── js/                # İnteraktif animasyon motoru (interactions.js), jquery.min.js, app.js
-│   ├── images/            # İllüstrasyonlar, SVG ikonlar, proje görselleri
+│   ├── js/                # interactions.js, jquery.min.js, app.js
+│   ├── images/            # Doodle illüstrasyonları, rozetler, SVG grafikler
 │   └── fonts/             # CabinetGrotesk, Unicons ve Love Ya Like A Sister fontları
-├── test_api.py            # Otomatik test süiti (Tüm sayfalar ve API'lar)
-├── requirements.txt       # Bağımlılıklar listesi
+├── test_api.py            # Otomatik test paketi
+├── requirements.txt       # Python bağımlılıkları
 └── README.md              # Proje dokümantasyonu
 ```
 
 ---
 
-## 🚀 Başlatma ve Çalıştırma
+## 🚀 Çalıştırma
 
-### 1. Bağımlılıkları Yükleme
 ```bash
+# Bağımlılıkları yükleyin
 pip install -r requirements.txt
-```
 
-### 2. Geliştirme Sunucusunu Başlatma
-```bash
+# Geliştirme sunucusunu başlatın
 python3 server.py
 # veya
 uvicorn server:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Sunucu ayağa kalktıktan sonra:
-* **Ana Sayfa:** [http://localhost:8000](http://localhost:8000)
-* **API Dokümantasyonu (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
-* **Sağlık Durumu:** [http://localhost:8000/api/health](http://localhost:8000/api/health)
+* **Canlı Site:** [http://localhost:8000](http://localhost:8000)
+* **API Belgeleri:** [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## 🧪 Testleri Çalıştırma
+## 🔮 Gelecek Yol Haritası
 
-Tüm sayfaların ve API'ların doğruluğunu test etmek için:
-```bash
-python3 test_api.py
-```
-
----
-
-## ✨ Özellikler ve Fonksiyonlar
-
-* **İnteraktif Arayüz & Animasyonlar:**
-  * Yumuşak geçişler, kaydırma efektleri ve duyarlı buton animasyonları.
-  * Mobil uyumlu hamburger menü ve yumuşak kaydırma (`smooth scroll`) navigasyonu.
-  * İndirilen özel Google Fontu: **Love Ya Like A Sister** (`/static/fonts/LoveYaLikeASister.*`) dahil edilmiştir.
-* **Fonksiyonel İletişim Formu (FastAPI + SQLite):**
-  * Ziyaretçi formu gönderdiğinde AJAX (`/api/contact`) ile veriler SQLite veritabanına kaydedilir.
-  * Başarı ve hata bildirimleri dinamik olarak ekranda gösterilir.
-* **Portföy Vaka İnceleme (Case Study) Sayfaları:**
-  * Sandbox Banking Application
-  * Morello Company Networking
-  * Snowlake Social Media
-  * Creatink Creative Agency
-* **Tamamen Bağımsız & Yerel Kaynaklar:**
-  * Tüm CSS, JS, font ve SVG varlıkları doğrudan `/static/` altından yerel olarak sunulur.
+1. **İçerik & Metin Düzenlemesi:** Ana sayfa alanlarının tamamen öğrenme modelleri eksenine oturtulması.
+2. **Cartoon / İllüstratif Görsel Dokunuşlar:** "Love Ya Like A Sister" tipografisi, daha belirgin çizgi film konturları ve eğlenceli mikro detaylar.
+3. **GSAP ScrollTrigger:** Aşağı kaydırdıkça canlanan, çizgi film havasını pekiştiren pürüzsüz kaydırma animasyonları.
+4. **Test & Analiz Modülü:** Öğrenme tarzını belirleyen etkileşimli soru akışının eklenmesi.
