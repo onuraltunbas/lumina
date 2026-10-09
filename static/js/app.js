@@ -88,16 +88,40 @@
     }
   }
 
+  // Mobil logoya tıklandığında menüyü aç / kapat
+  function initMobileLogoMenuToggle() {
+    const mobileBrands = document.querySelectorAll('.navbar-inner-mobile .navbar-brand-mobile');
+    mobileBrands.forEach(function(brand) {
+      brand.style.cursor = 'pointer';
+      brand.setAttribute('role', 'button');
+      brand.setAttribute('aria-label', 'Menüyü Aç/Kapat');
+      brand.setAttribute('title', 'Menü');
+
+      brand.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const navInner = brand.closest('.navbar-inner-mobile');
+        if (!navInner) return;
+        const menuBtn = navInner.querySelector('.menu-button');
+        if (menuBtn) {
+          menuBtn.click();
+        }
+      });
+    });
+  }
+
   // Mobil menü bağlantısına tıklandığında menüyü otomatik kapat
   function initMobileNavAutoClose() {
     const mobileLinks = document.querySelectorAll('.nav-link-mobile');
-    const menuButton = document.querySelector('.navbar-inner-mobile .menu-button');
-    if (!mobileLinks.length || !menuButton) return;
-
     mobileLinks.forEach(function(link) {
       link.addEventListener('click', function() {
-        if (menuButton.classList.contains('w--open')) {
-          menuButton.click();
+        const navInner = link.closest('.navbar-inner-mobile');
+        if (navInner) {
+          const menuBtn = navInner.querySelector('.menu-button');
+          if (menuBtn && menuBtn.classList.contains('w--open')) {
+            menuBtn.click();
+          }
         }
       });
     });
@@ -108,12 +132,14 @@
       initSmoothScroll();
       initEngineRefresh();
       initNavbarAuth();
+      initMobileLogoMenuToggle();
       initMobileNavAutoClose();
     });
   } else {
     initSmoothScroll();
     initEngineRefresh();
     initNavbarAuth();
+    initMobileLogoMenuToggle();
     initMobileNavAutoClose();
   }
 })();

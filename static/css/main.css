@@ -4704,6 +4704,7 @@ figcaption {
     height: 68px !important;
     display: flex !important;
     align-items: center !important;
+    position: relative !important;
   }
 
   .navbar-wrapper-mobile {
@@ -4711,13 +4712,26 @@ figcaption {
     width: 100% !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
+    position: relative !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .navbar-brand-mobile {
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+    transition: transform 0.15s ease !important;
+  }
+
+  .navbar-brand-mobile:active {
+    transform: scale(0.96) !important;
   }
 
   .dashboard-nav-inner {
@@ -4785,25 +4799,62 @@ html, body {
 
 @media screen and (max-width: 991px) {
   .navbar-inner-mobile {
-    width: 100%;
+    width: 100% !important;
+    position: relative !important;
   }
   .navbar-wrapper-mobile {
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    position: relative !important;
   }
-  .menu-button {
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
+  .navbar-brand-mobile {
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    transition: transform 0.15s ease !important;
   }
-  .menu-button.w--open {
-    background-color: #F3E8FF;
+  .navbar-brand-mobile:active {
+    transform: scale(0.96) !important;
+  }
+  .navbar-brand-mobile .logo {
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  /* Mobilde menü simgesi olmasın (Webflow collapse kontrolü için gizli tutulur) */
+  .navbar-inner-mobile .menu-button,
+  .navbar-inner-mobile .w-nav-button {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+    overflow: hidden !important;
+  }
+
+  /* Karanlık tema butonunu mobilde sağa al */
+  .navbar .theme-switch-wrapper {
+    left: auto !important;
+    right: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 2200 !important;
+  }
+
+  .auth-page-wrapper .navbar .container > div {
+    padding-left: 0 !important;
+    justify-content: center !important;
   }
   .nav-menu-wrapper-mobile {
     border: 2.5px solid #1D1D1D !important;
@@ -5231,13 +5282,9 @@ html.dark-theme .switch-mode .icon-moon-solid {
   transform: rotate(0deg);
 }
 
-/* Navbar Logo Spacing so Button at 5px never collides with Logo */
+/* Navbar Logo Spacing so Button at 5px never collides with Logo (Desktop) */
 .navbar-wrapper {
   padding-left: 78px !important;
-}
-
-.navbar-wrapper-mobile {
-  padding-left: 64px !important;
 }
 
 .dashboard-nav-inner {
@@ -5245,6 +5292,9 @@ html.dark-theme .switch-mode .icon-moon-solid {
 }
 
 @media screen and (max-width: 767px) {
+  .navbar .theme-switch-wrapper {
+    right: 12px !important;
+  }
   .switch-mode {
     width: 56px;
     height: 28px;
@@ -5266,6 +5316,12 @@ html.dark-theme .switch-mode .icon-moon-solid {
   }
   .dashboard-nav-inner {
     padding-left: 64px !important;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .navbar .theme-switch-wrapper {
+    right: 10px !important;
   }
 }
 
