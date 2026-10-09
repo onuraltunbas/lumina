@@ -4270,6 +4270,10 @@ figcaption {
   transform: none !important;
 }
 
+#btn-open-diff {
+  margin-top: 10px !important;
+}
+
 /* =====================================================================
    COMIC COMPARISON MODAL
    ===================================================================== */
