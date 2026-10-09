@@ -5089,3 +5089,633 @@ html, body {
   margin-bottom: 0;
 }
 
+/* =====================================================================
+   SHADCN SWITCH-MODE (REGISTRY.WATERMELON.SH) - TEMA DEĞİŞTİRİCİ
+   ===================================================================== */
+.theme-switch-wrapper {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+}
+
+.switch-mode {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 66px;
+  height: 34px;
+  padding: 0;
+  border-radius: 9999px;
+  border: 2px solid #DDD;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  overflow: visible;
+  transition: border-color 0.3s ease, box-shadow 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.switch-mode:hover {
+  box-shadow: 0 0 0 2.5px rgba(121, 52, 237, 0.2);
+}
+
+.switch-mode:focus-visible {
+  outline: 2px solid #7934ED;
+  outline-offset: 2px;
+}
+
+.switch-mode .switch-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px;
+  background-color: #F9F9F9;
+  transition: background-color 0.4s ease;
+  z-index: 1;
+}
+
+.switch-mode .switch-knob {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background-color: #F3F3F7;
+  border: 2px solid #DDD;
+  box-sizing: border-box;
+  z-index: 2;
+  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.35s ease,
+              border-color 0.35s ease;
+}
+
+.switch-mode .switch-icon {
+  position: relative;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.switch-mode .switch-icon svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.25s ease,
+              color 0.25s ease;
+}
+
+/* Light Mode Icon States */
+.switch-mode .icon-sun-solid {
+  display: block;
+  fill: #686771;
+  transform: rotate(0deg);
+}
+.switch-mode .icon-sun-outline {
+  display: none;
+}
+.switch-mode .icon-moon-outline {
+  display: block;
+  color: #ABABB4;
+  transform: rotate(15deg);
+}
+.switch-mode .icon-moon-solid {
+  display: none;
+}
+
+/* Dark Mode Icon & Knob States */
+html.dark-theme .switch-mode {
+  border-color: #444;
+}
+
+html.dark-theme .switch-mode:hover {
+  box-shadow: 0 0 0 2.5px rgba(167, 139, 250, 0.3);
+}
+
+html.dark-theme .switch-mode .switch-track {
+  background-color: #111;
+}
+
+html.dark-theme .switch-mode .switch-knob {
+  background-color: #1C1C1C;
+  border-color: #444;
+  transform: translateX(32px);
+}
+
+html.dark-theme .switch-mode .icon-sun-solid {
+  display: none;
+}
+html.dark-theme .switch-mode .icon-sun-outline {
+  display: block;
+  color: #8A8A8F;
+  transform: rotate(45deg);
+}
+html.dark-theme .switch-mode .icon-moon-outline {
+  display: none;
+}
+html.dark-theme .switch-mode .icon-moon-solid {
+  display: block;
+  fill: #F4F4FB;
+  transform: rotate(0deg);
+}
+
+/* Navbar Logo Spacing so Button at 5px never collides with Logo */
+.navbar-wrapper {
+  padding-left: 78px !important;
+}
+
+.navbar-wrapper-mobile {
+  padding-left: 64px !important;
+}
+
+.dashboard-nav-inner {
+  padding-left: 78px !important;
+}
+
+@media screen and (max-width: 767px) {
+  .switch-mode {
+    width: 56px;
+    height: 28px;
+  }
+  .switch-mode .switch-knob {
+    width: 28px;
+    height: 28px;
+  }
+  .switch-mode .switch-icon {
+    width: 26px;
+    height: 26px;
+  }
+  .switch-mode .switch-icon svg {
+    width: 13px;
+    height: 13px;
+  }
+  html.dark-theme .switch-mode .switch-knob {
+    transform: translateX(28px);
+  }
+  .dashboard-nav-inner {
+    padding-left: 64px !important;
+  }
+}
+
+/* =====================================================================
+   KUSURSUZ KARANLIK TEMA SİSTEMİ (DARK THEME)
+   ===================================================================== */
+html.dark-theme,
+html.dark-theme body {
+  background-color: #0F0E17 !important;
+  color: #E4E4E7 !important;
+}
+
+/* Geçiş Animasyonu */
+body, .wrapper, .card, .navbar, .dashboard-header, .dashboard-hero-card,
+.test-card, .auth-card, .license-card, .not-found-card, .dashboard-score-card {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Comic Sınırlar & Gölgeler Dark Mod */
+html.dark-theme {
+  --comic-border: 2.5px solid #383452;
+  --comic-shadow: 4px 4px 0px #08070F;
+  --comic-shadow-lg: 6px 6px 0px #08070F;
+  --comic-shadow-hover: 7px 7px 0px #08070F;
+}
+
+/* Renk Arka Planları (Pastelden Derin Koyu Tonlara) */
+html.dark-theme .background-purple,
+html.dark-theme .wrapper.background-purple {
+  background-color: #141224 !important;
+}
+
+html.dark-theme .background-white {
+  background-color: #1A1829 !important;
+}
+
+/* Başlıklar & Metinler */
+html.dark-theme h1,
+html.dark-theme h2,
+html.dark-theme h3,
+html.dark-theme h4,
+html.dark-theme h5,
+html.dark-theme h6,
+html.dark-theme .display-1,
+html.dark-theme .display-2,
+html.dark-theme .display-3 {
+  color: #FFFFFF !important;
+}
+
+html.dark-theme p,
+html.dark-theme .paragraph-large,
+html.dark-theme .paragraph-wrapper {
+  color: #CBD5E1 !important;
+}
+
+/* Navbar Dark Mod */
+html.dark-theme .navbar {
+  background-color: rgba(20, 18, 36, 0.95) !important;
+  border-bottom: 2.5px solid #383452 !important;
+}
+
+html.dark-theme .navbar-inner,
+html.dark-theme .navbar-inner-mobile {
+  background: transparent !important;
+}
+
+html.dark-theme .nav-link {
+  color: #E4E4E7 !important;
+}
+
+html.dark-theme .nav-link:hover {
+  color: #A78BFA !important;
+}
+
+html.dark-theme .nav-link-mobile {
+  color: #F4F4F5 !important;
+}
+
+html.dark-theme .nav-menu-wrapper-mobile {
+  background-color: #1A1829 !important;
+  border: 2.5px solid #383452 !important;
+  box-shadow: 5px 5px 0px #08070F !important;
+}
+
+html.dark-theme .burger-line {
+  background-color: #F4F4F5 !important;
+}
+
+/* SVG Logo - Siyah Yazıyı Kusursuz Beyaza Dönüştürür */
+html.dark-theme .logo {
+  filter: invert(1) brightness(2) !important;
+}
+
+/* Genel Kartlar & Sınırlar */
+html.dark-theme .card {
+  background-color: #1A1829 !important;
+  border: 2.5px solid #383452 !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+  color: #F4F4F5 !important;
+}
+
+html.dark-theme .border-bottom {
+  border-bottom: 2.5px solid #383452 !important;
+}
+
+html.dark-theme .border-top {
+  border-top: 2.5px solid #383452 !important;
+}
+
+/* Rozetler (Badges) */
+html.dark-theme .badge {
+  background-color: #242038 !important;
+  border: 2px solid #4C466D !important;
+  color: #F1F5F9 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .badge-text {
+  color: #F1F5F9 !important;
+}
+
+html.dark-theme .star-badge,
+html.dark-theme .star-badge-blue {
+  background-color: #7934ED !important;
+  border: 2.5px solid #A78BFA !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+  color: #FFFFFF !important;
+}
+
+/* 5 Öğrenme Modeli Kartları (Karakteristik Renkli Çerçeveli Koyu Kartlar) */
+html.dark-theme .service-model-card {
+  border: 2.5px solid #383452 !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+}
+
+html.dark-theme .service-model-card[data-model="gorsel"] {
+  background: #241A3B !important;
+  border-color: #9333EA !important;
+  color: #E9D5FF !important;
+}
+
+html.dark-theme .service-model-card[data-model="isitsel"] {
+  background: #112A20 !important;
+  border-color: #10B981 !important;
+  color: #BBF7D0 !important;
+}
+
+html.dark-theme .service-model-card[data-model="yazarak"] {
+  background: #331628 !important;
+  border-color: #EC4899 !important;
+  color: #FBCFE8 !important;
+}
+
+html.dark-theme .service-model-card[data-model="okuyarak"] {
+  background: #0E2536 !important;
+  border-color: #0284C7 !important;
+  color: #BAE6FD !important;
+}
+
+html.dark-theme .service-model-card[data-model="deneyimsel"] {
+  background: #33240E !important;
+  border-color: #F59E0B !important;
+  color: #FDE68A !important;
+}
+
+html.dark-theme .service-model-card:hover,
+html.dark-theme .service-model-card.is-active {
+  transform: translateY(-3px) !important;
+  box-shadow: 6px 6px 0px #08070F !important;
+}
+
+html.dark-theme .service-model-card h3 {
+  color: #FFFFFF !important;
+}
+
+/* 3D Nöral Beyin Kartı & Rozetleri */
+html.dark-theme .brain-canvas-wrapper {
+  background-color: #141224 !important;
+  border: 2.5px solid #383452 !important;
+  box-shadow: 5px 5px 0px #08070F !important;
+}
+
+html.dark-theme .brain-info-pill {
+  background: rgba(26, 24, 41, 0.9) !important;
+  border: 2px solid #383452 !important;
+  color: #F1F5F9 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .brain-active-regions-badge {
+  background: rgba(26, 24, 41, 0.95) !important;
+  border: 2px solid #383452 !important;
+  color: #F1F5F9 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .brain-hint-badge {
+  background: rgba(26, 24, 41, 0.88) !important;
+  border: 1.5px solid #383452 !important;
+  color: #94A3B8 !important;
+}
+
+html.dark-theme .brain-pedagogical-disclaimer {
+  background-color: #1A1829 !important;
+  border: 2px solid #383452 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .brain-pedagogical-disclaimer .disclaimer-badge,
+html.dark-theme .test-pedagogical-disclaimer .disclaimer-badge {
+  background-color: #33240E !important;
+  border: 1.5px solid #B45309 !important;
+  color: #FDE68A !important;
+}
+
+html.dark-theme .brain-pedagogical-disclaimer .disclaimer-text,
+html.dark-theme .test-pedagogical-disclaimer .disclaimer-text {
+  color: #94A3B8 !important;
+}
+
+/* Test Sayfası & Bilgilendirme Notları */
+html.dark-theme .test-card {
+  background-color: #1A1829 !important;
+  border: 3px solid #383452 !important;
+  box-shadow: 6px 6px 0px #08070F !important;
+}
+
+html.dark-theme .test-waiting-box {
+  background-color: #141224 !important;
+  border: 2.5px dashed #4B4668 !important;
+}
+
+html.dark-theme .test-pedagogical-disclaimer {
+  background-color: #141224 !important;
+  border: 1.5px solid #383452 !important;
+  box-shadow: 2px 2px 0px #08070F !important;
+}
+
+/* Kullanıcı Kontrol Paneli (Dashboard) */
+html.dark-theme .dashboard-header {
+  background-color: rgba(20, 18, 36, 0.95) !important;
+  border-bottom: 2.5px solid #383452 !important;
+}
+
+html.dark-theme .dashboard-user-pill {
+  background: #242038 !important;
+  border: 2px solid #383452 !important;
+  color: #F1F5F9 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .dashboard-logout-btn {
+  background: #3B1424 !important;
+  border: 2px solid #9F1239 !important;
+  color: #FECDD3 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .dashboard-logout-btn:hover {
+  background: #4C1D2E !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+}
+
+html.dark-theme .dashboard-hero-card {
+  background-color: #1A1829 !important;
+  border: 3px solid #383452 !important;
+  box-shadow: 6px 6px 0px #08070F !important;
+}
+
+html.dark-theme .dashboard-stat-tag {
+  background-color: #242038 !important;
+  border: 1.5px solid #383452 !important;
+  color: #CBD5E1 !important;
+  box-shadow: 2px 2px 0px #08070F !important;
+}
+
+html.dark-theme #dash-test-status-tag {
+  background-color: #33240E !important;
+  border-color: #B45309 !important;
+  color: #FDE68A !important;
+}
+
+html.dark-theme .dashboard-waiting-box {
+  background-color: #1A1829 !important;
+  border: 2.5px solid #383452 !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+  color: #E2E8F0 !important;
+}
+
+html.dark-theme .dashboard-score-card {
+  background-color: #1A1829 !important;
+  border: 2.5px solid #383452 !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+}
+
+html.dark-theme .dashboard-score-card:hover,
+html.dark-theme .dashboard-score-card.is-active {
+  box-shadow: 6px 6px 0px #08070F !important;
+  border-color: #7934ED !important;
+}
+
+html.dark-theme .dashboard-score-card.is-dominant {
+  border-color: #10B981 !important;
+  background-color: #122820 !important;
+}
+
+html.dark-theme .score-card-title {
+  color: #FFFFFF !important;
+}
+
+html.dark-theme .score-progress-bar-bg {
+  background-color: #26223B !important;
+}
+
+html.dark-theme .score-reason-text {
+  color: #94A3B8 !important;
+}
+
+html.dark-theme .score-reason-text strong {
+  color: #F1F5F9 !important;
+}
+
+/* Giriş & Kayıt (Auth) */
+html.dark-theme .auth-card {
+  background-color: #1A1829 !important;
+  border: 3px solid #383452 !important;
+  box-shadow: 8px 8px 0px #08070F !important;
+}
+
+html.dark-theme .auth-tabs {
+  border-bottom: 2.5px solid #383452 !important;
+}
+
+html.dark-theme .auth-tab-btn {
+  background-color: #242038 !important;
+  border: 2.5px solid #383452 !important;
+  color: #94A3B8 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .auth-tab-btn:hover {
+  color: #FFFFFF !important;
+}
+
+html.dark-theme .auth-tab-btn.active {
+  background-color: #FFE600 !important;
+  color: #1D1D1D !important;
+  border-color: #1D1D1D !important;
+}
+
+html.dark-theme .auth-label {
+  color: #F1F5F9 !important;
+}
+
+html.dark-theme .auth-input {
+  background-color: #141224 !important;
+  border: 2.5px solid #383452 !important;
+  color: #FFFFFF !important;
+}
+
+html.dark-theme .auth-input:focus {
+  border-color: #7934ED !important;
+  box-shadow: 0 0 0 3px rgba(121, 52, 237, 0.3) !important;
+}
+
+/* Lisans & 404 Sayfaları */
+html.dark-theme .license-card,
+html.dark-theme .not-found-card {
+  background-color: #1A1829 !important;
+  border: 3px solid #383452 !important;
+  box-shadow: 6px 6px 0px #08070F !important;
+}
+
+/* Zaman Çizelgesi (Timeline) */
+html.dark-theme .timeline-marker {
+  background-color: #141224 !important;
+}
+
+html.dark-theme .timeline-content h3 {
+  color: #FFFFFF !important;
+}
+
+html.dark-theme .timeline-content p {
+  color: #94A3B8 !important;
+}
+
+/* Footer Dark Mod */
+html.dark-theme .footer,
+html.dark-theme .footer .wrapper,
+html.dark-theme .section.footer .wrapper {
+  background-color: #0E0D17 !important;
+  border-top: 2.5px solid #2E2A45 !important;
+}
+
+html.dark-theme .footer-row p,
+html.dark-theme .site-details p {
+  color: #94A3B8 !important;
+}
+
+/* Doodles Dark Glow */
+html.dark-theme .doodle-shine,
+html.dark-theme .doodle-breeze,
+html.dark-theme .doodle-flash,
+html.dark-theme .doodle-wave,
+html.dark-theme .doodle-heart,
+html.dark-theme .doodle-arrow,
+html.dark-theme .doodle-cloud {
+  filter: brightness(1.25) drop-shadow(0 0 3px rgba(167, 139, 250, 0.3)) !important;
+}
+
+/* Auth Sayfası Dark Mod İnce Ayarları */
+html.dark-theme .auth-page-wrapper {
+  background: radial-gradient(circle at 15% 20%, #1A162B 0%, #141124 60%, #0F0D1B 100%) !important;
+}
+
+html.dark-theme .auth-nav-back {
+  background: #242038 !important;
+  color: #F1F5F9 !important;
+  border-color: #383452 !important;
+  box-shadow: 3px 3px 0px #08070F !important;
+}
+
+html.dark-theme .auth-nav-back:hover {
+  background: #7934ED !important;
+  color: #FFFFFF !important;
+  border-color: #A78BFA !important;
+}
+
+html.dark-theme .auth-header-doodle {
+  background: #7934ED !important;
+  color: #FFFFFF !important;
+  border-color: #A78BFA !important;
+  box-shadow: 4px 4px 0px #08070F !important;
+}
+
+html.dark-theme .auth-alert.error {
+  background: #3B1424 !important;
+  color: #FECDD3 !important;
+  border-color: #9F1239 !important;
+}
+
+html.dark-theme .auth-alert.success {
+  background: #112A20 !important;
+  color: #BBF7D0 !important;
+  border-color: #10B981 !important;
+}
+
+html.dark-theme .license-block {
+  border-bottom: 2px dashed #383452 !important;
+}
+
+
+

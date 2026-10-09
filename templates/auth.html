@@ -8,6 +8,19 @@
   <link href="/static/css/main.css" rel="stylesheet" type="text/css"/>
   <link href="/static/images/64427d8f1fc82a6fb0791e81_favicon.png" rel="shortcut icon" type="image/x-icon"/>
   <link href="/static/images/64427d923fb922a5adafc5ba_webclip.png" rel="apple-touch-icon"/>
+  <script>
+    (function() {
+      try {
+        var stored = localStorage.getItem('lumina_theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark-theme');
+        } else {
+          document.documentElement.classList.remove('dark-theme');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* Auth Ekranına Özel Çizgi Roman / Comic Tasarım */
     .auth-page-wrapper {
@@ -287,9 +300,32 @@
   <div class="auth-page-wrapper">
     <!-- Navbar / Üst Kısım -->
     <header class="navbar border-bottom">
+      <div class="theme-switch-wrapper">
+        <button type="button" class="switch-mode" id="theme-switch-btn" role="switch" aria-checked="false" aria-label="Karanlık/Aydınlık Tema Değiştir">
+          <div class="switch-track"></div>
+          <div class="switch-knob"></div>
+          <div class="switch-icon switch-sun">
+            <svg class="icon-sun-solid ionicon" viewBox="0 0 512 512">
+              <path d="M256 118a22 22 0 01-22-22V48a22 22 0 0144 0v48a22 22 0 01-22 22zM256 486a22 22 0 01-22-22v-48a22 22 0 0144 0v48a22 22 0 01-22 22zM369.14 164.86a22 22 0 01-15.56-37.55l33.94-33.94a22 22 0 0131.11 31.11l-33.94 33.94a21.93 21.93 0 01-15.55 6.44zM108.92 425.08a22 22 0 01-15.55-37.56l33.94-33.94a22 22 0 1131.11 31.11l-33.94 33.94a21.94 21.94 0 01-15.56 6.45zM464 278h-48a22 22 0 010-44h48a22 22 0 010 44zM96 278H48a22 22 0 010-44h48a22 22 0 010 44zM403.08 425.08a21.94 21.94 0 01-15.56-6.45l-33.94-33.94a22 22 0 0131.11-31.11l33.94 33.94a22 22 0 01-15.55 37.56zM142.86 164.86a21.89 21.89 0 01-15.55-6.44l-33.94-33.94a22 22 0 0131.11-31.11l33.94 33.94a22 22 0 01-15.56 37.55zM256 358a102 102 0 11102-102 102.12 102.12 0 01-102 102z"/>
+            </svg>
+            <svg class="icon-sun-outline ionicon" viewBox="0 0 512 512">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M256 48v48M256 416v48M403.08 108.92l-33.94 33.94M142.86 369.14l-33.94 33.94M464 256h-48M96 256H48M403.08 403.08l-33.94-33.94M142.86 142.86l-33.94-33.94"/>
+              <circle cx="256" cy="256" r="80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"/>
+            </svg>
+          </div>
+          <div class="switch-icon switch-moon">
+            <svg class="icon-moon-outline ionicon" viewBox="0 0 512 512">
+              <path d="M160 136c0-30.62 4.51-61.61 16-88C99.57 81.27 48 159.32 48 248c0 119.29 96.71 216 216 216 88.68 0 166.73-51.57 200-128-26.39 11.49-57.38 16-88 16-119.29 0-216-96.71-216-216z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+            </svg>
+            <svg class="icon-moon-solid ionicon" viewBox="0 0 512 512">
+              <path d="M264 480A232 232 0 0132 248c0-94 54-178.28 137.61-214.67a16 16 0 0121.06 21.06C181.07 76.43 176 104.66 176 136c0 110.28 89.72 200 200 200 31.34 0 59.57-5.07 81.61-14.67a16 16 0 0121.06 21.06C442.28 426 358 480 264 480z"/>
+            </svg>
+          </div>
+        </button>
+      </div>
       <div class="navbar-space"></div>
       <div class="container">
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center; padding-left: 78px;">
           <a class="w-nav-brand" href="/" aria-label="Ana Sayfa" style="display: inline-flex; align-items: center;">
             <img alt="Lumina" class="logo" loading="lazy" src="/static/images/644290cf40e714e0668a1a45_logo.svg"/>
           </a>
@@ -572,5 +608,6 @@
       });
     })();
   </script>
+  <script src="/static/js/theme.js"></script>
 </body>
 </html>
