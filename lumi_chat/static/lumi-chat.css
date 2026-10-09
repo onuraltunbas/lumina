@@ -1026,3 +1026,74 @@ html.dark-theme #lumi-root {
     border-radius: 20px;
   }
 }
+
+/* --- ANA SAYFA SABİT ZIPLAMA & EL SALLAMA --- */
+.lumi-shimeji.is-home-fixed {
+  position: fixed !important;
+  z-index: 99998;
+}
+
+.lumi-shimeji.is-waving #lumi-arm-r {
+  animation: lumiWaveHand 0.75s ease-in-out infinite alternate !important;
+  transform-origin: 32px 55px;
+}
+@keyframes lumiWaveHand {
+  0% { transform: rotate(-35deg) translateY(-12px); }
+  100% { transform: rotate(-85deg) translateY(-22px) rotate(15deg); }
+}
+
+.lumi-shimeji.is-home-hop .lumi-character-svg {
+  animation: lumiHomeHop 2.2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+@keyframes lumiHomeHop {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-16px) scale(0.96, 1.05); }
+  50% { transform: translateY(0) scale(1.06, 0.94); }
+  65% { transform: translateY(-7px) scale(0.98, 1.02); }
+  80% { transform: translateY(0) scale(1, 1); }
+}
+
+/* --- MİSAFİR KAYIT & GİRİŞ BUTONLARI --- */
+.lumi-auth-cta {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1.5px dashed rgba(29, 29, 29, 0.2);
+  flex-wrap: wrap;
+}
+.lumi-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 2px solid #1D1D1D;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 2.5px 2.5px 0px #1D1D1D;
+  transition: all 0.15s ease;
+}
+.lumi-cta-reg {
+  background: #FDE047;
+  color: #1D1D1D;
+}
+.lumi-cta-reg:hover {
+  background: #FACC15;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+.lumi-cta-log {
+  background: #E9D5FF;
+  color: #581C87;
+}
+.lumi-cta-log:hover {
+  background: #D8B4FE;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+

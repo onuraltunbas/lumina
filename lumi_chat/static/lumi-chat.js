@@ -10,12 +10,15 @@
   link.href = '/api/chat/widget.css';
   document.head.appendChild(link);
 
+  var isHomepage = (window.location.pathname === '/' || window.location.pathname === '/index.html');
   var msgCounter = 0;
   var state = {
     busy: false,
     initDone: false,
     cfg: null,
     usage: null,
+    is_guest: false,
+    guest_used: false,
     currentMood: 'normal',
     sleepTimer: null
   };
@@ -395,10 +398,22 @@
         }
         var d = await r.json();
         state.cfg = d;
+        state.is_guest = !!d.is_guest;
+        state.guest_used = !!d.guest_used || (localStorage.getItem('lumi_guest_asked') === '1');
         state.usage = d.usage;
         state.initDone = true;
 
-        if (!d.has_test) {
+        if (isHomepage || state.is_guest) {
+          usageEl.style.display = 'none'; // Kullanıcı "1 soru hakkı" yazısını hiçbir yerde görmesin
+        }
+
+        if (state.is_guest && state.guest_used) {
+          ta.disabled = true;
+          ta.placeholder = 'Sohbete devam etmek için giriş yap veya kayıt ol ✨';
+          sendBtn.disabled = true;
+        }
+
+        if (!d.has_test && !state.is_guest) {
           notice.innerHTML = '🧪 Testi henüz çözmedin, bu yüzden ipuçlarım genel. <a href="/test">Testi çöz</a>, sana özel teknikler vereyim!';
           notice.style.display = 'block';
         }
@@ -412,9 +427,24 @@
         });
 
         if (!d.history.length) {
-          addMsg('model', 'Selam **' + d.username + '**! 👋 Ben Lumi. ' +
-            (d.has_test ? 'Öğrenme profiline özel çalışma taktikleri verebilirim.' : 'Sana en uygun çalışma tekniklerini keşfedebiliriz.') +
-            ' Ne üzerinde çalışmak istersin?', '', null, 'mutlu');
+          if (state.is_guest) {
+            var welcomeText = 'Selam! 👋 Ben **Lumi**. Lumina platformunda öğrenme stillerini keşfetmene yardımcı oluyorum. Bana çalışma teknikleri veya dersler hakkında aklına gelen bir soruyu sorabilirsin!';
+            if (state.guest_used) {
+              welcomeText = 'Selam tekrar! ✨ Sohbetimize devam edebilmek ve sana özel öğrenme taktiklerini keşfedebilmemiz için ücretsiz kayıt olabilir veya giriş yapabilirsin:';
+            }
+            var gMsg = addMsg('model', welcomeText, '', null, 'mutlu');
+            if (state.guest_used && gMsg._body) {
+              var cta = el('div', 'lumi-auth-cta',
+                '<a href="/auth?tab=register" class="lumi-cta-btn lumi-cta-reg">📝 Ücretsiz Kayıt Ol</a>' +
+                '<a href="/auth?tab=login" class="lumi-cta-btn lumi-cta-log">🔑 Giriş Yap</a>'
+              );
+              gMsg._body.appendChild(cta);
+            }
+          } else {
+            addMsg('model', 'Selam **' + d.username + '**! 👋 Ben Lumi. ' +
+              (d.has_test ? 'Öğrenme profiline özel çalışma taktikleri verebilirim.' : 'Sana en uygun çalışma tekniklerini keşfedebiliriz.') +
+              ' Ne üzerinde çalışmak istersin?', '', null, 'mutlu');
+          }
           setLumiMood('mutlu');
         } else {
           setLumiMood('normal');
@@ -439,6 +469,21 @@
     async function send(text) {
       text = (text || '').trim();
       if (!text || state.busy) return;
+
+      if (state.is_guest && (state.guest_used || localStorage.getItem('lumi_guest_asked') === '1')) {
+        var sMsg = addMsg('model', 'Kayıt olursan veya hesabın varsa giriş yaparsan seni daha iyi tanıyıp daha iyi yardımcı olabilirim! ✨', '', null, 'heyecanli');
+        var cta = el('div', 'lumi-auth-cta',
+          '<a href="/auth?tab=register" class="lumi-cta-btn lumi-cta-reg">📝 Ücretsiz Kayıt Ol</a>' +
+          '<a href="/auth?tab=login" class="lumi-cta-btn lumi-cta-log">🔑 Giriş Yap</a>'
+        );
+        if (sMsg._body) sMsg._body.appendChild(cta);
+        ta.disabled = true;
+        ta.placeholder = 'Sohbete devam etmek için giriş yap veya kayıt ol ✨';
+        sendBtn.disabled = true;
+        scroll();
+        return;
+      }
+
       setBusy(true);
 
       ta.value = '';
@@ -468,6 +513,21 @@
           var err = {};
           try { err = await r.json(); } catch (_) {}
           botMsg.remove();
+          if (r.status === 403 || err.error === 'guest_limit') {
+            var gMsg = addMsg('model', 'Kayıt olursan veya hesabın varsa giriş yaparsan seni daha iyi tanıyıp daha iyi yardımcı olabilirim! ✨', '', null, 'heyecanli');
+            var cta = el('div', 'lumi-auth-cta',
+              '<a href="/auth?tab=register" class="lumi-cta-btn lumi-cta-reg">📝 Ücretsiz Kayıt Ol</a>' +
+              '<a href="/auth?tab=login" class="lumi-cta-btn lumi-cta-log">🔑 Giriş Yap</a>'
+            );
+            if (gMsg._body) gMsg._body.appendChild(cta);
+            state.guest_used = true;
+            localStorage.setItem('lumi_guest_asked', '1');
+            ta.disabled = true;
+            ta.placeholder = 'Sohbete devam etmek için giriş yap veya kayıt ol ✨';
+            sendBtn.disabled = true;
+            scroll();
+            return;
+          }
           if (r.status === 400 && err.error !== 'too_long' && err.error !== 'empty') {
             userBubble.classList.add('blocked');
           }
@@ -515,13 +575,31 @@
           botMsg._body.innerHTML = md('(boş cevap)');
         }
         if (state.usage) { state.usage.day_used++; renderUsage(); }
+
+        if (state.is_guest) {
+          state.guest_used = true;
+          localStorage.setItem('lumi_guest_asked', '1');
+          var cta = el('div', 'lumi-auth-cta',
+            '<a href="/auth?tab=register" class="lumi-cta-btn lumi-cta-reg">📝 Ücretsiz Kayıt Ol</a>' +
+            '<a href="/auth?tab=login" class="lumi-cta-btn lumi-cta-log">🔑 Giriş Yap</a>'
+          );
+          if (botMsg._body) {
+            botMsg._body.appendChild(cta);
+          }
+          ta.disabled = true;
+          ta.placeholder = 'Sohbete devam etmek için giriş yap veya kayıt ol ✨';
+          sendBtn.disabled = true;
+          scroll();
+        }
       } catch (e) {
         botMsg.remove();
         addMsg('system', 'Bağlantı koptu. İnternetini kontrol edip tekrar dener misin?');
         setLumiMood('teselli');
       } finally {
         setBusy(false);
-        ta.focus();
+        if (!state.is_guest || !state.guest_used) {
+          ta.focus();
+        }
       }
     }
 
@@ -623,11 +701,12 @@
       return { floorY: bestFloor, platform: bestPlatform };
     }
 
-    var posX = Math.max(20, window.innerWidth - 130);
-    var posY = getFloorY();
+    var szInit = getCharSize();
+    var posX = isHomepage ? Math.max(10, window.innerWidth - szInit.w - 28) : Math.max(20, window.innerWidth - 130);
+    var posY = isHomepage ? Math.max(10, window.innerHeight - szInit.h - 28) : getFloorY();
     var targetX = posX;
-    var facingDir = 1; // 1 = sağ, -1 = sol
-    var behavior = 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling', 'climb', 'hang'
+    var facingDir = isHomepage ? -1 : 1; // 1 = sağ, -1 = sol
+    var behavior = isHomepage ? 'home_idle' : 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling', 'climb', 'hang'
     var isDragging = false;
     var dragPointerId = null;
     var dragStartX = 0, dragStartY = 0;
@@ -877,6 +956,17 @@
     // Fizik ve Hareket Çerçeve Döngüsü (60fps - Sakinleştirilmiş Hız)
     function physicsStep() {
       var sz = getCharSize();
+
+      // Ana sayfada sabit durur, koşmaz veya tırmanmaz
+      if (isHomepage) {
+        posX = Math.max(10, window.innerWidth - sz.w - 28);
+        posY = Math.max(10, window.innerHeight - sz.h - 28);
+        facingDir = -1;
+        updateTransform();
+        requestAnimationFrame(physicsStep);
+        return;
+      }
+
       var maxW = Math.max(10, window.innerWidth - sz.w - 10);
       var footX = posX + sz.w / 2;
       // Bir tık yavaşlatılmış, sakin ve dengeli hız (yürüme: 1.05, koşma: 1.65)
@@ -1144,6 +1234,18 @@
       behaviorTimer = setTimeout(function () {
         if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang') return;
 
+        // Ana sayfada Lumi uslu durur: minik zıplama ve dostça el sallama
+        if (isHomepage) {
+          shimeji.classList.add('is-home-fixed', 'is-home-hop');
+          setFacing(-1);
+          shimeji.classList.add('is-waving');
+          setTimeout(function () {
+            shimeji.classList.remove('is-waving');
+          }, 3000);
+          scheduleBehavior(4200 + Math.random() * 2000);
+          return;
+        }
+
         // Panel açıksa uslu durup beklesin
         if (root.classList.contains('is-open')) {
           behavior = 'idle';
@@ -1314,6 +1416,15 @@
         // TIKLAMA / DOKUNMA -> PANELİ AÇ/KAPAT
         togglePanel();
         scheduleBehavior(2000);
+      } else if (isHomepage) {
+        // Ana sayfada sürüklense dahi sağ alt köşeye geri döner
+        var sz = getCharSize();
+        posX = Math.max(10, window.innerWidth - sz.w - 28);
+        posY = Math.max(10, window.innerHeight - sz.h - 28);
+        facingDir = -1;
+        updateTransform();
+        shimeji.classList.add('is-home-fixed', 'is-home-hop');
+        scheduleBehavior(3000);
       } else {
         var sz = getCharSize();
         var footX = posX + sz.w / 2;

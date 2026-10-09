@@ -57,7 +57,13 @@ Baskın stil: {dominant}
 
 KİŞİSELLEŞTİRME VE DERS REHBERLİĞİ KURALLARI:
 1. Genel çalışma tavsiyelerinde kullanıcının baskın stili olan **{dominant}** profiline ve yüksek puanlı diğer stillerine öncelik ver.
-2. BELİRLİ BİR DERSE ÇALIŞMA YÖNTEMİ SORULDUĞUNDA (ZORUNLU KURAL):
+2. ÖĞRENME BİÇİMİMİ NEREDEN / NEYE DAYANARAK BİLİYORSUN SORULDUĞUNDA:
+   Kullanıcı "Öğrenme biçimimi nereden biliyorsun?", "Neye dayanarak biliyorsun?", "Bunu nasıl biliyorsun?" veya testin kaynağını sorduğunda:
+   - Lumina platformunda {date} tarihinde çözdüğü 5 Öğrenme Stili Testi'nin bilimsel analizine ve testteki sorulara verdiği yanıtlara dayanarak bildiğini açık ve samimi bir dille anlat.
+   - Skorlarına atıfta bulun: "Baskın stilin %{dominant_pct} ile **{dominant}** çıktı. Ayrıca diğer stillerin: {scores_inline}."
+   - Kontrol panelindeki (Dashboard) 3D nöral beyin modelinde aktif lobları ve skor kartlarını inceleyebileceğini hatırlat.
+   - Bunun klinik bir teşhis değil, bireysel öğrenme farkındalığı sağlayan pedagojik bir simülasyon olduğunu belirt.
+3. BELİRLİ BİR DERSE ÇALIŞMA YÖNTEMİ SORULDUĞUNDA (ZORUNLU KURAL):
    Kullanıcı belirli bir derse nasıl çalışacağını sorduğunda (örn. "Coğrafyayı nasıl çalışmalıyım?"):
    - DURUM A (Kullanıcının stili ile dersin doğası farklıysa - Örn. kullanıcı {dominant} ama Coğrafya soruyor):
      Kullanıcının kendi becerisi ile dersin doğası arasındaki farkı mutlaka açık ve samimi bir dille belirt:
@@ -71,13 +77,28 @@ KİŞİSELLEŞTİRME VE DERS REHBERLİĞİ KURALLARI:
 GENERIC_BLOCK = """
 KULLANICI HENÜZ ÖĞRENME STİLİ TESTİNİ ÇÖZMEDİ:
 - Kişiselleştirme yapma; 5 stilin hepsinden dengeli ipuçları ver.
+- Eğer kullanıcı "Öğrenme biçimimi nereden biliyorsun?" diye sorarsa:
+  "Henüz öğrenme stili testini çözmediğin için senin stilini henüz bilmiyorum 🙈 Şu an genel ipuçları veriyorum. Ama kontrol panelinden testimizi çözersen hemen senin profilini öğrenip sana özel taktikler verebilirim!" de.
 - Belirli bir ders sorulduğunda dersin doğasını (örn. Coğrafyanın haritalar ve şekillerle daha çok görsel öğrenilen bir ders olduğunu) açıkla ve o dersin gerektirdiği yöntemleri öner.
 - Lumina testini çözerse kendi öğrenme stili ile dersin doğasını birleştiren kişisel taktikler verebileceğini hatırlat.
 """
 
+GUEST_BLOCK = """
+KULLANICI GİRİŞ YAPMAMIŞ BİR MİSAFİR (ANA SAYFA TANIŞMA SORUSU):
+- Samimi, enerjik ve hoş geldin diyen bir ton kullan.
+- Kullanıcının sorusuna (çalışma tekniği, Lumina nedir, ders tavsiyesi vb.) somut, hap gibi 2-3 maddelik harika bir yanıt ver.
+- Eğer kullanıcı "Öğrenme biçimimi nereden biliyorsun?" diye sorarsa:
+  "Henüz üye olmadığın ve test çözmediğin için öğrenme stilini henüz bilmiyorum 🙈 Şu an sana genel taktikler veriyorum. Ama ücretsiz kayıt olup testimizi çözersen, senin nöral öğrenme profilini hemen öğrenip sana özel taktikler verebilirim!" de.
+- CEVABININ EN SONUNA MUTLAKA ŞU CÜMLEYİ EKLE:
+  "Kayıt olursan veya hesabın varsa giriş yaparsan seni daha iyi tanıyıp daha iyi yardımcı olabilirim! ✨"
+"""
 
-def build_system_prompt(username: str, result) -> str:
+
+def build_system_prompt(username: str, result, is_guest: bool = False) -> str:
     prompt = BASE_PROMPT.format(name=CONFIG["bot_name"])
+    if is_guest:
+        return prompt + "\nKullanıcı: Misafir Ziyaretçi\n" + GUEST_BLOCK
+
     prompt += f"\nKullanıcının adı: {username}\n"
     if result is None:
         return prompt + GENERIC_BLOCK
@@ -89,10 +110,20 @@ def build_system_prompt(username: str, result) -> str:
         "okuyarak": result.score_okuyarak,
         "deneyimsel": result.score_deneyimsel,
     }
+    sorted_scores = sorted(scores.items(), key=lambda kv: -(kv[1] or 0))
     lines = "\n".join(
         f"- {STYLE_NAMES[k]}: %{round(v or 0)}"
-        for k, v in sorted(scores.items(), key=lambda kv: -(kv[1] or 0))
+        for k, v in sorted_scores
     )
-    dominant = STYLE_NAMES.get(result.dominant_style or "", result.dominant_style or "-")
+    scores_inline = ", ".join(f"{STYLE_NAMES[k]} %{round(v or 0)}" for k, v in sorted_scores)
+    dominant_key = result.dominant_style or ""
+    dominant = STYLE_NAMES.get(dominant_key, dominant_key or "-")
+    dominant_pct = round(scores.get(dominant_key, 0) or 0)
     date = result.created_at.strftime("%d.%m.%Y") if result.created_at else "-"
-    return prompt + PERSONAL_BLOCK.format(date=date, scores=lines, dominant=dominant)
+    return prompt + PERSONAL_BLOCK.format(
+        date=date,
+        scores=lines,
+        scores_inline=scores_inline,
+        dominant=dominant,
+        dominant_pct=dominant_pct
+    )
