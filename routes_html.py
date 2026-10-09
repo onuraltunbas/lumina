@@ -12,16 +12,12 @@ router = APIRouter(tags=["HTML Pages"])
 
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
 
-_cached_templates = {}
-
 def get_template(name: str) -> str:
-    if name not in _cached_templates:
-        filepath = os.path.join(TEMPLATES_DIR, name)
-        if not os.path.exists(filepath):
-            raise HTTPException(status_code=404, detail="Sayfa bulunamadı.")
-        with open(filepath, "r", encoding="utf-8") as f:
-            _cached_templates[name] = f.read()
-    return _cached_templates[name]
+    filepath = os.path.join(TEMPLATES_DIR, name)
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="Sayfa bulunamadı.")
+    with open(filepath, "r", encoding="utf-8") as f:
+        return f.read()
 
 
 # =====================================================================

@@ -4156,3 +4156,16 @@ figcaption {
   font-style: normal;
   font-display: block;
 }
+/* Custom Navbar Layout (Brand left, Links right) */
+@media screen and (min-width: 992px) {
+  .nav-menu-grid {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  .nav-menu {
+    width: auto !important;
+    margin-left: auto !important;
+  }
+}
