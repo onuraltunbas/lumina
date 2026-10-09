@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (isCorrect) {
                 btn.classList.add('correct');
-                feedbackEl.textContent = "✅ Doğru Cevap! Harika bir hafızan var.";
+                feedbackEl.innerHTML = "✅ Doğru Cevap! (1 / 1)";
                 feedbackEl.className = "feedback success";
                 if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
                 
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Doğru olanı da göster
                 document.querySelector('.option-btn[data-correct="true"]').classList.add('correct');
                 
-                feedbackEl.textContent = "❌ Yanlış Cevap. Doğru kombinasyon A ve C (Su) olmalıydı.";
+                feedbackEl.innerHTML = "❌ Yanlış Cevap. (0 / 1) Doğru kombinasyon A ve C (Su) olmalıydı.";
                 feedbackEl.className = "feedback error";
                 
                 window.testSonuclari.cevaplar.soru1 = false;

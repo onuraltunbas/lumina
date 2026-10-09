@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EdTech Hackathon - Molekül Testi</title>
-    <meta name="description" content="Moleküllerle deney yapın ve sonuçlarını değerlendirin. Etkileşimli eğitim arayüzü.">
+    <title>Lumina - Bilişsel Öğrenme Stili Testi</title>
+    <meta name="description" content="5 temel bilişsel öğrenme stilinizi (Deneyimsel, Görsel, Okuyarak, Yazarak, İşitsel) keşfedin.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <main id="test-container">
+        <!-- 5 Adımlı İlerleme Çubuğu -->
+        <div class="step-indicator-container hidden" id="test-progress-bar-container">
+            <div class="step-indicator-item active" data-step="1">
+                <div class="step-dot">1</div>
+            </div>
+            <div class="step-indicator-item" data-step="2">
+                <div class="step-dot">2</div>
+            </div>
+            <div class="step-indicator-item" data-step="3">
+                <div class="step-dot">3</div>
+            </div>
+            <div class="step-indicator-item" data-step="4">
+                <div class="step-dot">4</div>
+            </div>
+            <div class="step-indicator-item" data-step="5">
+                <div class="step-dot">5</div>
+            </div>
+        </div>
+
+        <!-- TEST GİRİŞ EKRANI (1. Kural: Hız Uyarısı) -->
+        <div id="test-giris" class="soru-kart">
+            <div class="glass-panel" style="text-align: center; padding: 3.5rem 2rem;">
+                <div style="display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); color: #818cf8; font-size: 2rem; margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h1 style="font-size: 2.2rem; margin-bottom: 0.8rem; color: #fff;">Bilişsel Öğrenme Stili Testi</h1>
+                <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 580px; margin: 0 auto 2rem auto; line-height: 1.6;">
+                    Bu test, 5 farklı alanda bilişsel öğrenme tarzınızı ve hafıza dinamiklerinizi ölçmek için tasarlanmıştır.
+                </p>
+
+                <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 14px; padding: 1.25rem 1.5rem; max-width: 540px; margin: 0 auto 2.5rem auto; display: flex; align-items: center; justify-content: center; gap: 12px; text-align: center;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem; color: #f59e0b; flex-shrink: 0;"></i>
+                    <span style="color: #fbbf24; font-size: 1.15rem; font-weight: 600;">
+                        Soruları cevaplama hızınız test sonucunu etkileyecektir.
+                    </span>
+                </div>
+
+                <button type="button" class="btn-primary" id="btn-teste-basla" style="max-width: 260px; margin: 0 auto; font-size: 1.1rem; padding: 14px 32px;">
+                    <i class="fa-solid fa-play" style="margin-right: 8px;"></i> Teste Başla
+                </button>
+            </div>
+        </div>
+
         <!-- 1. SORU (Molekül Animasyonu ve Seçimi) -->
-        <div id="soru-1" class="soru-kart">
+        <div id="soru-1" class="soru-kart hidden">
             <div class="glass-panel" id="molekul-oyunu-ekrani">
                 <h1>Molekül Laboratuvarı</h1>
                 <p>Molekülleri laboratuvar alanına sürükleyerek eşleştir ve ne olduğunu gözlemle!</p>
@@ -67,7 +110,7 @@
         <!-- 2. SORU: HAFIZA OYUNU -->
         <div id="soru-2" class="soru-kart hidden">
             <div class="glass-panel" id="hafiza-oyunu-ekrani">
-                <h1>Görsel Hafıza Testi</h1>
+                <h1>Kim's Game</h1>
                 
                 <!-- GİRİŞ EKRANI -->
                 <div id="hafiza-intro">
@@ -102,12 +145,216 @@
                 </div>
             </div>
         </div>
+
+        <!-- 3. SORU: OKUYARAK ÖĞRENME -->
+        <div id="soru-3" class="soru-kart hidden">
+            <div class="glass-panel" id="soru3-panel">
+                <h1>Metin İnceleme</h1>
+
+                <!-- Okuma Alanı -->
+                <div id="soru3-okuma">
+                    <div class="timer-container">
+                        <div class="timer-bar" id="soru3-timer-bar"></div>
+                        <span class="timer-text" id="soru3-sayac">20</span>
+                    </div>
+                    <div class="reading-card">
+                        <p class="reading-hint"><i class="fa-regular fa-clock"></i> Aşağıdaki eylemleri dikkatlice okuyunuz (Okuma Süresi: 20 sn):</p>
+                        <ol class="reading-list">
+                            <li><span class="step-letter">(A)</span> Masaya geçip montunu sandalyeye asar ve yemeğini yemeye başlar.</li>
+                            <li><span class="step-letter">(B)</span> Turnikeden öğrenci kartını okutarak yemekhane binasına giriş yapar.</li>
+                            <li><span class="step-letter">(C)</span> Boş tepsisini alıp tezgâhtan günün sıcak yemeklerini seçer.</li>
+                            <li><span class="step-letter">(D)</span> Elindeki yemek tepsisiyle etrafına bakınarak salonda boş bir masa bulur.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Sıralama Giriş Alanı -->
+                <div id="soru3-siralama" class="hidden">
+                    <h3 class="question-title">Az önce okuduğunuz eylemleri kronolojik sıraya göre harflerle dizin:</h3>
+                    <div class="sort-inputs">
+                        <div class="sort-slot"><span class="slot-num">1. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                        <div class="sort-slot"><span class="slot-num">2. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                        <div class="sort-slot"><span class="slot-num">3. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                        <div class="sort-slot"><span class="slot-num">4. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                    </div>
+                    <button type="button" class="btn-primary" id="soru3-kontrol-btn">Sıralamayı Kontrol Et</button>
+
+                    <div id="soru3-sonuc" class="hidden result-box">
+                        <p class="result-correct-answer">Doğru Sıralama: <strong>B → C → D → A</strong></p>
+                        <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem;">Metin içi bağlaçları ve olay örgüsünü analiz ederek doğru akışı kurgulayınız.</p>
+                        <p id="soru3-puan-text" class="result-score-text"></p>
+                        <button type="button" class="btn-primary" id="soru3-devam-btn" style="margin-top: 1.5rem;">Sonraki Soruya Geç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. SORU: YAZARAK ÖĞRENME -->
+        <div id="soru-4" class="soru-kart hidden">
+            <div class="glass-panel" id="soru4-panel">
+                <!-- Giriş / Yöntem Seçimi -->
+                <div id="soru4-giris">
+                    <h1 style="margin-bottom: 1.5rem;">Bu soruda kağıt kullanılması önerilir</h1>
+                    <div class="method-cards">
+                        <button type="button" class="method-card" data-mod="telefon">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                            <span class="method-title">Telefon Klavyesi</span>
+                            <span class="method-time">50 Saniye</span>
+                        </button>
+                        <button type="button" class="method-card" data-mod="bilgisayar">
+                            <i class="fa-solid fa-laptop"></i>
+                            <span class="method-title">Bilgisayar Klavyesi</span>
+                            <span class="method-time">65 Saniye</span>
+                        </button>
+                        <button type="button" class="method-card" data-mod="kagit">
+                            <i class="fa-solid fa-note-sticky"></i>
+                            <span class="method-title">Kağıt & Kalem</span>
+                            <span class="method-time">90 Saniye</span>
+                        </button>
+                    </div>
+                    <div class="note-badge"><i class="fa-solid fa-circle-info"></i> Not: Yazının birebir aynısını yazmak zorunda değilsiniz, kritik parametreleri not alabilirsiniz.</div>
+                </div>
+
+                <!-- Okuma + Yazma Alanı -->
+                <div id="soru4-okuma" class="hidden">
+                    <div class="timer-container">
+                        <div class="timer-bar" id="soru4-timer-bar-okuma"></div>
+                        <span class="timer-text" id="soru4-sayac-okuma">90</span>
+                    </div>
+                    <div class="scrolling-text-container">
+                        <div id="soru4-metin" class="scrolling-text-box"></div>
+                    </div>
+
+                    <div id="soru4-yazma-alani" class="writing-input-area">
+                        <label for="soru4-yazma-input" class="writing-label"><i class="fa-solid fa-pencil"></i> Not Alma Alanınız:</label>
+                        <textarea id="soru4-yazma-input" class="glass-textarea" rows="4" placeholder="Okurken not almak istediğiniz kısımları buraya yazabilirsiniz..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Kağıt Seçeneği İçin Ara Uyarı Ekranı -->
+                <div id="soru4-kagit-uyari" class="hidden">
+                    <div style="text-align: center; padding: 2.5rem 1.5rem;">
+                        <div style="display: inline-flex; align-items: center; justify-content: center; width: 68px; height: 68px; border-radius: 50%; background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-size: 2.2rem; margin-bottom: 1.5rem;">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h2 style="font-size: 1.7rem; margin-bottom: 1rem; color: #fff;">Metni yazdığınız kağıtlarınızı kapatınız</h2>
+                        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                            Cevaplama aşamasına geçmeden önce lütfen not aldığınız kağıdı kapatın veya kaldırın.
+                        </p>
+                        <button type="button" class="btn-primary" id="soru4-kagit-uyari-btn" style="max-width: 260px; margin: 0 auto; font-size: 1.05rem; padding: 12px 28px;">
+                            Sorulara Geç
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sorular (Geri sayım kaldırıldı) -->
+                <div id="soru4-sorular" class="hidden">
+                    <h3 class="question-title">Az önce incelediğiniz rapordaki teknik parametreleri tamamlayınız:</h3>
+                    
+                    <div class="qa-field">
+                        <label for="soru4-cevap1">1. Malzemenin esnek forma geçmeye başladığı eşik sıcaklık değeri:</label>
+                        <input type="text" id="soru4-cevap1" class="glass-input" placeholder="Sıcaklık değerini giriniz..." autocomplete="off">
+                    </div>
+                    
+                    <div class="qa-field">
+                        <label for="soru4-cevap2">2. 140°C seviyesinde gevşeyerek bu değişime yol açan iç yapı unsuru:</label>
+                        <input type="text" id="soru4-cevap2" class="glass-input" placeholder="İç yapı unsurunun adı..." autocomplete="off">
+                    </div>
+
+                    <button type="button" class="btn-primary" id="soru4-cevapla-btn">Cevapları Gönder</button>
+                </div>
+
+                <!-- Sonuç Gösterimi -->
+                <div id="soru4-sonuc" class="hidden result-box">
+                    <h4 style="color: var(--text-main); margin-bottom: 1rem;">Doğru Cevaplar:</h4>
+                    <p class="result-item">Eşik sıcaklık değeri: <strong>140°C</strong></p>
+                    <p class="result-item">Gevşeyen iç yapı unsuru: <strong>Kristal bağlar</strong></p>
+                    <p id="soru4-puan-text" class="result-score-text"></p>
+                    <button type="button" class="btn-primary" id="soru4-devam-btn" style="margin-top: 1.5rem;">Sonraki Soruya Geç</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. SORU: DİNLEME & BELLEK (İşitsel Öğrenme) -->
+        <div id="soru-5" class="soru-kart hidden">
+            <div class="glass-panel" id="soru5-panel">
+                <h1>Seçici Dinleme</h1>
+
+                <!-- Başlat Ekranı -->
+                <div id="soru5-giris">
+                    <div class="audio-intro-card">
+                        <div class="audio-icon-pulse"><i class="fa-solid fa-volume-high"></i></div>
+                        <p style="font-size: 1.05rem; margin-bottom: 1.5rem; line-height: 1.6;">Şimdi bir kafede geçen ses kaydını dinleyeceksiniz. Kulaklığınızın veya hoparlörünüzün sesini açın ve dikkatle dinleyin.</p>
+                        <button type="button" class="btn-primary" id="soru5-basla-btn"><i class="fa-solid fa-play"></i> Dinlemeye Başla</button>
+                    </div>
+                </div>
+
+                <!-- Dinleme Durumu (Ses Dalgası Animasyonu) -->
+                <div id="soru5-dinleme" class="hidden">
+                    <div class="audio-playing-card">
+                        <div class="sound-wave">
+                            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                            <span class="bar"></span><span class="bar"></span>
+                        </div>
+                        <p class="audio-status-text">Ses kaydı dinleniyor, lütfen odaklanın...</p>
+                        <audio id="soru5-ses" src="audio/soru3.mp3" preload="auto"></audio>
+                    </div>
+                </div>
+
+                <!-- Nesneleri Hatırlama ve Kutular -->
+                <div id="soru5-sorular" class="hidden">
+                    <h3 class="question-title">Konuşmacının oturmak istediği masanın üstünde dağınık olduğu belirtilen nesneler nelerdi?</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Aklınıza geldikçe yeni kutu ekleyip hatırladığınız nesneleri yazabilirsiniz:</p>
+
+                    <div id="soru5-kutular" class="dynamic-inputs-container">
+                        <div class="input-line">
+                            <input type="text" class="soru5-kutu glass-input" placeholder="Nesne 1" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="action-buttons-row">
+                        <button type="button" class="btn-secondary" id="soru5-ekle-btn"><i class="fa-solid fa-plus"></i> Kutu Ekle</button>
+                        <button type="button" class="btn-primary" id="soru5-tamam-btn"><i class="fa-solid fa-check"></i> Tamamla ve Değerlendir</button>
+                    </div>
+                </div>
+
+                <!-- Sonuç Ekranı -->
+                <div id="soru5-sonuc" class="hidden result-box">
+                    <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">Doğru Cevaplar:</h4>
+                    <p class="result-item">Masanın üstündeki hedef nesneler: <strong>şemsiye, elma, fotoğraf makinesi, çorap, vida, kalem</strong></p>
+                    <p id="soru5-puan-text" class="result-score-text"></p>
+                    <button type="button" class="btn-primary" id="soru5-devam-btn" style="margin-top: 1.5rem;">Test Sonuçlarını Gör</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEST BİTİŞ EKRANI -->
+        <div id="sonuc-ekrani" class="soru-kart hidden">
+            <div class="glass-panel" id="sonuc-panel">
+                <div id="analiz-bekleme-ekrani" style="text-align: center; padding: 3.5rem 1.5rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); color: #818cf8; font-size: 2.2rem; margin-bottom: 1.5rem;">
+                        <i class="fa-solid fa-brain fa-pulse"></i>
+                    </div>
+                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: #fff;">Test Tamamlandı!</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                        Bilişsel cevaplarınız ve performans metrikleriniz analiz ediliyor...
+                    </p>
+                    <button type="button" class="btn-primary" id="btn-analiz-durum" disabled style="max-width: 360px; margin: 0 auto; font-size: 1.05rem; padding: 14px 28px; cursor: not-allowed; opacity: 0.85;">
+                        <i class="fa-solid fa-spinner fa-spin" id="analiz-icon" style="margin-right: 8px;"></i> <span id="analiz-btn-yazi">Bilgileriniz Analiz Ediliyor...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Canvas-confetti for some nice effects -->
+    <!-- Canvas-confetti for celebrations -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/soru1_molekul.js"></script>
     <script src="js/soru2_hafiza.js"></script>
+    <script src="js/soru3_okuma.js"></script>
+    <script src="js/soru4_yazma.js"></script>
+    <script src="js/soru5_isitsel.js"></script>
 </body>
 </html>
