@@ -84,12 +84,22 @@ function soru3Degerlendir() {
     ['vida'].forEach(v => { if (cevaplar.has(v)) dogruSayisi += 1; });
     ['kalem'].forEach(v => { if (cevaplar.has(v)) dogruSayisi += 1; });
 
-    // net puanlama: her dogru nesne 100/6
-    const dogruFinal = new Set();
+    // 1) "fotoğraf makinesi" varyasyonlari (space/aksan)
+    const FOTO_VARYANT = new Set([
+        'fotograf makinesi',
+        'fotoğraf makinesi',
+        'foto makinesi',
+        'fotograf makine',
+        'fotoğraf makine',
+        'fotografcik',
+        'fotograf'
+    ]);
+
+    // 2) eslestirme
     cevaplar.forEach(v => {
         if (v === 'semsiye') dogruFinal.add('semsiye');
         if (v === 'elma') dogruFinal.add('elma');
-        if (v === 'fotograf makinesi' || v === 'fotoğraf makinesi' || v === 'foto makinesi') dogruFinal.add('fotoğraf makinesi');
+        if (FOTO_VARYANT.has(v)) dogruFinal.add('fotoğraf makinesi');
         if (v === 'corap') dogruFinal.add('çorap');
         if (v === 'vida') dogruFinal.add('vida');
         if (v === 'kalem') dogruFinal.add('kalem');
