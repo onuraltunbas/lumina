@@ -136,6 +136,24 @@ body {
     background: #f1f5f9;
     border-radius: 12px;
     padding: 1rem 1.25rem;
+    min-height: 5.5rem;
+}
+
+.soru2-metin-parca {
+    display: block;
+    margin-bottom: 0.35rem;
+    animation: soru2-kay 0.6s ease;
+}
+
+@keyframes soru2-kay {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .soru2-yazma {
@@ -179,5 +197,34 @@ body {
 
 .soru2-dogru {
     margin-bottom: 0.5rem;
+}
+
+.soru2-secimler {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.soru2-secim {
+    min-width: 180px;
+    padding: 0.75rem 1rem;
+    line-height: 1.4;
+}
+
+.soru2-secim-sure {
+    font-weight: 700;
+    color: var(--renk-ana);
+}
+
+.soru2-uyari {
+    margin-top: 1.25rem;
+    padding: 0.75rem 1rem;
+    background: #fef9c3;
+    border: 2px solid #fde047;
+    border-radius: 10px;
+    color: #713f12;
+    font-weight: 700;
+    font-size: 1rem;
 }
 

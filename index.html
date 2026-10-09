@@ -58,14 +58,24 @@
         <!-- 2. SORU (Yazarak Öğrenme) -->
         <div id="soru-2" class="soru-kart hidden">
 
-            <!-- Yönerge Ekranı -->
+            <!-- Yönerge / Yazım Yöntemi Seçimi -->
             <div id="soru2-giris">
                 <p class="soru2-yonerge">
                     Bu soru <strong>yazarak öğrenme yöntemi</strong> ile ilgilidir.
-                    Soruyu bir kağıda yazmanız önerilir; kağıdınız yoksa ekrandaki
-                    kutucuğu kullanabilirsiniz.
+                    Metni nasıl yazacağınızı seçiniz:
                 </p>
-                <button type="button" class="btn btn-primary" id="soru2-basla">Başla</button>
+                <div class="soru2-secimler">
+                    <button type="button" class="btn btn-outline-primary soru2-secim" data-mod="telefon">
+                        Telefon klavyesi<br><span class="soru2-secim-sure">50 sn</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary soru2-secim" data-mod="bilgisayar">
+                        Bilgisayar klavyesi<br><span class="soru2-secim-sure">65 sn</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary soru2-secim" data-mod="kagit">
+                        Kağıt<br><span class="soru2-secim-sure">90 sn</span>
+                    </button>
+                </div>
+                <p class="soru2-uyari">Not: Yazının birebir aynısını yazmak zorunda değilsiniz.</p>
             </div>
 
             <!-- Okuma + Yazma Alanı (90 sn) -->
@@ -76,14 +86,12 @@
                     <span>saniye</span>
                 </div>
                 <h3 class="soru2-baslik">Kurgusal Makale Özeti: "Zeta-4 Biyo-Polimerinin Termal Davranışı"</h3>
-                <p class="soru2-metin">
-                    Yeni sentezlenen Zeta-4 polimeri, yüksek sıcaklık altında aşamalı bir
-                    tepkime gösterir. Sıcaklık 140°C seviyesine ulaştığında malzeme iç
-                    yapısındaki kristal bağlar gevşeyerek esnek forma geçer.
-                </p>
-                <label class="soru2-yonerge" for="soru2-yazma">Metni buraya yazın:</label>
-                <textarea id="soru2-yazma" class="soru2-yazma" rows="5"
-                    placeholder="Metni buraya yazın..."></textarea>
+                <div id="soru2-metin" class="soru2-metin"></div>
+                <div id="soru2-yazma-alani">
+                    <label class="soru2-yonerge" for="soru2-yazma">Metni buraya yazın:</label>
+                    <textarea id="soru2-yazma" class="soru2-yazma" rows="5"
+                        placeholder="Metni buraya yazın..."></textarea>
+                </div>
             </div>
 
             <!-- Sorular (15 sn) -->
