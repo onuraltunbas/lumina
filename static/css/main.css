@@ -4186,18 +4186,30 @@ figcaption {
 .badge {
   border: var(--comic-border) !important;
   box-shadow: 3px 3px 0px #1D1D1D !important;
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
-  letter-spacing: 0.5px;
-  font-size: 15px !important;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px;
+  font-size: 14px !important;
 }
 
 /* Comic Labels & Step Badges */
 .label,
-.star-badge .label,
 .timeline-info .label {
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
-  font-size: 18px !important;
-  letter-spacing: 0.8px;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.5px;
+}
+
+/* Star badge label font */
+.star-badge .label,
+.star-badge-blue .label {
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 14.5px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.6px !important;
+  line-height: 1.25 !important;
 }
 
 /* Comic Buttons */
@@ -4208,9 +4220,10 @@ figcaption {
 .button-front,
 .button-text,
 .button-link {
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
-  font-size: 21px !important;
-  letter-spacing: 0.5px;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 17px !important;
+  letter-spacing: 0.3px;
 }
 
 .button-front {
@@ -4238,20 +4251,23 @@ figcaption {
 .services .card h3,
 .card h3,
 .comic-diff-card h3 {
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
-  font-size: 23px !important;
-  letter-spacing: 0.3px;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 21px !important;
+  letter-spacing: 0.2px;
   line-height: 1.25;
 }
 
 .timeline-content h3 {
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
-  font-size: 24px !important;
-  letter-spacing: 0.4px;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 22px !important;
+  letter-spacing: 0.2px;
 }
 
 ._404 h1.page-title {
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 900 !important;
 }
 
 /* Comic Cards */
@@ -4505,9 +4521,10 @@ figcaption {
   color: #FFFFFF;
   padding: 8px 18px;
   border-radius: 999px;
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
-  font-size: 15px !important;
-  letter-spacing: 0.5px;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.3px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -4542,9 +4559,10 @@ figcaption {
   border: 1.5px solid #1D1D1D;
   border-radius: 8px;
   padding: 5px 12px;
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 700 !important;
   font-size: 13px !important;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   color: #1D1D1D;
   z-index: 10;
   pointer-events: none;
@@ -4559,9 +4577,10 @@ figcaption {
   border: 1.5px solid #1D1D1D;
   border-radius: 8px;
   padding: 6px 12px;
-  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 600 !important;
   font-size: 13px !important;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   color: #1D1D1D;
   z-index: 10;
   pointer-events: none;

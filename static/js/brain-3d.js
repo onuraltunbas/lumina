@@ -1,59 +1,60 @@
-// 3D Interactive Neural Brain for Lumina Studio
-// Connects with the 5 Learning Styles cards on hover/click and in the user Dashboard
+// 3D Nöron Ağı - Kıvrımlı Beyin (Lumina Studio)
+// Orijinal kıvrımlı geometri (folds), beyincik, 2400 nöron düğümü, akson çizgileri ve kart entegrasyonu
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// BEYIN BÖLGELERİ VE KOORDİNAT TANIMLARI
+// --- BEYİN BÖLGELERİ KONFİGÜRASYONU ---
 const BEYIN_BOLGELERI = {
-    OksipitalLob: { cx: 0.8, cy: -0.2, cz: 0.0, radius: 0.35 },
-    GorselKorteksV1: { cx: 0.95, cy: -0.3, cz: 0.0, radius: 0.20 },
-    VentralGorselYol: { cx: 0.5, cy: -0.5, cz: 0.25, radius: 0.30 },
-    DorsalGorselYol: { cx: 0.4, cy: 0.4, cz: 0.25, radius: 0.30 },
-    ParietalLob: { cx: 0.2, cy: 0.6, cz: 0.0, radius: 0.40 },
-    TemporalLob: { cx: -0.1, cy: -0.4, cz: 0.45, radius: 0.40 },
-    Hipokampus: { cx: -0.1, cy: -0.4, cz: 0.20, radius: 0.20 },
-    PrefrontalKorteks: { cx: -0.7, cy: 0.3, cz: 0.0, radius: 0.45 },
-    IsitselKorteks: { cx: -0.1, cy: -0.1, cz: 0.55, radius: 0.20 },
-    UstTemporalGirus: { cx: -0.1, cy: -0.1, cz: 0.45, radius: 0.25 },
-    FrontalDilAglari: { cx: -0.6, cy: 0.1, cz: 0.35, radius: 0.30 },
-    MotorKorteks: { cx: -0.3, cy: 0.7, cz: 0.0, radius: 0.40 },
-    Beyincik: { cx: 0.6, cy: -0.7, cz: 0.0, radius: 0.35 },
-    BazalGangliyonlar: { cx: 0.0, cy: -0.1, cz: 0.0, radius: 0.20 },
-    Amigdala: { cx: -0.2, cy: -0.4, cz: 0.15, radius: 0.15 },
-    GorselKelimeBicimiAlani: { cx: 0.3, cy: -0.5, cz: 0.4, radius: 0.20 }
+    OksipitalLob: { x: -3.5, y: -0.5, z: 0, radius: 1.5, color: 0x000000 },
+    GorselKorteks: { x: -4.0, y: -0.5, z: 0, radius: 1.0, color: 0x000000 },
+    VentralGorselYol: { x: -2.0, y: -2.0, z: 1.0, radius: 1.2, color: 0x000000 },
+    DorsalGorselYol: { x: -2.0, y: 1.5, z: 1.0, radius: 1.2, color: 0x000000 },
+    ParietalLob: { x: -1.0, y: 2.0, z: 0, radius: 2.0, color: 0x000000 },
+    TemporalLob: { x: 0.5, y: -1.5, z: 2.0, radius: 2.0, color: 0x000000 },
+    Hipokampus: { x: 0, y: -1.0, z: 0.5, radius: 1.0, color: 0x000000 },
+    PrefrontalKorteks: { x: 3.5, y: 1.0, z: 0, radius: 2.0, color: 0x000000 },
+    IsitselKorteks: { x: 1.0, y: -0.5, z: 2.5, radius: 1.0, color: 0x000000 },
+    UstTemporalGirus: { x: 0.5, y: 0, z: 2.5, radius: 1.2, color: 0x000000 },
+    FrontalDilAglari: { x: 2.5, y: 0.5, z: 1.5, radius: 1.5, color: 0x000000 },
+    MotorKorteks: { x: 1.0, y: 2.5, z: 0, radius: 1.5, color: 0x000000 },
+    Beyincik: { x: -3.0, y: -3.5, z: 0, radius: 1.5, color: 0x000000 },
+    SolOksipitotemporal: { x: -2.5, y: -2.5, z: 1.5, radius: 1.2, color: 0x000000 },
+    GorselKelimeBicimi: { x: -2.0, y: -2.5, z: 2.0, radius: 1.0, color: 0x000000 },
+    BazalGangliyonlar: { x: 0.5, y: 0, z: 0.5, radius: 1.0, color: 0x000000 },
+    Amigdala: { x: 1.0, y: -1.5, z: 0.8, radius: 0.8, color: 0x000000 }
 };
 
-// 5 ÖĞRENME MODELİNİN BEYİN BÖLGELERİ EŞLEŞTİRMESİ
+// 5 Temel Öğrenme Modelinin Bölgelerle Eşleşmesi
 const MODEL_CONFIG = {
     gorsel: {
         name: "Görsel Öğrenme (Visual)",
-        colorHex: 0xA855F7, // Mor / Purple
-        regions: ['OksipitalLob', 'GorselKorteksV1', 'VentralGorselYol', 'DorsalGorselYol', 'ParietalLob', 'TemporalLob', 'Hipokampus', 'PrefrontalKorteks'],
-        labelsText: "Oksipital Lob, Görsel Korteks (V1), Ventral & Dorsal Yol, Hipokampus"
+        colorHex: 0xA855F7, // Mor
+        regions: ['OksipitalLob', 'GorselKorteks', 'VentralGorselYol', 'DorsalGorselYol', 'ParietalLob', 'Hipokampus', 'PrefrontalKorteks'],
+        labelsText: "Oksipital Lob, Görsel Korteks, Ventral & Dorsal Yol, Hipokampus"
     },
     isitsel: {
         name: "İşitsel Öğrenme (Auditory)",
-        colorHex: 0x10B981, // Canlı Yeşil / Green
-        regions: ['IsitselKorteks', 'TemporalLob', 'UstTemporalGirus', 'FrontalDilAglari', 'PrefrontalKorteks', 'ParietalLob', 'Hipokampus'],
-        labelsText: "İşitsel Korteks, Üst Temporal Girus, Dil Ağları, Prefrontal Korteks"
+        colorHex: 0x10B981, // Canlı Yeşil
+        regions: ['IsitselKorteks', 'TemporalLob', 'UstTemporalGirus', 'FrontalDilAglari', 'PrefrontalKorteks'],
+        labelsText: "İşitsel Korteks, Temporal Lob, Üst Temporal Girus, Dil Ağları"
     },
     yazarak: {
         name: "Yazarak Öğrenme (Writing)",
-        colorHex: 0xEC4899, // Pembe / Pink
-        regions: ['PrefrontalKorteks', 'MotorKorteks', 'ParietalLob', 'FrontalDilAglari', 'TemporalLob', 'Beyincik', 'Hipokampus'],
+        colorHex: 0xEC4899, // Pembe
+        regions: ['PrefrontalKorteks', 'MotorKorteks', 'FrontalDilAglari', 'Beyincik', 'Hipokampus'],
         labelsText: "Motor Korteks, Prefrontal Korteks, Dil Ağları, Beyincik"
     },
     okuyarak: {
         name: "Okuyarak Öğrenme (Reading)",
-        colorHex: 0x0284C7, // Elektrik Mavi / Blue
-        regions: ['OksipitalLob', 'GorselKelimeBicimiAlani', 'TemporalLob', 'FrontalDilAglari', 'PrefrontalKorteks', 'Hipokampus'],
-        labelsText: "Görsel Kelime Biçimi Alanı, Oksipital Lob, Dil Ağları, Hipokampus"
+        colorHex: 0x0284C7, // Elektrik Mavi
+        regions: ['OksipitalLob', 'GorselKelimeBicimi', 'SolOksipitotemporal', 'TemporalLob', 'FrontalDilAglari', 'Hipokampus'],
+        labelsText: "Görsel Kelime Biçimi, Oksipital Lob, Dil Ağları, Hipokampus"
     },
     deneyimsel: {
         name: "Deneyimsel Öğrenme (Experiential)",
-        colorHex: 0xF59E0B, // Kehribar Sarı / Yellow-Amber
-        regions: ['MotorKorteks', 'Beyincik', 'BazalGangliyonlar', 'Hipokampus', 'PrefrontalKorteks', 'ParietalLob', 'Amigdala'],
+        colorHex: 0xF59E0B, // Kehribar Sarı
+        regions: ['MotorKorteks', 'Beyincik', 'BazalGangliyonlar', 'Amigdala', 'Hipokampus', 'ParietalLob'],
         labelsText: "Motor Korteks, Beyincik, Bazal Gangliyonlar, Amigdala, Hipokampus"
     }
 };
@@ -66,197 +67,211 @@ function initBrain() {
     const infoDot = document.querySelector('.brain-info-dot');
     const activeRegionsBadge = document.getElementById('brain-active-regions-badge');
 
-    const scene = new THREE.Scene();
-
     const getWidth = () => container.clientWidth || 550;
     const getHeight = () => container.clientHeight || 580;
 
-    const camera = new THREE.PerspectiveCamera(45, getWidth() / getHeight(), 1, 1000);
-    camera.position.set(-52, 14, 0); // Lateral bakış açısı
+    // --- TEMEL SAHNE KURULUMU ---
+    const scene = new THREE.Scene();
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(getWidth(), getHeight());
-    renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor(0x000000, 0); // Tam şeffaf
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
-    scene.add(ambientLight);
-    
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    dirLight.position.set(-20, 30, 20);
-    scene.add(dirLight);
-
-    const fillLight = new THREE.DirectionalLight(0xaaccff, 1.2);
-    fillLight.position.set(20, -10, -20);
-    scene.add(fillLight);
+    const camera = new THREE.PerspectiveCamera(45, getWidth() / getHeight(), 0.1, 100);
+    camera.position.set(12, 2, 12); // Yandan görünüm odaklı kamera
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 1.0; 
-    controls.minDistance = 20;
-    controls.maxDistance = 150;
+    controls.minDistance = 5;
+    controls.maxDistance = 35;
 
-    // NÖRAL BEYİN GEOMETRİSİ ÜRETİMİ
+    // Işıklandırma (Toon/Cel shading için yönlü ışık)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(10, 10, 10);
+    scene.add(dirLight);
+
+    // Ana Grup Merkezi
     const brainGroup = new THREE.Group();
     scene.add(brainGroup);
 
-    const R_BASE = 14.5;
-    const TOTAL_NEURONS = 1150;
-    const neuronsRaw = [];
+    // --- SOLUK BEYİN KIVRIMLARI (GYRUS/SULCUS) MANTIĞI ---
+    const foldGeometry = new THREE.SphereGeometry(4, 128, 128);
+    const posAttribute = foldGeometry.attributes.position;
+    const v3 = new THREE.Vector3();
 
-    // Gerçekçi beyin lobu dış sınır fonksiyonu
-    function getBrainBoundary(theta, phi) {
-        let r = R_BASE;
-        r += 1.8 * Math.cos(2 * phi);
-        r += 1.2 * Math.cos(4 * theta);
-        const yNorm = Math.cos(phi);
-        const xNorm = Math.sin(phi) * Math.cos(theta);
-        const zNorm = Math.sin(phi) * Math.sin(theta);
-
-        if (yNorm < -0.2 && xNorm > 0.1) {
-            r += 1.5 * Math.sin((yNorm + 0.2) * Math.PI);
-        }
-        if (xNorm < -0.3 && yNorm > -0.1) {
-            r += 1.4 * Math.cos(xNorm * Math.PI);
-        }
-        return r;
+    for (let i = 0; i < posAttribute.count; i++) {
+        v3.fromBufferAttribute(posAttribute, i);
+        
+        // Büyük beyin eliptik yapısı (yandan uzun)
+        v3.x *= 1.3;
+        v3.y *= 1.0;
+        v3.z *= 0.8;
+        
+        // Matematiksel dalgalarla kıvrım (folds) oluşturma
+        const noise = Math.sin(v3.x * 4) * Math.cos(v3.y * 4) * Math.sin(v3.z * 4) * 0.3;
+        v3.addScaledVector(v3.clone().normalize(), noise);
+        
+        posAttribute.setXYZ(i, v3.x, v3.y, v3.z);
     }
+    foldGeometry.computeVertexNormals();
 
-    const tempRegions = Object.entries(BEYIN_BOLGELERI).map(([name, conf]) => ({
-        name,
-        center: new THREE.Vector3(conf.cx * R_BASE, conf.cy * R_BASE, conf.cz * R_BASE),
-        radiusSq: (conf.radius * R_BASE) * (conf.radius * R_BASE)
-    }));
+    const foldMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.04, // Çok soluk, hayalet kıvrım hissi
+        shininess: 10,
+        side: THREE.DoubleSide,
+        depthWrite: false // İçteki çizgilerin ve nöronların z-buffer testinde kaybolmasını önler
+    });
+    const foldsMesh = new THREE.Mesh(foldGeometry, foldMaterial);
+    foldsMesh.renderOrder = 0;
+    brainGroup.add(foldsMesh);
 
-    for (let i = 0; i < TOTAL_NEURONS; i++) {
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        const maxR = getBrainBoundary(theta, phi);
-        const u = Math.pow(Math.random(), 0.65);
-        const r = maxR * (0.28 + 0.72 * u);
-
-        const x = r * Math.sin(phi) * Math.cos(theta);
-        const y = r * Math.cos(phi);
-        let z = r * Math.sin(phi) * Math.sin(theta);
-
-        const hemisphere = (i % 2 === 0) ? 1 : -1;
-        const zGap = 0.8;
-        z = hemisphere * (Math.abs(z) * 0.78 + zGap);
-
-        neuronsRaw.push({
-            pos: new THREE.Vector3(x, y, z),
-            index: i
-        });
+    // Beyincik (Cerebellum) Kıvrımları
+    const cerebellumFoldGeom = new THREE.SphereGeometry(1.5, 64, 64);
+    const cPos = cerebellumFoldGeom.attributes.position;
+    for (let i = 0; i < cPos.count; i++) {
+        v3.fromBufferAttribute(cPos, i);
+        const cNoise = Math.sin(v3.x * 8) * Math.sin(v3.y * 12) * 0.15;
+        v3.addScaledVector(v3.clone().normalize(), cNoise);
+        cPos.setXYZ(i, v3.x, v3.y, v3.z);
     }
+    cerebellumFoldGeom.computeVertexNormals();
+    const cerebellumFolds = new THREE.Mesh(cerebellumFoldGeom, foldMaterial);
+    cerebellumFolds.position.set(-3.2, -3.2, 0);
+    cerebellumFolds.renderOrder = 0;
+    brainGroup.add(cerebellumFolds);
 
-    // Nöron Düğümleri (InstancedMesh)
-    const sphereGeom = new THREE.SphereGeometry(1, 10, 10);
-    const innerMaterial = new THREE.MeshStandardMaterial({
-        roughness: 0.35,
-        metalness: 0.15,
-        vertexColors: true
-    });
+    // --- NÖRON AĞI ÜRETİMİ (2400 NOKTA) ---
+    const nodeCount = 2400;
+    const nodes = [];
+    const nodeBaseScales = [];
+    const nodeRegions = [];
+    const nodeActiveState = new Uint8Array(nodeCount);
 
-    const outlineGeom = new THREE.SphereGeometry(1, 8, 8);
-    const outlineMaterial = new THREE.MeshBasicMaterial({
-        color: 0x1D1D1D,
-        side: THREE.BackSide
-    });
+    // Nöron için Cel Shading (Çizgi Film) Materyali
+    const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
+    const fillMaterial = new THREE.MeshToonMaterial({ color: 0xffffff }); // Default Beyaz
 
-    const innerMesh = new THREE.InstancedMesh(sphereGeom, innerMaterial, TOTAL_NEURONS);
-    const outlineMesh = new THREE.InstancedMesh(outlineGeom, outlineMaterial, TOTAL_NEURONS);
+    const nodeGeometry = new THREE.SphereGeometry(1, 8, 8);
+    const instancedMesh = new THREE.InstancedMesh(nodeGeometry, fillMaterial, nodeCount);
+    const outlineMesh = new THREE.InstancedMesh(nodeGeometry, outlineMaterial, nodeCount);
 
     const dummy = new THREE.Object3D();
-    const defaultColor = new THREE.Color(0xffffff);
-    const whiteColor = new THREE.Color(0xffffff);
-    const tempGlowColor = new THREE.Color();
-    const nodesData = [];
-    const neuronRegions = [];
+    const defaultWhite = new THREE.Color(0xffffff);
 
-    for (let i = 0; i < TOTAL_NEURONS; i++) {
-        const data = neuronsRaw[i];
-        
-        dummy.position.copy(data.pos);
-        dummy.scale.setScalar(0.1);
+    let i = 0;
+    while (i < nodeCount) {
+        const isCerebellum = Math.random() > 0.85;
+        let x, y, z;
+        if (isCerebellum) {
+            const uC = Math.pow(Math.random(), 0.7);
+            const r = (0.15 + 0.85 * uC) * 1.5;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            x = -3.2 + r * Math.sin(phi) * Math.cos(theta);
+            y = -3.2 + r * Math.sin(phi) * Math.sin(theta);
+            z = r * Math.cos(phi);
+        } else {
+            // Merkezdeki aşırı yoğunluğu azaltan dengeli radyal dağılım
+            const u = Math.pow(Math.random(), 0.6);
+            const r = (0.18 + 0.82 * u) * 4.0;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            x = r * Math.sin(phi) * Math.cos(theta) * 1.3; 
+            y = r * Math.sin(phi) * Math.sin(theta);
+            z = r * Math.cos(phi) * 0.8; 
+            if (x < -2.5 && y < -2) continue; // Beyincik boşluğu
+        }
+
+        // Kıvrımlara uyum sağlaması için noktaları dalgalandırma
+        const noise = Math.sin(x * 4) * Math.cos(y * 4) * Math.sin(z * 4) * 0.3;
+        x += noise * (x / 4);
+        y += noise * (y / 4);
+        z += noise * (z / 4);
+
+        const posVec = new THREE.Vector3(x, y, z);
+        nodes.push(posVec);
+
+        // Hangi bölgelere girdiğini hesapla
+        const inRegs = [];
+        for (const [rName, rData] of Object.entries(BEYIN_BOLGELERI)) {
+            const dx = x - rData.x;
+            const dy = y - rData.y;
+            const dz1 = z - rData.z;
+            const dz2 = z - (-rData.z);
+            const dist1 = Math.sqrt(dx*dx + dy*dy + dz1*dz1);
+            const dist2 = Math.sqrt(dx*dx + dy*dy + dz2*dz2);
+            if (dist1 <= rData.radius || dist2 <= rData.radius) {
+                inRegs.push(rName);
+            }
+        }
+        nodeRegions.push(inRegs);
+
+        const scale = 0.026 + Math.random() * 0.042;
+        nodeBaseScales.push(scale);
+
+        dummy.position.set(x, y, z);
+        dummy.scale.set(scale, scale, scale);
         dummy.updateMatrix();
-        innerMesh.setMatrixAt(i, dummy.matrix);
+        instancedMesh.setMatrixAt(i, dummy.matrix);
+
+        // Dış çizgi (Outline) matrisi
+        dummy.scale.set(scale * 1.3, scale * 1.3, scale * 1.3);
+        dummy.updateMatrix();
         outlineMesh.setMatrixAt(i, dummy.matrix);
 
-        const inRegs = [];
-        for (const reg of tempRegions) {
-            const symCenter = reg.center.clone();
-            symCenter.z = Math.sign(data.pos.z) * Math.abs(symCenter.z);
-            if (data.pos.distanceToSquared(symCenter) < reg.radiusSq) {
-                inRegs.push(reg.name);
-            }
-        }
-        neuronRegions.push(inRegs);
-
-        const nodeRadius = 0.05 + Math.random() * 0.15;
-        innerMesh.setColorAt(i, defaultColor);
-        
-        nodesData.push({
-            position: data.pos,
-            baseScale: nodeRadius,
-            currentMultiplier: 1.0,
-            targetMultiplier: 1.0,
-            pulseSpeed: 2 + Math.random() * 4,
-            pulsePhase: Math.random() * Math.PI * 2,
-            activePulse: false,
-            baseColor: null
-        });
+        instancedMesh.setColorAt(i, defaultWhite);
+        i++;
     }
-    
-    innerMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    outlineMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 
-    brainGroup.add(innerMesh);
+    instancedMesh.instanceMatrix.needsUpdate = true;
+    outlineMesh.instanceMatrix.needsUpdate = true;
+    if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true;
+
     brainGroup.add(outlineMesh);
+    brainGroup.add(instancedMesh);
 
-    // Sinirsel bağlantı çizgileri (çizgi roman tarzı koyu konturlar)
-    const maxConnectDistance = 2.5; 
-    const maxConnectionsPerNeuron = 10;
-    
+    // --- BAĞLANTILAR (AKSONLAR) ---
     const lineMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x1D1D1D, 
-        transparent: true, 
-        opacity: 0.5 
+        color: 0x1D1D1D, // Çizgi roman koyu siyah
+        transparent: true,
+        opacity: 0.45, // Dengeli ve net şeffaflık
+        depthWrite: false
     });
-    
-    const linePoints = [];
 
-    for (let i = 0; i < neuronsRaw.length; i++) {
-        let connectionCount = 0;
-        const neighbors = [];
-        for (let j = 0; j < neuronsRaw.length; j++) {
-            if(i !== j) {
-                const dist = neuronsRaw[i].pos.distanceTo(neuronsRaw[j].pos);
-                if(dist < maxConnectDistance) {
-                    neighbors.push({index: j, distance: dist});
-                }
-            }
-        }
-        neighbors.sort((a, b) => a.distance - b.distance);
+    const linePositions = [];
+    const maxDist = 0.95; 
+    const maxConns = 10;
 
-        for(let n=0; n<neighbors.length; n++) {
-            if(i < neighbors[n].index) {
-                linePoints.push(neuronsRaw[i].pos);
-                linePoints.push(neuronsRaw[neighbors[n].index].pos);
+    for (let j = 0; j < nodes.length; j++) {
+        let conns = 0;
+        for (let k = j + 1; k < nodes.length; k++) {
+            if (nodes[j].distanceTo(nodes[k]) < maxDist) {
+                linePositions.push(nodes[j].x, nodes[j].y, nodes[j].z);
+                linePositions.push(nodes[k].x, nodes[k].y, nodes[k].z);
+                conns++;
+                if (conns >= maxConns) break;
             }
-            connectionCount++;
-            if (connectionCount >= maxConnectionsPerNeuron) break;
         }
     }
 
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
-    const lineSegments = new THREE.LineSegments(lineGeometry, lineMaterial);
-    brainGroup.add(lineSegments);
+    const lineGeo = new THREE.BufferGeometry();
+    lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+    const lines = new THREE.LineSegments(lineGeo, lineMaterial);
+    lines.renderOrder = 1;
+    brainGroup.add(lines);
 
-    // KART ETKİLEŞİMİ (AKTİF BÖLGELERİ VURGULAMA & YANIP SÖNME)
+    outlineMesh.renderOrder = 2;
+    instancedMesh.renderOrder = 3;
+
+    // --- MODEL AKTİVASYONU & RENKLENDİRME ---
     let currentActiveModel = null;
 
     function activateModel(modelKey) {
@@ -265,29 +280,25 @@ function initBrain() {
             return;
         }
         currentActiveModel = modelKey;
-        
+
         const config = MODEL_CONFIG[modelKey];
         if (!config) return;
 
         const activeColor = new THREE.Color(config.colorHex);
         const dimColor = new THREE.Color(0xD1D5DB); // Pasif nöronlar yumuşak gri
 
-        for (let i = 0; i < neuronsRaw.length; i++) {
-            const isActivated = neuronRegions[i].some(r => config.regions.includes(r));
+        for (let idx = 0; idx < nodeCount; idx++) {
+            const isActivated = nodeRegions[idx].some(r => config.regions.includes(r));
             if (isActivated) {
-                innerMesh.setColorAt(i, activeColor);
-                nodesData[i].targetMultiplier = 1.75;
-                nodesData[i].activePulse = true;
-                nodesData[i].baseColor = activeColor.clone();
+                instancedMesh.setColorAt(idx, activeColor);
+                nodeActiveState[idx] = 1;
             } else {
-                innerMesh.setColorAt(i, dimColor);
-                nodesData[i].targetMultiplier = 0.8;
-                nodesData[i].activePulse = false;
-                nodesData[i].baseColor = null;
+                instancedMesh.setColorAt(idx, dimColor);
+                nodeActiveState[idx] = 0;
             }
         }
-        if (innerMesh.instanceColor) {
-            innerMesh.instanceColor.needsUpdate = true;
+        if (instancedMesh.instanceColor) {
+            instancedMesh.instanceColor.needsUpdate = true;
         }
 
         if (statusText) {
@@ -304,15 +315,12 @@ function initBrain() {
 
     function resetModel() {
         currentActiveModel = null;
-
-        for (let i = 0; i < neuronsRaw.length; i++) {
-            innerMesh.setColorAt(i, whiteColor);
-            nodesData[i].targetMultiplier = 1.0;
-            nodesData[i].activePulse = false;
-            nodesData[i].baseColor = null;
+        for (let idx = 0; idx < nodeCount; idx++) {
+            instancedMesh.setColorAt(idx, defaultWhite);
+            nodeActiveState[idx] = 0;
         }
-        if (innerMesh.instanceColor) {
-            innerMesh.instanceColor.needsUpdate = true;
+        if (instancedMesh.instanceColor) {
+            instancedMesh.instanceColor.needsUpdate = true;
         }
 
         if (statusText) {
@@ -326,19 +334,17 @@ function initBrain() {
         }
     }
 
-    // Dışarıya metodları aç (Dashboard ve dinamik tetiklemeler için)
+    // Window global fonksiyonları (Dashboard için)
     window.activateBrainModel = activateModel;
     window.resetBrainModel = resetModel;
 
-    // Kart hover & click olaylarını bağla (Hem ana sayfa hem de dashboard kartları)
+    // Kart hover & click olaylarını bağla
     const cards = document.querySelectorAll('.service-model-card, .dashboard-score-card');
     cards.forEach(card => {
         const model = card.getAttribute('data-model');
         if (!model) return;
 
-        card.addEventListener('mouseenter', () => {
-            activateModel(model);
-        });
+        card.addEventListener('mouseenter', () => activateModel(model));
         card.addEventListener('mouseleave', () => {
             const anyActive = document.querySelector('.service-model-card.is-active, .dashboard-score-card.is-active');
             if (anyActive) {
@@ -363,7 +369,7 @@ function initBrain() {
         });
     });
 
-    // Sayfa açılışında baskın model varsa otomatik aktive et
+    // Açılışta baskın model varsa aktive et
     const dominantModel = container.getAttribute('data-dominant-model');
     if (dominantModel && MODEL_CONFIG[dominantModel]) {
         activateModel(dominantModel);
@@ -379,63 +385,43 @@ function initBrain() {
             renderer.setSize(w, h);
         }
     }
-
     window.addEventListener('resize', onResize, false);
     if (window.ResizeObserver) {
         new ResizeObserver(onResize).observe(container);
     }
 
+    // --- ANİMASYON DÖNGÜSÜ ---
     const clock = new THREE.Clock();
 
     function animate() {
         requestAnimationFrame(animate);
-        const elapsedTime = clock.getElapsedTime();
-        let colorNeedsUpdate = false;
-        
-        for(let i = 0; i < nodesData.length; i++) {
-            const node = nodesData[i];
-            
-            // Hedef boyuta yumuşak geçiş
-            node.currentMultiplier += (node.targetMultiplier - node.currentMultiplier) * 0.12;
-            
-            // Aktif bölgeler daha canlı nabız ve renk parıltısı ile yanıp söner
-            const pulseAmp = node.activePulse ? 0.35 : 0.14;
-            const pulseSpeed = node.activePulse ? (node.pulseSpeed * 1.8) : node.pulseSpeed;
-            const pulse = Math.sin(elapsedTime * pulseSpeed + node.pulsePhase) * pulseAmp;
-            
-            const currentScale = node.baseScale * node.currentMultiplier * (1.0 + pulse);
-            
-            dummy.position.copy(node.position);
-            dummy.scale.setScalar(currentScale);
-            dummy.updateMatrix();
-            innerMesh.setMatrixAt(i, dummy.matrix);
-            
-            // Dış çizgi roman konturu
-            dummy.scale.setScalar(currentScale + 0.026); 
-            dummy.updateMatrix();
-            outlineMesh.setMatrixAt(i, dummy.matrix);
+        const t = clock.getElapsedTime();
 
-            // Yanıp sönen renk parıltısı (renkli renkli neon efekti)
-            if (node.activePulse && node.baseColor) {
-                const glowFactor = (Math.sin(elapsedTime * 4.5 + node.pulsePhase) + 1.0) * 0.5;
-                tempGlowColor.copy(node.baseColor).lerp(whiteColor, glowFactor * 0.42);
-                innerMesh.setColorAt(i, tempGlowColor);
-                colorNeedsUpdate = true;
-            }
+        // Genel yavaş dönüş ve süzülme
+        brainGroup.rotation.y = t * 0.05;
+        brainGroup.position.y = Math.sin(t * 0.5) * 0.2;
+
+        // Nefes alma (Pulsing) animasyonu
+        for (let idx = 0; idx < nodeCount; idx++) {
+            const base = nodeBaseScales[idx];
+            const isAct = nodeActiveState[idx] === 1;
+            // Aktif bölgeler belirgin şekilde nabız atar
+            const pScale = isAct 
+                ? (base * 1.35 * (1 + Math.sin(t * 3.5 + idx) * 0.28))
+                : (base * (1 + Math.sin(t * 2.0 + idx) * 0.2));
+
+            dummy.position.copy(nodes[idx]);
+            dummy.scale.set(pScale, pScale, pScale);
+            dummy.updateMatrix();
+            instancedMesh.setMatrixAt(idx, dummy.matrix);
+
+            dummy.scale.set(pScale * 1.3, pScale * 1.3, pScale * 1.3);
+            dummy.updateMatrix();
+            outlineMesh.setMatrixAt(idx, dummy.matrix);
         }
-        
-        innerMesh.instanceMatrix.needsUpdate = true;
+        instancedMesh.instanceMatrix.needsUpdate = true;
         outlineMesh.instanceMatrix.needsUpdate = true;
 
-        if (colorNeedsUpdate && innerMesh.instanceColor) {
-            innerMesh.instanceColor.needsUpdate = true;
-        }
-        
-        // Beyin yüzme (bobbing) efekti
-        brainGroup.position.y = Math.sin(elapsedTime * 2.0) * 1.4;
-        const squish = 1.0 + Math.sin(elapsedTime * 4.0) * 0.015;
-        brainGroup.scale.set(1.0, squish, 1.0);
-        
         controls.update();
         renderer.render(scene, camera);
     }
