@@ -4619,22 +4619,109 @@ figcaption {
 }
 
 /* =====================================================================
-   NAVBAR LOGO SIZING (2X ENLARGED)
+   TÜM SAYFALARDA EŞİT VE STANDART NAVBAR BOYUTU (DESKTOP: 84px / MOBİL: 68px)
    ===================================================================== */
-.navbar .logo {
-  height: 48px !important;
+.navbar,
+.dashboard-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 84px !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+  background-color: #FFFFFF !important;
+  border-bottom: 2.5px solid #1D1D1D !important;
+  z-index: 1999 !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.navbar-space {
+  display: none !important;
+}
+
+.navbar .logo,
+.dashboard-header .logo {
+  height: 44px !important;
   width: auto !important;
   max-width: none !important;
-  display: block;
+  display: block !important;
+}
+
+.navbar-inner {
+  width: 100% !important;
+  height: 84px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.navbar-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.nav-menu-grid {
+  height: 84px !important;
+  align-items: center !important;
+}
+
+.nav-link {
+  padding: 10px 0 !important;
+  line-height: 1 !important;
+}
+
+.dashboard-nav-inner {
+  height: 84px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
 }
 
 @media screen and (max-width: 767px) {
-  .navbar-brand-mobile {
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
+  .navbar,
+  .dashboard-header {
+    height: 68px !important;
+    min-height: 68px !important;
+    max-height: 68px !important;
+    border-bottom: 2px solid #1D1D1D !important;
   }
-  .navbar .logo {
-    height: 44px !important;
+
+  .navbar .logo,
+  .dashboard-header .logo {
+    height: 36px !important;
+  }
+
+  .navbar-inner-mobile {
+    width: 100% !important;
+    height: 68px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .navbar-wrapper-mobile {
+    height: 68px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .navbar-brand-mobile {
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .dashboard-nav-inner {
+    height: 68px !important;
   }
 }
 

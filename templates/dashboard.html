@@ -13,7 +13,29 @@
     .dashboard-header {
       background: #FFFFFF;
       border-bottom: 2.5px solid #1D1D1D;
-      padding: 18px 0;
+      height: 84px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1999;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0;
+    }
+    .dashboard-main-content {
+      padding-top: 105px;
+    }
+    @media screen and (max-width: 767px) {
+      .dashboard-header {
+        height: 68px;
+        padding: 0;
+      }
+      .dashboard-main-content {
+        padding-top: 86px;
+      }
     }
     .dashboard-nav-inner {
       display: flex;
@@ -300,7 +322,7 @@
   </header>
 
   <!-- Ana İçerik -->
-  <main class="container" style="max-width: 1200px;">
+  <main class="container dashboard-main-content" style="max-width: 1200px;">
     <!-- Kullanıcı Karşılama Kartı -->
     <div class="dashboard-hero-card">
       <div>
