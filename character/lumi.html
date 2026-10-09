@@ -473,6 +473,46 @@
             100% { transform: rotate(10deg); }
         }
 
+        /* 15. HAVADA ASILI (Çizgi Film Düşüşü / Wile E. Coyote) */
+        [data-state="hover_drop"] #lumi-master { animation: hoverShiver 0.08s ease-in-out infinite; }
+        [data-state="hover_drop"] #pupils-l, [data-state="hover_drop"] #pupils-r { transform: translateY(16px); }
+        [data-state="hover_drop"] #lid-l, [data-state="hover_drop"] #lid-r { transform: translateY(-16px); }
+        [data-state="hover_drop"] #brow-l, [data-state="hover_drop"] #brow-r { opacity: 1; transform: translateY(-22px) rotate(8deg); }
+        [data-state="hover_drop"] #mouth-o { opacity: 1; transform: scale(1.4); }
+        [data-state="hover_drop"] #orb-core { transform: scale(1.35); fill: #FFA9BD; animation: none; }
+        [data-state="hover_drop"] #lumi-leg-l { animation: hoverPedalL 0.12s linear infinite; }
+        [data-state="hover_drop"] #lumi-leg-r { animation: hoverPedalR 0.12s linear infinite; }
+        [data-state="hover_drop"] #lumi-arm-l { animation: hoverFlailL 0.14s ease-in-out infinite; }
+        [data-state="hover_drop"] #lumi-arm-r { animation: hoverFlailR 0.14s ease-in-out infinite; }
+
+        @keyframes hoverPedalL {
+            0% { transform: rotate(-38deg) translateY(-8px); }
+            50% { transform: rotate(38deg) translateY(4px); }
+            100% { transform: rotate(-38deg) translateY(-8px); }
+        }
+        @keyframes hoverPedalR {
+            0% { transform: rotate(38deg) translateY(4px); }
+            50% { transform: rotate(-38deg) translateY(-8px); }
+            100% { transform: rotate(38deg) translateY(4px); }
+        }
+        @keyframes hoverFlailL {
+            0% { transform: rotate(68deg) translateY(-28px) translateX(10px); }
+            50% { transform: rotate(32deg) translateY(-14px) translateX(4px); }
+            100% { transform: rotate(68deg) translateY(-28px) translateX(10px); }
+        }
+        @keyframes hoverFlailR {
+            0% { transform: rotate(-68deg) translateY(-28px) translateX(-10px); }
+            50% { transform: rotate(-32deg) translateY(-14px) translateX(-4px); }
+            100% { transform: rotate(-68deg) translateY(-28px) translateX(-10px); }
+        }
+        @keyframes hoverShiver {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, 1px); }
+            50% { transform: translate(2px, -1px); }
+            75% { transform: translate(-1px, -2px); }
+            100% { transform: translate(0, 0); }
+        }
+
         /* Kontrol Paneli */
         #controls-panel {
             width: 100%;
@@ -835,6 +875,7 @@
             <button class="btn-emotion" data-target="uykulu">💤 Uykulu</button>
             <button class="btn-emotion" data-target="tirmaniyor">🧗 Tırmanıyor</button>
             <button class="btn-emotion" data-target="asili">🌟 Tavanda Asılı</button>
+            <button class="btn-emotion" data-target="hover_drop">💨 Çizgi Film Düşüşü</button>
         </div>
     </div>
 
@@ -853,7 +894,8 @@
             "uyari": "Hop! Kişisel verilerini korumam ve kurallara uymam gerekiyor, bunu yapamam 🛡️🔒",
             "uykulu": "Bugün çok verimli çalıştık ama göz kapaklarım ağırlaşıyor... ZzZz 💤",
             "tirmaniyor": "Tuttum duvarı, yukarı doğru tırmanıyorum! Kollarıma ve bacaklarıma bak! 🧗✨",
-            "asili": "Tavandayım! Burası çok havalı, biraz sallanıp aşağı atlayacağım! 🌟🪂"
+            "asili": "Tavandayım! Burası çok havalı, biraz sallanıp aşağı atlayacağım! 🌟🪂",
+            "hover_drop": "Aaa zemin nereye gitti?! Ayaklarım boşlukta pedal çeviriyor, düşüyoruum! 😱🕳️"
         };
 
         const stage = document.getElementById('lumi-stage');

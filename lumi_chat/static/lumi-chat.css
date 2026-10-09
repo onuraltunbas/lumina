@@ -504,6 +504,96 @@ html.dark-theme #lumi-root {
   100% { transform: rotate(-18deg) translateY(4px); }
 }
 
+/* --- ÇİZGİ FİLM HAVADA ASILI KALMA & DÜŞÜŞ (CARTOON HOVER DROP / WILE E. COYOTE) --- */
+.lumi-shimeji.is-hover-drop {
+  z-index: 2508;
+}
+.lumi-shimeji.is-hover-drop #lumi-shimeji-body-wrap {
+  animation: lumi-hover-shiver 0.08s ease-in-out infinite;
+}
+.lumi-shimeji.is-hover-drop .lumi-shimeji-shadow {
+  opacity: 0.04;
+  transform: translateX(-50%) scale(0.2);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Şaşkın aşağı bakan gözler & açık ağız */
+.lumi-shimeji.is-hover-drop #pupils-l,
+.lumi-shimeji.is-hover-drop #pupils-r {
+  transform: translateY(16px) !important;
+  transition: transform 0.08s ease;
+}
+.lumi-shimeji.is-hover-drop #lid-l,
+.lumi-shimeji.is-hover-drop #lid-r {
+  transform: translateY(-16px) !important;
+}
+.lumi-shimeji.is-hover-drop #brow-l,
+.lumi-shimeji.is-hover-drop #brow-r {
+  opacity: 1 !important;
+  transform: translateY(-22px) rotate(8deg) !important;
+}
+.lumi-shimeji.is-hover-drop #mouth-o {
+  opacity: 1 !important;
+  transform: scale(1.4) !important;
+}
+.lumi-shimeji.is-hover-drop #mouth-smile,
+.lumi-shimeji.is-hover-drop #mouth-happy,
+.lumi-shimeji.is-hover-drop #mouth-sad,
+.lumi-shimeji.is-hover-drop #mouth-flat {
+  opacity: 0 !important;
+}
+.lumi-shimeji.is-hover-drop #orb-core {
+  transform: scale(1.35) !important;
+  fill: #FFA9BD !important;
+  animation: none !important;
+}
+
+/* Boşlukta çılgınca pedal çeviren bacaklar (Rapid mid-air bicycle pedaling) */
+.lumi-shimeji.is-hover-drop #lumi-leg-l {
+  animation: lumi-hover-pedal-l 0.12s linear infinite;
+}
+.lumi-shimeji.is-hover-drop #lumi-leg-r {
+  animation: lumi-hover-pedal-r 0.12s linear infinite;
+}
+
+@keyframes lumi-hover-pedal-l {
+  0% { transform: rotate(-38deg) translateY(-8px); }
+  50% { transform: rotate(38deg) translateY(4px); }
+  100% { transform: rotate(-38deg) translateY(-8px); }
+}
+@keyframes lumi-hover-pedal-r {
+  0% { transform: rotate(38deg) translateY(4px); }
+  50% { transform: rotate(-38deg) translateY(-8px); }
+  100% { transform: rotate(38deg) translateY(4px); }
+}
+
+/* Şaşkınlıkla yanlara açılıp çırpınan kollar (Frantic flailing arms) */
+.lumi-shimeji.is-hover-drop #lumi-arm-l {
+  animation: lumi-hover-flail-l 0.14s ease-in-out infinite;
+}
+.lumi-shimeji.is-hover-drop #lumi-arm-r {
+  animation: lumi-hover-flail-r 0.14s ease-in-out infinite;
+}
+
+@keyframes lumi-hover-flail-l {
+  0% { transform: rotate(68deg) translateY(-28px) translateX(10px); }
+  50% { transform: rotate(32deg) translateY(-14px) translateX(4px); }
+  100% { transform: rotate(68deg) translateY(-28px) translateX(10px); }
+}
+@keyframes lumi-hover-flail-r {
+  0% { transform: rotate(-68deg) translateY(-28px) translateX(-10px); }
+  50% { transform: rotate(-32deg) translateY(-14px) translateX(-4px); }
+  100% { transform: rotate(-68deg) translateY(-28px) translateX(-10px); }
+}
+
+@keyframes lumi-hover-shiver {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+
 /* --- DÜŞÜŞ (HAVADAN YERE DOĞRU) --- */
 .lumi-shimeji.is-falling #lumi-arm-l {
   transform: rotate(62deg) translateY(-24px);
