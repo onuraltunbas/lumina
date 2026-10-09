@@ -97,3 +97,87 @@ body {
     box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
 }
 
+.soru1-puan,
+.soru2-puan {
+    font-weight: 600;
+    color: var(--renk-ana);
+    margin: 0.75rem 0;
+}
+
+/* ===== 2. Soru: Yazarak Öğrenme ===== */
+.soru2-yonerge {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.soru2-ustbilgi {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+    color: #64748b;
+}
+
+.soru2-sayac {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--renk-ana);
+    line-height: 1;
+}
+
+.soru2-baslik {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+}
+
+.soru2-metin {
+    line-height: 1.8;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+}
+
+.soru2-yazma {
+    width: 100%;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.soru2-yazma:focus {
+    border-color: var(--renk-ana);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+.soru2-alan {
+    margin-bottom: 1.25rem;
+}
+
+.soru2-alan label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.soru2-cevap {
+    width: 100%;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.soru2-cevap:focus {
+    border-color: var(--renk-ana);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+.soru2-dogru {
+    margin-bottom: 0.5rem;
+}
+

@@ -44,17 +44,79 @@
                 <button type="button" class="btn btn-primary" id="soru1-kontrol">
                     Kontrol Et
                 </button>
+                <div id="soru1-sonuc" class="hidden">
+                    <p class="soru1-yonerge">Doğru sıralama: <strong>B → C → D → A</strong></p>
+                    <p id="soru1-puan" class="soru1-puan"></p>
+                    <button type="button" class="btn btn-primary" id="soru1-devam">
+                        Devam
+                    </button>
+                </div>
             </div>
 
         </div>
 
-        <!-- 2. SORU (Sürükle Bırak / Test) -->
+        <!-- 2. SORU (Yazarak Öğrenme) -->
         <div id="soru-2" class="soru-kart hidden">
-            <!-- Arkadaşının Hazırladığı Soru Kodları buraya -->
-            <h2>2. Soru</h2>
-            <button type="button" class="btn btn-primary" onclick="soru2Tamamla(0, 0)">
-                İleri
-            </button>
+
+            <!-- Yönerge Ekranı -->
+            <div id="soru2-giris">
+                <p class="soru2-yonerge">
+                    Bu soru <strong>yazarak öğrenme yöntemi</strong> ile ilgilidir.
+                    Soruyu bir kağıda yazmanız önerilir; kağıdınız yoksa ekrandaki
+                    kutucuğu kullanabilirsiniz.
+                </p>
+                <button type="button" class="btn btn-primary" id="soru2-basla">Başla</button>
+            </div>
+
+            <!-- Okuma + Yazma Alanı (90 sn) -->
+            <div id="soru2-okuma" class="hidden">
+                <div class="soru2-ustbilgi">
+                    <span>Okuma ve yazma süreniz</span>
+                    <span id="soru2-sayac-okuma" class="soru2-sayac">90</span>
+                    <span>saniye</span>
+                </div>
+                <h3 class="soru2-baslik">Kurgusal Makale Özeti: "Zeta-4 Biyo-Polimerinin Termal Davranışı"</h3>
+                <p class="soru2-metin">
+                    Yeni sentezlenen Zeta-4 polimeri, yüksek sıcaklık altında aşamalı bir
+                    tepkime gösterir. Sıcaklık 140°C seviyesine ulaştığında malzeme iç
+                    yapısındaki kristal bağlar gevşeyerek esnek forma geçer.
+                </p>
+                <label class="soru2-yonerge" for="soru2-yazma">Metni buraya yazın:</label>
+                <textarea id="soru2-yazma" class="soru2-yazma" rows="5"
+                    placeholder="Metni buraya yazın..."></textarea>
+            </div>
+
+            <!-- Sorular (15 sn) -->
+            <div id="soru2-sorular" class="hidden">
+                <div class="soru2-ustbilgi">
+                    <span>Cevaplama süreniz</span>
+                    <span id="soru2-sayac-cevap" class="soru2-sayac">15</span>
+                    <span>saniye</span>
+                </div>
+                <p class="soru2-yonerge">
+                    Az önce okuduğunuz bilimsel rapordaki kritik teknik parametreleri
+                    aşağıdaki boşluklara klavyenizle yazarak tamamlayınız.
+                </p>
+                <div class="soru2-alan">
+                    <label for="soru2-cevap1">Malzemenin esnek forma geçmeye başladığı eşik sıcaklık değeri:</label>
+                    <input type="text" id="soru2-cevap1" class="soru2-cevap" autocomplete="off">
+                </div>
+                <div class="soru2-alan">
+                    <label for="soru2-cevap2">140°C seviyesinde gevşeyerek bu değişime yol açan iç yapı unsuru:</label>
+                    <input type="text" id="soru2-cevap2" class="soru2-cevap" autocomplete="off">
+                </div>
+                <button type="button" class="btn btn-primary" id="soru2-cevapla">Cevapla</button>
+            </div>
+
+            <!-- Doğru Cevaplar -->
+            <div id="soru2-sonuc" class="hidden">
+                <p class="soru2-yonerge">Doğru Cevaplar:</p>
+                <p class="soru2-dogru">Malzemenin esnek forma geçmeye başladığı eşik sıcaklık değeri: <strong>140°C</strong></p>
+                <p class="soru2-dogru">140°C seviyesinde gevşeyerek bu değişime yol açan iç yapı unsuru: <strong>kristal bağlar</strong></p>
+                <p id="soru2-puan" class="soru2-puan"></p>
+                <button type="button" class="btn btn-primary" id="soru2-devam">Devam</button>
+            </div>
+
         </div>
 
         <!-- SONUÇ EKRANI (Radar Grafiği) -->
