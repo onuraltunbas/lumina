@@ -39,9 +39,33 @@ function soru2_Hesapla(kullaniciSiralama, dogruSiralama, cozumSuresi) {
     return Number(Math.max(0, hamPuan).toFixed(2)); 
 }
 
-// 3. Soru
-function soru3_Hesapla(dogruMu) {
-    return Boolean(dogruMu) ? 100 : 0;
+// 3. Soru (4 harf sıralama - göreli)
+function soru3_Hesapla(kullaniciSiralama, dogruSiralama, cozumSuresi) {
+    if (!Array.isArray(kullaniciSiralama) || !Array.isArray(dogruSiralama) || dogruSiralama.length !== 4) return 0;
+
+    let dogruBagSayisi = 0;
+    let toplamBagSayisi = 3;
+    let islenecekDizi = kullaniciSiralama.slice(0, 4);
+    if (new Set(islenecekDizi).size !== islenecekDizi.length) return 0;
+
+    for (let i = 0; i < islenecekDizi.length - 1; i++) {
+        let orjIndex = dogruSiralama.indexOf(islenecekDizi[i]);
+        if (orjIndex !== -1 && orjIndex < dogruSiralama.length - 1) {
+            if (dogruSiralama[orjIndex + 1] === islenecekDizi[i + 1]) dogruBagSayisi++;
+        }
+    }
+
+    let hamPuan = (dogruBagSayisi / toplamBagSayisi) * 100;
+
+    if (hamPuan > 0) {
+        cozumSuresi = isNaN(cozumSuresi) || cozumSuresi < 0 ? 0 : Number(cozumSuresi);
+        let ceza = 0;
+        if (cozumSuresi > 15) ceza = 10 + (Math.floor(cozumSuresi - 15) * 3);
+        else if (cozumSuresi > 5) ceza = Math.floor(cozumSuresi - 5) * 1;
+        hamPuan -= ceza;
+    }
+
+    return Number(Math.max(0, hamPuan).toFixed(2));
 }
 
 // 4. Soru
