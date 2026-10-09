@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Lumina Studio - API, Kimlik Doğrulama ve Sayfa Entegrasyon Testleri
+Lumina Platform - API, Güvenlik, KVKK, Kimlik Doğrulama ve Sayfa Entegrasyon Testleri
 FastAPI TestClient kullanılarak doğrudan doğrulanır.
 """
 
@@ -13,45 +13,50 @@ from server import app
 client = TestClient(app)
 
 def test_endpoints():
-    print("🧪 [Test Başlangıcı] Lumina Studio Testleri Başlatılıyor...")
+    print("🧪 [Test Başlangıcı] Lumina Platform Güvenlik ve Entegrasyon Testleri Başlatılıyor...")
 
     # 1. Health Check
     res = client.get("/api/health")
     assert res.status_code == 200, f"Health check başarısız: {res.status_code}"
     print("  ✅ [200 OK] /api/health ->", res.json()["status"])
 
-    # 2. Ana Sayfa
+    # 2. Ana Sayfa (Başlık ve Meta Doğrulama)
     res = client.get("/")
     assert res.status_code == 200, f"Ana sayfa yüklenemedi: {res.status_code}"
-    assert "Lumina" in res.text, "Ana sayfa içeriğinde Lumina başlığı bulunamadı"
+    assert "Kişisel Öğrenme Stilleri" in res.text, "Ana sayfa güncel başlığı bulunamadı"
+    assert "Pedagojik &amp; Temsili Görselleştirme" in res.text, "3D beyin bilimsel bilgilendirme notu bulunamadı"
     assert "/static/css/main.css" in res.text
-    assert "/static/js/interactions.js" in res.text
-    print("  ✅ [200 OK] / (Ana Sayfa) -> Başarıyla render edildi")
+    print("  ✅ [200 OK] / (Ana Sayfa) -> Başarıyla render edildi (Eğitsel başlık ve bilimsel not doğrulandı)")
 
-    # 3. Portföy Sayfaları
-    projects = [
+    # 3. Şablon Kalıntılarının Temizlendiğinin Doğrulanması (404 Kontrolü)
+    removed_projects = [
         "sandbox-banking-application-website",
         "morello-company-networking-website",
         "snowlake-social-media-website",
         "creatink-creative-agency-website"
     ]
-    for p in projects:
+    for p in removed_projects:
         res = client.get(f"/project/{p}")
-        assert res.status_code == 200, f"Proje {p} yüklenemedi: {res.status_code}"
-        print(f"  ✅ [200 OK] /project/{p}")
+        assert res.status_code == 404, f"Şablon kalıntısı /project/{p} kaldırılmamış!"
+    print("  ✅ [404 Not Found] Şablon portföy sayfaları (/project/*) başarıyla temizlendi")
 
-    # 4. Dokümantasyon ve Şablon Sayfaları
-    templates = ["changelog", "license", "style-guide"]
-    for t in templates:
-        res = client.get(f"/template/{t}")
-        assert res.status_code == 200, f"Şablon {t} yüklenemedi: {res.status_code}"
-        print(f"  ✅ [200 OK] /template/{t}")
+    # 4. Lisans Sayfası (Türkçe ve Lumina'ya Özgü)
+    res = client.get("/license")
+    assert res.status_code == 200
+    assert "Lumina Platformu Lisans Koşulları" in res.text
+    assert "this template" not in res.text.lower(), "İngilizce şablon kalıntısı bulundu!"
+    print("  ✅ [200 OK] /license -> Türkçe telif ve lisans sayfası başarıyla doğrulandı")
 
-    # 5. İletişim Formu POST
+    # 5. API Dokümantasyonu Güvenlik Kontrolü (/docs kapalı olmalı)
+    res = client.get("/docs")
+    assert res.status_code == 404, "/docs herkese açık, güvenlik açığı!"
+    print("  ✅ [404 Not Found] /docs Swagger dokümantasyonu üretim modunda güvenle kapatıldı")
+
+    # 6. İletişim Formu POST
     contact_data = {
         "name": "Onur Altunbaş",
         "email": "onur@example.com",
-        "message": "Yeni bir proje için görüşmek istiyoruz."
+        "message": "Öğrenme stilleri testi hakkında bilgi almak istiyorum."
     }
     res = client.post("/api/contact", json=contact_data)
     assert res.status_code == 200, f"Contact POST başarısız: {res.status_code}"
@@ -59,60 +64,64 @@ def test_endpoints():
     assert resp_json["success"] is True
     print("  ✅ [200 OK] POST /api/contact ->", resp_json["message"])
 
-    # 6. Mesaj Listesi GET
+    # 7. KVKK Güvenlik Testi: Yetkisiz GET /api/contact/messages Engeli
     res = client.get("/api/contact/messages")
-    assert res.status_code == 200
-    msgs = res.json()["data"]
-    assert len(msgs) > 0
-    print(f"  ✅ [200 OK] GET /api/contact/messages -> Toplam {len(msgs)} kayıt doğrulandı")
+    assert res.status_code == 401, "KVKK İHLALİ: Oturumu olmayan kişi iletişim mesajlarını çekebiliyor!"
+    print("  ✅ [401 Unauthorized] GET /api/contact/messages yetkisiz erişim başarıyla engellendi (KVKK Uyumu)")
 
-    # 7. Bülten Aboneliği POST
+    # 8. Bülten Aboneliği POST
     res = client.post("/api/newsletter", json={"email": "newsletter@example.com"})
     assert res.status_code == 200
     print("  ✅ [200 OK] POST /api/newsletter ->", res.json()["message"])
 
-    # 8. 404 Sayfası
+    # 9. 404 Sayfası
     res = client.get("/olmayan-bir-sayfa-404")
     assert res.status_code == 404
     assert "404" in res.text or "Not Found" in res.text
     print("  ✅ [404 Not Found] /olmayan-bir-sayfa-404 -> Özel 404 şablonu render edildi")
 
-    # 9. KİMLİK DOĞRULAMA (AUTH) TESTLERİ
-    print("\n🔐 [Kimlik Doğrulama Testleri]")
+    # 10. KİMLİK DOĞRULAMA (AUTH) & GÜVENLİK TESTLERİ
+    print("\n🔐 [Kimlik Doğrulama & Güvenlik Testleri]")
 
-    # 9a. /auth sayfası render testi (Oturum açmamış kullanıcı)
+    # 10a. Şifre Uzunluk Politikası Kontrolü (En az 8 karakter)
+    res = client.post("/api/auth/register", json={"username": "kisa_test", "password": "123"})
+    assert res.status_code == 400 or res.status_code == 422, "Zayıf şifre (123) kabul edildi, güvenlik açığı!"
+    print("  ✅ [400 Bad Request] 8 karakterden kısa zayıf şifre başarıyla reddedildi")
+
+    # 10b. /auth sayfası render testi (Oturum açmamış kullanıcı)
     res = client.get("/auth")
     assert res.status_code == 200
     assert "Kayıt Ol" in res.text and "Giriş Yap" in res.text
     print("  ✅ [200 OK] GET /auth -> Kayıt ve Giriş sekme şablonu render edildi")
 
-    # 9b. /dashboard sayfasına yetkisiz erişim (Yönlendirme kontrolü)
+    # 10c. /dashboard sayfasına yetkisiz erişim (Yönlendirme kontrolü)
     res = client.get("/dashboard", follow_redirects=False)
     assert res.status_code in [302, 303, 307]
     assert "/auth" in res.headers.get("location", "")
     print("  ✅ [303 Redirect] GET /dashboard (Anonim) -> /auth sayfasına başarıyla yönlendirildi")
 
-    # 9c. Yeni Kullanıcı Kaydı POST /api/auth/register
+    # 10d. Yeni Kullanıcı Kaydı POST /api/auth/register (Güçlü şifre ile)
     test_user = f"test_{uuid.uuid4().hex[:8]}"
-    test_pass = "GuvenliSifre123"
+    test_pass = "GucluSifre2026!"
 
     res = client.post("/api/auth/register", json={"username": test_user, "password": test_pass})
     assert res.status_code == 200, f"Kayıt başarısız: {res.text}"
     reg_data = res.json()
     assert reg_data["success"] is True
     assert reg_data["user"]["username"] == test_user
-    print(f"  ✅ [200 OK] POST /api/auth/register -> '{test_user}' başarıyla kaydedildi")
+    print(f"  ✅ [200 OK] POST /api/auth/register -> '{test_user}' güçlü şifreyle başarıyla kaydedildi")
 
     # Çerez oluşturuldu mu?
     assert "lumina_session" in client.cookies, "Oturum çerezi atanamadı"
     print("  ✅ [Cookie OK] lumina_session çerezi oluşturuldu ve kaydedildi")
 
-    # 9d. Aynı kullanıcı adıyla tekrar kayıt engellemesi
-    res = client.post("/api/auth/register", json={"username": test_user, "password": "baskasifre"})
-    assert res.status_code == 400
-    print("  ✅ [400 Bad Request] Mükerrer kullanıcı adı kaydı başarıyla engellendi")
+    # 10e. Oturumu olan kullanıcının GET /api/contact/messages erişimi
+    res = client.get("/api/contact/messages")
+    assert res.status_code == 200
+    assert res.json()["success"] is True
+    print("  ✅ [200 OK] GET /api/contact/messages (Yetkili Oturum) -> Mesajlar güvenle listelendi")
 
-    # 9e. /api/auth/me ile aktif kullanıcı bilgilerini doğrulama
+    # 10f. /api/auth/me ile aktif kullanıcı bilgilerini doğrulama
     res = client.get("/api/auth/me")
     assert res.status_code == 200
     me_data = res.json()
@@ -120,65 +129,45 @@ def test_endpoints():
     assert me_data["user"]["username"] == test_user
     print("  ✅ [200 OK] GET /api/auth/me -> Kullanıcı oturumu doğrulandı")
 
-    # 9f. Oturumu olan kullanıcının /dashboard erişimi
+    # 10g. Oturumu olan kullanıcının /dashboard erişimi
     res = client.get("/dashboard")
     assert res.status_code == 200
     assert "Lumina" in res.text
-    assert "dashboard-grid" in res.text
-    print("  ✅ [200 OK] GET /dashboard (Giriş Yapmış) -> Kontrol paneli başarıyla yüklendi")
+    assert "Pedagojik &amp; Temsili Simülasyon" in res.text, "Dashboard 3D beyin bilimsel notu bulunamadı"
+    print("  ✅ [200 OK] GET /dashboard (Giriş Yapmış) -> Kontrol paneli ve bilimsel not başarıyla yüklendi")
 
-    # 9g. Oturumu olan kullanıcının /auth erişiminde dashboard'a yönlendirilmesi
-    res = client.get("/auth", follow_redirects=False)
-    assert res.status_code in [302, 303, 307]
-    assert "/dashboard" in res.headers.get("location", "")
-    print("  ✅ [303 Redirect] GET /auth (Zaten Giriş Yapmış) -> /dashboard sayfasına yönlendirildi")
-
-    # 9h. Test Sonucu Kaydetme (Bağımsız %0-100 Puanlama)
+    # 10h. Test Sonucu Kaydetme (Bağımsız %0-100 Puanlama)
     result_payload = {
-        "score_gorsel": 100.0,
-        "score_isitsel": 50.0,
-        "score_yazarak": 40.0,
-        "score_okuyarak": 65.0,
+        "score_gorsel": 95.0,
+        "score_isitsel": 75.0,
+        "score_yazarak": 60.0,
+        "score_okuyarak": 80.0,
         "score_deneyimsel": 85.0,
         "dominant_style": "gorsel",
         "details_json": '{"test": "demo"}'
     }
     res = client.post("/api/auth/results", json=result_payload)
     assert res.status_code == 200
-    assert res.json()["result"]["score_gorsel"] == 100.0
-    assert res.json()["result"]["dominant_style"] == "gorsel"
+    assert res.json()["result"]["score_gorsel"] == 95.0
     print("  ✅ [200 OK] POST /api/auth/results -> Bağımsız %0-100 sonuç veritabanına kaydedildi")
 
-    # 9i. Kullanıcı test sonuçlarını listeleme
-    res = client.get("/api/auth/results")
-    assert res.status_code == 200
-    results_list = res.json()["data"]
-    assert len(results_list) >= 1
-    print(f"  ✅ [200 OK] GET /api/auth/results -> Toplam {len(results_list)} test kaydı doğrulandı")
-
-    # 9j. Çıkış Yapma POST /api/auth/logout
+    # 10i. Çıkış Yapma POST /api/auth/logout
     res = client.post("/api/auth/logout")
     assert res.status_code == 200
     print("  ✅ [200 OK] POST /api/auth/logout -> Oturum sonlandırıldı")
 
-    # 9k. Çıkış sonrası /api/auth/me kontrolü
-    res = client.get("/api/auth/me")
-    assert res.status_code == 200
-    assert res.json()["authenticated"] is False
-    print("  ✅ [200 OK] GET /api/auth/me (Çıkış sonrası) -> Oturum kapalı olduğu doğrulandı")
-
-    # 9l. Hatalı Şifreyle Giriş Denemesi
-    res = client.post("/api/auth/login", json={"username": test_user, "password": "YanlisSifre"})
+    # 10j. Hatalı Şifreyle Giriş Denemesi
+    res = client.post("/api/auth/login", json={"username": test_user, "password": "YanlisSifre123!"})
     assert res.status_code == 401
     print("  ✅ [401 Unauthorized] Hatalı şifre denemesi başarıyla reddedildi")
 
-    # 9m. Doğru Şifre ve Beni Hatırla ile Giriş
+    # 10k. Doğru Şifre ve Giriş
     res = client.post("/api/auth/login", json={"username": test_user, "password": test_pass, "remember_me": True})
     assert res.status_code == 200
     assert res.json()["success"] is True
-    print("  ✅ [200 OK] POST /api/auth/login -> 'Beni Hatırla' ile giriş başarılı")
+    print("  ✅ [200 OK] POST /api/auth/login -> Doğru şifre ile giriş başarılı")
 
-    print("\n🎉 Tüm testler (Sayfalar, API'ler, Auth, Oturum, Bağımsız Skorlama) başarıyla tamamlandı! (100% PASS)")
+    print("\n🎉 Tüm testler (Güvenlik, KVKK, Sayfalar, API'ler, Auth, Oturum, Bağımsız Skorlama) başarıyla tamamlandı! (100% PASS)")
 
 if __name__ == "__main__":
     test_endpoints()

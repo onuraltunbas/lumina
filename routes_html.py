@@ -70,42 +70,12 @@ def test_page():
 
 
 # =====================================================================
-# PORTFÖY PROJE DETAY SAYFALARI
+# LİSANS VE KULLANIM KOŞULLARI
 # =====================================================================
-PROJECT_MAP = {
-    "sandbox-banking-application-website": "project_sandbox.html",
-    "morello-company-networking-website": "project_morello.html",
-    "snowlake-social-media-website": "project_snowlake.html",
-    "creatink-creative-agency-website": "project_creatink.html",
-}
-
-@router.api_route("/project/{slug}", methods=["GET", "HEAD"], response_class=HTMLResponse)
-def project_detail(slug: str):
-    template_name = PROJECT_MAP.get(slug)
-    if not template_name:
-        raise HTTPException(status_code=404, detail="Proje bulunamadı.")
-    content = get_template(template_name)
-    return HTMLResponse(content=content)
-
-
-# =====================================================================
-# ŞABLON VE DOKÜMANTASYON SAYFALARI
-# =====================================================================
-@router.api_route("/template/changelog", methods=["GET", "HEAD"], response_class=HTMLResponse)
-def changelog_page():
-    content = get_template("changelog.html")
-    return HTMLResponse(content=content)
-
-
+@router.api_route("/license", methods=["GET", "HEAD"], response_class=HTMLResponse)
 @router.api_route("/template/license", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def license_page():
     content = get_template("license.html")
-    return HTMLResponse(content=content)
-
-
-@router.api_route("/template/style-guide", methods=["GET", "HEAD"], response_class=HTMLResponse)
-def style_guide_page():
-    content = get_template("style_guide.html")
     return HTMLResponse(content=content)
 
 
@@ -116,3 +86,4 @@ def style_guide_page():
 def not_found_page():
     content = get_template("404.html")
     return HTMLResponse(content=content, status_code=404)
+

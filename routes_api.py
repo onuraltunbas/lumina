@@ -27,6 +27,38 @@ router = APIRouter(prefix="/api", tags=["API"])
 
 
 # =====================================================================
+# GÜVENLİK & BRUTE-FORCE RATE LIMITER
+# =====================================================================
+_LOGIN_ATTEMPTS = {}
+_REGISTER_ATTEMPTS = {}
+MAX_LOGIN_ATTEMPTS = 5
+LOGIN_LOCKOUT_SECONDS = 300  # 5 dakika
+MAX_REGISTER_ATTEMPTS = 5
+REGISTER_LOCKOUT_SECONDS = 300  # 5 dakika
+
+def _check_rate_limit(attempts_dict: dict, ip: str, max_attempts: int, window_seconds: int, action_name: str):
+    now = datetime.datetime.utcnow().timestamp()
+    timestamps = [t for t in attempts_dict.get(ip, []) if now - t < window_seconds]
+    if len(timestamps) >= max_attempts:
+        wait_seconds = int(window_seconds - (now - timestamps[0]))
+        raise HTTPException(
+            status_code=429,
+            detail=f"Güvenlik nedeniyle çok fazla {action_name} denemesi engellendi. Lütfen {max(wait_seconds, 15)} saniye sonra tekrar deneyin."
+        )
+    attempts_dict[ip] = timestamps
+
+def _record_failed_attempt(attempts_dict: dict, ip: str):
+    now = datetime.datetime.utcnow().timestamp()
+    if ip not in attempts_dict:
+        attempts_dict[ip] = []
+    attempts_dict[ip].append(now)
+
+def _clear_rate_limit(attempts_dict: dict, ip: str):
+    if ip in attempts_dict:
+        del attempts_dict[ip]
+
+
+# =====================================================================
 # PYDANTIC ŞEMALARI
 # =====================================================================
 class ContactFormSchema(BaseModel):
@@ -41,7 +73,7 @@ class NewsletterSchema(BaseModel):
 
 class RegisterSchema(BaseModel):
     username: str = Field(..., min_length=3, max_length=30)
-    password: str = Field(..., min_length=4, max_length=128)
+    password: str = Field(..., min_length=8, max_length=128)
 
 
 class LoginSchema(BaseModel):
@@ -74,6 +106,9 @@ async def register_user(
     """
     Yeni kullanıcı kaydı oluşturur, otomatik oturum açar ve oturum çerezi döner.
     """
+    client_ip = get_client_ip(request)
+    _check_rate_limit(_REGISTER_ATTEMPTS, client_ip, MAX_REGISTER_ATTEMPTS, REGISTER_LOCKOUT_SECONDS, "kayıt")
+
     raw_username = payload.username.strip()
     raw_password = payload.password.strip()
 
@@ -84,10 +119,10 @@ async def register_user(
             detail="Kullanıcı adı 3-30 karakter uzunluğunda olmalı ve sadece harf, rakam ve alt çizgi içermelidir."
         )
 
-    if len(raw_password) < 4:
+    if len(raw_password) < 8:
         raise HTTPException(
             status_code=400,
-            detail="Şifre en az 4 karakter uzunluğunda olmalıdır."
+            detail="Şifre güvenlik standartları gereği en az 8 karakter uzunluğunda olmalıdır."
         )
 
     # Kullanıcı adı kullanımda mı? (küçük/büyük harf duyarsız kontrol)
@@ -145,11 +180,15 @@ async def login_user(
     """
     Kullanıcı girişi yapar. 'Beni Hatırla' işaretlenirse 30 günlük kalıcı oturum verir.
     """
+    client_ip = get_client_ip(request)
+    _check_rate_limit(_LOGIN_ATTEMPTS, client_ip, MAX_LOGIN_ATTEMPTS, LOGIN_LOCKOUT_SECONDS, "giriş")
+
     raw_username = payload.username.strip()
     raw_password = payload.password.strip()
 
     user = db.query(User).filter(User.username.ilike(raw_username)).first()
     if not user or not verify_password(raw_password, user.password_hash):
+        _record_failed_attempt(_LOGIN_ATTEMPTS, client_ip)
         raise HTTPException(
             status_code=401,
             detail="Kullanıcı adı veya şifre hatalı. Lütfen tekrar deneyin."
@@ -160,6 +199,9 @@ async def login_user(
             status_code=403,
             detail="Bu hesap devre dışı bırakılmıştır. Lütfen yöneticiyle iletişime geçin."
         )
+
+    # Başarılı girişte rate limiter sayacını sıfırla
+    _clear_rate_limit(_LOGIN_ATTEMPTS, client_ip)
 
     # Kullanıcı son giriş & IP bilgisini güncelle
     user.last_login = datetime.datetime.utcnow()
@@ -360,15 +402,37 @@ async def handle_contact_form(payload: ContactFormSchema, request: Request, db: 
 
 
 @router.get("/contact/messages")
-async def list_contact_messages(limit: int = 50, db: Session = Depends(get_db)):
+async def list_contact_messages(
+    request: Request,
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
     """
     Gönderilen iletişim mesajlarını listeler.
+    KVKK ve gizlilik gereği aktif oturum (auth) doğrulaması zorunludur.
     """
+    token = request.cookies.get(COOKIE_NAME)
+    user = get_session_user(db, token) if token else None
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="KVKK ve gizlilik standartları gereği bu verilere yalnızca yetkili kullanıcılar erişebilir."
+        )
+
     messages = db.query(ContactMessage).order_by(ContactMessage.created_at.desc()).limit(limit).all()
     return {
         "success": True,
         "count": len(messages),
-        "data": [msg.to_dict() for msg in messages]
+        "data": [
+            {
+                "id": msg.id,
+                "name": msg.name,
+                "email": msg.email,
+                "message": msg.message,
+                "created_at": msg.created_at.isoformat() if msg.created_at else None
+            }
+            for msg in messages
+        ]
     }
 
 
@@ -397,7 +461,7 @@ async def health_check(db: Session = Depends(get_db)):
     user_count = db.query(User).count()
     return {
         "status": "ok",
-        "service": "Lumina Creative Studio",
+        "service": "Lumina Learning Platform",
         "total_messages": msg_count,
         "total_users": user_count,
         "timestamp": datetime.datetime.utcnow().isoformat()

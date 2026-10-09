@@ -23,12 +23,16 @@ import routes_html
 # =====================================================================
 # FASTAPI UYGULAMASI
 # =====================================================================
+# API Dokümantasyonu (Canlı ortamda güvenlik nedeniyle varsayılan olarak kapalıdır)
+_enable_docs = os.getenv("ENABLE_DOCS", "false").lower() == "true"
+
 app = FastAPI(
-    title="Lumina - Creative Design Studio & Portfolio",
-    description="Modern, yüksek performanslı ve interaktif portföy web sitesi.",
+    title="Lumina - Bireysel Öğrenme Stilleri ve Nöral Gelişim Platformu",
+    description="5 temel öğrenme modeli ve interaktif 3D nöral lob simülasyonu.",
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url=None
+    docs_url="/docs" if _enable_docs else None,
+    redoc_url="/redoc" if _enable_docs else None,
+    openapi_url="/openapi.json" if _enable_docs else None,
 )
 
 # =====================================================================

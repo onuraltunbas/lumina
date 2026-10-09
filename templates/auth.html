@@ -340,8 +340,8 @@
           </div>
 
           <div class="auth-form-group">
-            <label class="auth-label" for="reg-password">🔒 Şifre (En az 4 karakter)</label>
-            <input class="auth-input" id="reg-password" name="password" type="password" placeholder="En az 4 karakterli şifreniz" required minlength="4" maxlength="128" autocomplete="new-password"/>
+            <label class="auth-label" for="reg-password">🔒 Şifre (En az 8 karakter)</label>
+            <input class="auth-input" id="reg-password" name="password" type="password" placeholder="En az 8 karakterli şifreniz" required minlength="8" maxlength="128" autocomplete="new-password"/>
           </div>
 
           <div class="auth-form-group">
@@ -490,6 +490,11 @@
 
         if (!username || !password) {
           showAlert('error', 'Lütfen tüm alanları doldurunuz.');
+          return;
+        }
+
+        if (password.length < 8) {
+          showAlert('error', 'Şifreniz güvenlik standartları gereği en az 8 karakter olmalıdır.');
           return;
         }
 
