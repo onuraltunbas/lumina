@@ -1,0 +1,1099 @@
+/* Lumi Chat — Lumina Comic/Doodle Stili + Büyük Canlı Karakter Widget'ı */
+#lumi-root {
+  --lumi-ink: #1D1D1D;
+  --lumi-purple: #7934ED;
+  --lumi-yellow: #FEF08A;
+  --lumi-bg: #FFFFFF;
+  --lumi-soft: #F3E8FF;
+  --lumi-text: #1D1D1D;
+  --lumi-muted: #6B7280;
+  --lumi-sky: #A9D3FF;
+  --lumi-navy: #18264A;
+  --lumi-pink: #FFA9BD;
+  --lumi-gold: #FFE49A;
+  --lumi-mouth: #663C4A;
+  --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2500;
+  font-family: inherit;
+  overflow: hidden;
+}
+
+html.dark-theme #lumi-root {
+  --lumi-ink: #E5E7EB;
+  --lumi-bg: #18181B;
+  --lumi-soft: #2E1065;
+  --lumi-text: #F4F4F5;
+  --lumi-muted: #A1A1AA;
+}
+
+/* =========================================================
+   CANLI KARAKTER SVG ANİMASYONLARI & ANATOMİK PİVOT MOTORU
+   ========================================================= */
+
+.lumi-character-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.22));
+  display: block;
+}
+
+/* Kesin Vektörel Koordinat Pivot Noktaları (Göz kayması ve deformasyonu önler) */
+.lumi-character-svg #lumi-body { transform-origin: 400px 600px; }
+.lumi-character-svg #lumi-leg-l { transform-origin: 320px 650px; }
+.lumi-character-svg #lumi-leg-r { transform-origin: 480px 650px; }
+.lumi-character-svg #lumi-arm-l { transform-origin: 290px 510px; }
+.lumi-character-svg #lumi-arm-r { transform-origin: 510px 510px; }
+.lumi-character-svg #lumi-head-group { transform-origin: 400px 480px; }
+.lumi-character-svg #lumi-tuft-l { transform-origin: 230px 320px; }
+.lumi-character-svg #lumi-tuft-r { transform-origin: 570px 320px; }
+.lumi-character-svg #lumi-eyes { transform-origin: 400px 360px; }
+.lumi-character-svg .eyes-blink { transform-origin: 400px 360px; }
+.lumi-character-svg #eye-wrap-l { transform-origin: 300px 360px; }
+.lumi-character-svg #eye-wrap-r { transform-origin: 500px 360px; }
+.lumi-character-svg #pupils-l { transform-origin: 300px 360px; }
+.lumi-character-svg #pupils-r { transform-origin: 500px 360px; }
+.lumi-character-svg #lid-l { transform-origin: 300px 360px; }
+.lumi-character-svg #lid-r { transform-origin: 500px 360px; }
+.lumi-character-svg #eye-happy-l { transform-origin: 300px 360px; }
+.lumi-character-svg #eye-happy-r { transform-origin: 500px 360px; }
+.lumi-character-svg #brow-l { transform-origin: 300px 270px; }
+.lumi-character-svg #brow-r { transform-origin: 500px 270px; }
+.lumi-character-svg #cheek-l { transform-origin: 250px 420px; }
+.lumi-character-svg #cheek-r { transform-origin: 550px 420px; }
+.lumi-character-svg .mouth-shape { transform-origin: 400px 428px; }
+.lumi-character-svg #lumi-antenna { transform-origin: 400px 175px; }
+.lumi-character-svg .orb-wrap { transform-origin: 400px 55px; }
+.lumi-character-svg #orb-core { transform-origin: 400px 55px; }
+.lumi-character-svg .emotion-effect { transform-origin: center; transform-box: fill-box; }
+
+.lumi-character-svg .anim-part {
+  transition: transform 0.42s var(--bounce),
+              opacity 0.2s ease,
+              fill 0.35s ease,
+              stroke 0.35s ease;
+}
+
+.lumi-character-svg .smooth-part {
+  transition: all 0.6s ease-in-out;
+}
+
+/* Temel Döngüler */
+@keyframes lumi-idleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes lumi-blink {
+  0%, 93%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.06); }
+}
+
+@keyframes lumi-orbPulse {
+  0%, 100% { transform: scale(1); filter: var(--orb-filter-norm, url(#go_norm)); }
+  50% { transform: scale(1.14); filter: var(--orb-filter-bright, url(#gob_norm)); }
+}
+
+@keyframes lumi-orbNeural {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.24); }
+}
+
+@keyframes lumi-sleepPulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.6; }
+  50% { transform: scale(1.02); opacity: 0.9; }
+}
+
+@keyframes lumi-excitedJump {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  40% { transform: translateY(-26px) scaleY(1.05); }
+  80% { transform: translateY(3px) scaleY(0.96); }
+}
+
+@keyframes lumi-zzz {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-14px); opacity: 1; }
+}
+
+.lumi-character-svg #lumi-master { animation: lumi-idleFloat 3.8s ease-in-out infinite; }
+.lumi-character-svg .eyes-blink { animation: lumi-blink 5.5s infinite; }
+.lumi-character-svg #orb-core { animation: lumi-orbPulse 3.5s ease-in-out infinite; }
+
+/* Varsayılan Gizlilik / Görünürlük */
+.lumi-character-svg .mouth-shape {
+  opacity: 0;
+  transition: opacity 0.12s ease, transform 0.35s var(--bounce);
+  pointer-events: none;
+}
+.lumi-character-svg .emotion-effect,
+.lumi-character-svg .eye-closed,
+.lumi-character-svg .eye-happy {
+  opacity: 0;
+  pointer-events: none;
+}
+.lumi-character-svg .brow {
+  opacity: 0.22;
+  transition: opacity 0.25s ease, transform 0.42s var(--bounce), stroke-width 0.3s ease;
+}
+.lumi-character-svg .lid {
+  transform: translateY(-12px); /* Gözün üzerinde gizli */
+  transition: transform 0.42s var(--bounce), opacity 0.2s ease;
+}
+
+/* Pozlanmış mimiklerde göz kırpma animasyonunu durdur (Esneme/bozulmaları önler) */
+[data-state="mutlu"] .eyes-blink,
+[data-state="heyecanli"] .eyes-blink,
+[data-state="dusunuyor"] .eyes-blink,
+[data-state="saskin"] .eyes-blink,
+[data-state="merakli"] .eyes-blink,
+[data-state="mahcup"] .eyes-blink,
+[data-state="teselli"] .eyes-blink,
+[data-state="uzgun"] .eyes-blink,
+[data-state="uyari"] .eyes-blink,
+[data-state="kizgin"] .eyes-blink,
+[data-state="uykulu"] .eyes-blink {
+  animation: none;
+}
+
+/* =========================================================
+   12 KUSURSUZ DUYGU DURUMU (STATE RULES)
+   ========================================================= */
+
+/* 1. NORMAL (Doğal, Dostça) */
+[data-state="normal"] #mouth-smile { opacity: 1; transform: scale(1); }
+[data-state="normal"] #cheek-l, [data-state="normal"] #cheek-r { opacity: 0.8; }
+[data-state="normal"] #lid-l, [data-state="normal"] #lid-r { transform: translateY(-12px); }
+
+/* 2. DİNLİYOR (Kullanıcı Yazarken - Dikkatli Dinleme) */
+[data-state="dinliyor"] #lumi-head-group { transform: rotate(8deg) translateY(-4px); }
+[data-state="dinliyor"] #mouth-smile { opacity: 1; transform: scale(1.06); }
+[data-state="dinliyor"] #pupils-l, [data-state="dinliyor"] #pupils-r { transform: translate(4px, 4px); }
+[data-state="dinliyor"] #brow-r { opacity: 0.75; transform: translateY(-10px); }
+[data-state="dinliyor"] #brow-l { opacity: 0.45; }
+[data-state="dinliyor"] #lid-l { transform: translateY(16px); }
+[data-state="dinliyor"] #lid-r { transform: translateY(-12px); }
+[data-state="dinliyor"] #lumi-arm-l { transform: rotate(-18deg) translateY(-8px); }
+[data-state="dinliyor"] #lumi-arm-r { transform: rotate(10deg); }
+[data-state="dinliyor"] #orb-core { transform: scale(1.12); }
+
+/* 3. DÜŞÜNÜYOR (Yapay Zeka Cevabı Hazırlarken - Nöral Mor Halesi & Çenede Düşünme Eli) */
+[data-state="dusunuyor"] #lumi-head-group { transform: rotate(10deg) translateY(-8px); }
+[data-state="dusunuyor"] #pupils-l, [data-state="dusunuyor"] #pupils-r { transform: translate(10px, -12px); }
+[data-state="dusunuyor"] #lid-l { transform: translateY(28px) rotate(6deg); }
+[data-state="dusunuyor"] #lid-r { transform: translateY(16px); }
+[data-state="dusunuyor"] #brow-r { opacity: 0.85; transform: translateY(-16px) rotate(12deg); }
+[data-state="dusunuyor"] #brow-l { opacity: 0.65; transform: translateY(4px) rotate(-6deg); }
+[data-state="dusunuyor"] #mouth-o { opacity: 1; transform: scale(0.68); }
+[data-state="dusunuyor"] #lumi-arm-l { transform: rotate(-48deg) translateY(-22px) translateX(14px); }
+[data-state="dusunuyor"] #lumi-arm-r { transform: rotate(16deg) translateX(-8px); }
+[data-state="dusunuyor"] #orb-core { fill: #C084FC; animation: lumi-orbNeural 1.3s ease-in-out infinite; }
+
+/* 4. TAKTİK / FİKİR (Çalışma Yöntemi Verirken - Ampul Gibi Parlayan Küre & Yıldızlar) */
+[data-state="taktik"] #lumi-head-group { transform: translateY(-8px); }
+[data-state="taktik"] #mouth-smile { opacity: 1; transform: scale(1.18); }
+[data-state="taktik"] #brow-l, [data-state="taktik"] #brow-r { opacity: 0.85; transform: translateY(-16px); }
+[data-state="taktik"] #lid-l, [data-state="taktik"] #lid-r { transform: translateY(-12px); }
+[data-state="taktik"] #lumi-arm-r { transform: rotate(-68deg) translateY(-22px); }
+[data-state="taktik"] #lumi-arm-l { transform: rotate(-18deg) translateX(10px); }
+[data-state="taktik"] #orb-core { fill: #FFFFFF; transform: scale(1.4); animation: none; }
+[data-state="taktik"] #cheek-l, [data-state="taktik"] #cheek-r { opacity: 1; transform: scale(1.15); }
+[data-state="taktik"] #efx-stars { opacity: 1; }
+
+/* 5. MUTLU (Anime ^^ Gözler & Tatlı Gülüş) */
+[data-state="mutlu"] #lumi-head-group { transform: translateY(-4px); }
+[data-state="mutlu"] .eye-open-parts { opacity: 0; }
+[data-state="mutlu"] .lid { opacity: 0; }
+[data-state="mutlu"] #eye-happy-l, [data-state="mutlu"] #eye-happy-r { opacity: 1; }
+[data-state="mutlu"] #brow-l, [data-state="mutlu"] #brow-r { opacity: 0.8; transform: translateY(-12px); }
+[data-state="mutlu"] #mouth-happy { opacity: 1; transform: scale(1); }
+[data-state="mutlu"] #lumi-arm-l { transform: rotate(22deg) translateY(-6px); }
+[data-state="mutlu"] #lumi-arm-r { transform: rotate(-22deg) translateY(-6px); }
+[data-state="mutlu"] #cheek-l, [data-state="mutlu"] #cheek-r { opacity: 1; transform: scale(1.25) translateY(-4px); }
+[data-state="mutlu"] #orb-core { animation: lumi-orbPulse 2s ease-in-out infinite; fill: #FFE49A; }
+
+/* 6. HEYECANLI (Sevinçten Zıplama & Havaya Kalkan Kollar & Bacaklar) */
+[data-state="heyecanli"] #lumi-master { animation: lumi-excitedJump 0.85s var(--bounce) infinite; }
+[data-state="heyecanli"] .eye-open-parts { opacity: 0; }
+[data-state="heyecanli"] .lid { opacity: 0; }
+[data-state="heyecanli"] #eye-happy-l, [data-state="heyecanli"] #eye-happy-r { opacity: 1; transform: scale(1.08); }
+[data-state="heyecanli"] #mouth-happy { opacity: 1; transform: scale(1.28); }
+[data-state="heyecanli"] #cheek-l, [data-state="heyecanli"] #cheek-r { opacity: 1; transform: scale(1.3); }
+[data-state="heyecanli"] #brow-l, [data-state="heyecanli"] #brow-r { opacity: 0.9; transform: translateY(-18px); }
+[data-state="heyecanli"] #lumi-tuft-l { transform: rotate(-8deg) translateY(-6px); }
+[data-state="heyecanli"] #lumi-tuft-r { transform: rotate(8deg) translateY(-6px); }
+[data-state="heyecanli"] #lumi-arm-l { transform: rotate(60deg) translateY(-26px); }
+[data-state="heyecanli"] #lumi-arm-r { transform: rotate(-60deg) translateY(-26px); }
+[data-state="heyecanli"] #lumi-leg-l { transform: rotate(-15deg) translateY(-4px); }
+[data-state="heyecanli"] #lumi-leg-r { transform: rotate(15deg) translateY(-4px); }
+[data-state="heyecanli"] #orb-core { fill: #FFFFFF; transform: scale(1.35); animation: none; }
+[data-state="heyecanli"] #efx-stars { opacity: 1; }
+
+/* 7. MERAKLI (Soru İşareti & Eğik Baş) */
+[data-state="merakli"] #lumi-head-group { transform: rotate(12deg); }
+[data-state="merakli"] #mouth-o { opacity: 1; transform: scale(0.75); }
+[data-state="merakli"] #brow-r { opacity: 0.95; transform: translateY(-20px) rotate(12deg); }
+[data-state="merakli"] #brow-l { opacity: 0.6; transform: translateY(6px) rotate(4deg); }
+[data-state="merakli"] #lid-l { transform: translateY(24px) rotate(6deg); }
+[data-state="merakli"] #lid-r { transform: translateY(-12px); }
+[data-state="merakli"] #pupils-l, [data-state="merakli"] #pupils-r { transform: translate(8px, -8px); }
+[data-state="merakli"] #lumi-arm-l { transform: rotate(-35deg) translateY(-12px); }
+[data-state="merakli"] #lumi-arm-r { transform: rotate(15deg); }
+[data-state="merakli"] #orb-core { animation-duration: 1.6s; }
+[data-state="merakli"] #efx-question { opacity: 1; transform: translateY(-18px); }
+
+/* 8. ŞAŞKIN (Kocaman Açılmış Gözler & Yanlara Açılan Kollar) */
+[data-state="saskin"] #lumi-head-group { transform: translateY(-14px); }
+[data-state="saskin"] #eye-wrap-l, [data-state="saskin"] #eye-wrap-r { transform: scale(1.15); }
+[data-state="saskin"] #mouth-o { opacity: 1; transform: scale(1.28); }
+[data-state="saskin"] #brow-l, [data-state="saskin"] #brow-r { opacity: 0.95; transform: translateY(-24px); }
+[data-state="saskin"] #lid-l, [data-state="saskin"] #lid-r { transform: translateY(-15px); }
+[data-state="saskin"] #orb-core { transform: scale(1.35); animation: none; }
+[data-state="saskin"] #lumi-arm-l { transform: rotate(32deg) translateX(-15px); }
+[data-state="saskin"] #lumi-arm-r { transform: rotate(-32deg) translateX(15px); }
+
+/* 9. MAHCUP (Kızarık Allık & Çekingen Ayaklar / Kollar) */
+[data-state="mahcup"] #lumi-head-group { transform: rotate(-8deg) translateY(8px); }
+[data-state="mahcup"] #mouth-smile { opacity: 1; transform: scale(0.75); }
+[data-state="mahcup"] #cheek-l, [data-state="mahcup"] #cheek-r { opacity: 1; transform: scale(1.45); }
+[data-state="mahcup"] #pupils-l, [data-state="mahcup"] #pupils-r { transform: translate(-10px, 8px); }
+[data-state="mahcup"] #lid-l, [data-state="mahcup"] #lid-r { transform: translateY(32px); }
+[data-state="mahcup"] #brow-l { opacity: 0.6; transform: translateY(-2px) rotate(-8deg); }
+[data-state="mahcup"] #brow-r { opacity: 0.6; transform: translateY(-2px) rotate(8deg); }
+[data-state="mahcup"] #lumi-arm-l { transform: rotate(-30deg) translateX(22px); }
+[data-state="mahcup"] #lumi-arm-r { transform: rotate(30deg) translateX(-22px); }
+[data-state="mahcup"] #lumi-leg-l { transform: rotate(10deg); }
+[data-state="mahcup"] #lumi-leg-r { transform: rotate(-10deg); }
+[data-state="mahcup"] #orb-core { fill: #FFA9BD; }
+
+/* 10. TESELLİ (Empati & Düşük Kulaklar & Yanlarda Kollar) */
+[data-state="teselli"] #lumi-head-group, [data-state="uzgun"] #lumi-head-group { transform: translateY(12px); }
+[data-state="teselli"] #mouth-sad, [data-state="uzgun"] #mouth-sad { opacity: 1; transform: scale(0.9); }
+[data-state="teselli"] #brow-l, [data-state="uzgun"] #brow-l { opacity: 0.95; transform: translateY(-8px) rotate(-16deg); }
+[data-state="teselli"] #brow-r, [data-state="uzgun"] #brow-r { opacity: 0.95; transform: translateY(-8px) rotate(16deg); }
+[data-state="teselli"] #lid-l, [data-state="uzgun"] #lid-l { transform: translateY(36px) rotate(-12deg); }
+[data-state="teselli"] #lid-r, [data-state="uzgun"] #lid-r { transform: translateY(36px) rotate(12deg); }
+[data-state="teselli"] #pupils-l, [data-state="teselli"] #pupils-r,
+[data-state="uzgun"] #pupils-l, [data-state="uzgun"] #pupils-r { transform: translateY(6px); }
+[data-state="teselli"] #lumi-tuft-l, [data-state="uzgun"] #lumi-tuft-l { transform: rotate(16deg); }
+[data-state="teselli"] #lumi-tuft-r, [data-state="uzgun"] #lumi-tuft-r { transform: rotate(-16deg); }
+[data-state="teselli"] #lumi-arm-l { transform: rotate(18deg) translateY(-8px) translateX(8px); }
+[data-state="teselli"] #lumi-arm-r { transform: rotate(-18deg) translateY(-8px) translateX(-8px); }
+[data-state="teselli"] #orb-core, [data-state="uzgun"] #orb-core { animation: lumi-sleepPulse 4s infinite; fill: var(--lumi-gold); }
+
+/* 11. UYARI / KORUMA MODU (Kırmızı Küre & Dik Kollar) */
+[data-state="uyari"] #lumi-head-group, [data-state="kizgin"] #lumi-head-group { transform: translateY(4px); }
+[data-state="uyari"] #mouth-flat, [data-state="kizgin"] #mouth-flat { opacity: 1; transform: scale(1.15); }
+[data-state="uyari"] #brow-l, [data-state="kizgin"] #brow-l { opacity: 1; transform: translateY(14px) rotate(22deg); stroke-width: 14; }
+[data-state="uyari"] #brow-r, [data-state="kizgin"] #brow-r { opacity: 1; transform: translateY(14px) rotate(-22deg); stroke-width: 14; }
+[data-state="uyari"] #lid-l, [data-state="kizgin"] #lid-l { transform: translateY(44px) rotate(16deg); }
+[data-state="uyari"] #lid-r, [data-state="kizgin"] #lid-r { transform: translateY(44px) rotate(-16deg); }
+[data-state="uyari"] #lumi-arm-l, [data-state="kizgin"] #lumi-arm-l { transform: rotate(-32deg) translateX(22px) translateY(-10px); }
+[data-state="uyari"] #lumi-arm-r, [data-state="kizgin"] #lumi-arm-r { transform: rotate(32deg) translateX(-22px) translateY(-10px); }
+[data-state="uyari"] #orb-core, [data-state="kizgin"] #orb-core { fill: #FFAAA6; animation: none; }
+[data-state="uyari"] .cheek, [data-state="kizgin"] .cheek { opacity: 0.15; }
+
+/* 12. UYKULU (Esneyen & Yarı Kapalı Gözler & Oturan Ayaklar) */
+[data-state="uykulu"] #lumi-master { animation: lumi-idleFloat 6.5s ease-in-out infinite; }
+[data-state="uykulu"] #lumi-head-group { transform: translateY(22px) rotate(6deg); }
+[data-state="uykulu"] #lumi-body { transform: scaleY(0.95) translateY(8px); }
+[data-state="uykulu"] #brow-l, [data-state="uykulu"] #brow-r { opacity: 0.45; transform: translateY(8px); }
+[data-state="uykulu"] #lid-l, [data-state="uykulu"] #lid-r { transform: translateY(82px); }
+[data-state="uykulu"] #pupils-l, [data-state="uykulu"] #pupils-r { transform: translateY(12px); }
+[data-state="uykulu"] #mouth-flat { opacity: 1; transform: scale(0.65); }
+[data-state="uykulu"] #lumi-arm-l { transform: translateY(14px) rotate(6deg); }
+[data-state="uykulu"] #lumi-arm-r { transform: translateY(14px) rotate(-6deg); }
+[data-state="uykulu"] #lumi-leg-l, [data-state="uykulu"] #lumi-leg-r { transform: translateY(-4px) scaleY(0.85); }
+[data-state="uykulu"] #orb-core { animation: lumi-sleepPulse 5s infinite; fill: #FFE0B2; }
+[data-state="uykulu"] #efx-zzz { opacity: 1; animation: lumi-zzz 3s ease-in-out infinite; }
+
+
+/* =========================================================
+   SHIMEJI INTERAKTIF MASAÜSTÜ/TARAYICI MASKOT MOTORU (shimejis.xyz Stili)
+   ========================================================= */
+
+.lumi-shimeji {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 96px;
+  height: 96px;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  cursor: grab;
+  z-index: 2505;
+  will-change: transform;
+}
+.lumi-shimeji:active,
+.lumi-shimeji.is-dragged {
+  cursor: grabbing;
+}
+
+.lumi-shimeji-body-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  transform-origin: 50% 90%;
+  transition: transform 0.12s ease-out;
+}
+
+/* Zemin Hacim Gölgesi */
+.lumi-shimeji-shadow {
+  width: 58px;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: blur(2px);
+  z-index: 1;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  pointer-events: none;
+}
+
+/* Konuşma Baloncuğu */
+.lumi-shimeji-bubble {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px) scale(0.9);
+  background: #FFFFFF;
+  color: #18264A;
+  border: 2px solid #18264A;
+  box-shadow: 3px 3px 0 #18264A;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  width: max-content;
+  max-width: 230px;
+  text-align: center;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.25s var(--bounce);
+}
+.lumi-shimeji-bubble.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+.lumi-shimeji-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #18264A transparent transparent transparent;
+}
+
+/* EN ÜST TAVANDA ASILIYKEN BALONCUK TAM ALTINDA GÖZÜKSÜN */
+.lumi-shimeji.bubble-below .lumi-shimeji-bubble {
+  bottom: auto;
+  top: calc(100% + 12px);
+  transform: translateX(-50%) translateY(-8px) scale(0.9);
+}
+.lumi-shimeji.bubble-below .lumi-shimeji-bubble.is-visible {
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+.lumi-shimeji.bubble-below .lumi-shimeji-bubble::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent #18264A transparent;
+}
+
+/* --- YÜRÜME DÖNGÜSÜ (Bacaklar & Kollar Sallanır - Sakin & Doğal Hız) --- */
+.lumi-shimeji.is-walking #lumi-leg-l {
+  animation: lumi-shimeji-walk-l 0.42s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-walking #lumi-leg-r {
+  animation: lumi-shimeji-walk-r 0.42s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-walking #lumi-arm-l {
+  animation: lumi-shimeji-arm-l 0.42s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-walking #lumi-arm-r {
+  animation: lumi-shimeji-arm-r 0.42s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-walking .lumi-character-svg #lumi-body {
+  animation: lumi-shimeji-bob 0.42s ease-in-out infinite alternate;
+}
+
+@keyframes lumi-shimeji-walk-l {
+  0% { transform: rotate(-24deg); }
+  100% { transform: rotate(24deg); }
+}
+@keyframes lumi-shimeji-walk-r {
+  0% { transform: rotate(24deg); }
+  100% { transform: rotate(-24deg); }
+}
+@keyframes lumi-shimeji-arm-l {
+  0% { transform: rotate(22deg); }
+  100% { transform: rotate(-22deg); }
+}
+@keyframes lumi-shimeji-arm-r {
+  0% { transform: rotate(-22deg); }
+  100% { transform: rotate(22deg); }
+}
+@keyframes lumi-shimeji-bob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+/* --- HIZLI KOŞMA (FAST DASH / RUN - Dengeli Hız) --- */
+.lumi-shimeji.is-running #lumi-leg-l {
+  animation: lumi-shimeji-run-l 0.22s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running #lumi-leg-r {
+  animation: lumi-shimeji-run-r 0.22s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running #lumi-arm-l {
+  animation: lumi-shimeji-run-arm-l 0.22s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running #lumi-arm-r {
+  animation: lumi-shimeji-run-arm-r 0.22s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running .lumi-shimeji-body-wrap {
+  transform: skewX(-8deg);
+}
+
+@keyframes lumi-shimeji-run-l {
+  0% { transform: rotate(-34deg); }
+  100% { transform: rotate(34deg); }
+}
+@keyframes lumi-shimeji-run-r {
+  0% { transform: rotate(34deg); }
+  100% { transform: rotate(-34deg); }
+}
+@keyframes lumi-shimeji-run-arm-l {
+  0% { transform: rotate(36deg); }
+  100% { transform: rotate(-36deg); }
+}
+@keyframes lumi-shimeji-run-arm-r {
+  0% { transform: rotate(-36deg); }
+  100% { transform: rotate(36deg); }
+}
+
+/* --- ZIPLAMA ÖNCESİ ÇÖMELME (CROUCH PREP) --- */
+.lumi-shimeji.is-crouch .lumi-character-svg #lumi-master {
+  transform: translateY(14px) scale(1.15, 0.82);
+  transition: transform 0.15s ease-out;
+}
+
+/* --- HAVADA SÜRÜKLENME & BACAK SALLAMA --- */
+.lumi-shimeji.is-dragged .lumi-shimeji-shadow {
+  opacity: 0.12;
+  transform: translateX(-50%) scale(0.35);
+}
+.lumi-shimeji.is-dragged #lumi-leg-l {
+  animation: lumi-dangle-leg-l 0.35s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-dragged #lumi-leg-r {
+  animation: lumi-dangle-leg-r 0.35s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-dragged #lumi-arm-l {
+  transform: rotate(60deg) translateY(-22px);
+}
+.lumi-shimeji.is-dragged #lumi-arm-r {
+  transform: rotate(-60deg) translateY(-22px);
+}
+@keyframes lumi-dangle-leg-l {
+  0% { transform: rotate(-18deg) translateY(4px); }
+  100% { transform: rotate(18deg) translateY(2px); }
+}
+@keyframes lumi-dangle-leg-r {
+  0% { transform: rotate(18deg) translateY(2px); }
+  100% { transform: rotate(-18deg) translateY(4px); }
+}
+
+/* --- ÇİZGİ FİLM HAVADA ASILI KALMA & DÜŞÜŞ (CARTOON HOVER DROP / WILE E. COYOTE) --- */
+.lumi-shimeji.is-hover-drop {
+  z-index: 2508;
+}
+.lumi-shimeji.is-hover-drop #lumi-shimeji-body-wrap {
+  animation: lumi-hover-shiver 0.08s ease-in-out infinite;
+}
+.lumi-shimeji.is-hover-drop .lumi-shimeji-shadow {
+  opacity: 0.04;
+  transform: translateX(-50%) scale(0.2);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Şaşkın aşağı bakan gözler & açık ağız */
+.lumi-shimeji.is-hover-drop #pupils-l,
+.lumi-shimeji.is-hover-drop #pupils-r {
+  transform: translateY(16px) !important;
+  transition: transform 0.08s ease;
+}
+.lumi-shimeji.is-hover-drop #lid-l,
+.lumi-shimeji.is-hover-drop #lid-r {
+  transform: translateY(-16px) !important;
+}
+.lumi-shimeji.is-hover-drop #brow-l,
+.lumi-shimeji.is-hover-drop #brow-r {
+  opacity: 1 !important;
+  transform: translateY(-22px) rotate(8deg) !important;
+}
+.lumi-shimeji.is-hover-drop #mouth-o {
+  opacity: 1 !important;
+  transform: scale(1.4) !important;
+}
+.lumi-shimeji.is-hover-drop #mouth-smile,
+.lumi-shimeji.is-hover-drop #mouth-happy,
+.lumi-shimeji.is-hover-drop #mouth-sad,
+.lumi-shimeji.is-hover-drop #mouth-flat {
+  opacity: 0 !important;
+}
+.lumi-shimeji.is-hover-drop #orb-core {
+  transform: scale(1.35) !important;
+  fill: #FFA9BD !important;
+  animation: none !important;
+}
+
+/* Boşlukta çılgınca pedal çeviren bacaklar (Rapid mid-air bicycle pedaling) */
+.lumi-shimeji.is-hover-drop #lumi-leg-l {
+  animation: lumi-hover-pedal-l 0.12s linear infinite;
+}
+.lumi-shimeji.is-hover-drop #lumi-leg-r {
+  animation: lumi-hover-pedal-r 0.12s linear infinite;
+}
+
+@keyframes lumi-hover-pedal-l {
+  0% { transform: rotate(-38deg) translateY(-8px); }
+  50% { transform: rotate(38deg) translateY(4px); }
+  100% { transform: rotate(-38deg) translateY(-8px); }
+}
+@keyframes lumi-hover-pedal-r {
+  0% { transform: rotate(38deg) translateY(4px); }
+  50% { transform: rotate(-38deg) translateY(-8px); }
+  100% { transform: rotate(38deg) translateY(4px); }
+}
+
+/* Şaşkınlıkla yanlara açılıp çırpınan kollar (Frantic flailing arms) */
+.lumi-shimeji.is-hover-drop #lumi-arm-l {
+  animation: lumi-hover-flail-l 0.14s ease-in-out infinite;
+}
+.lumi-shimeji.is-hover-drop #lumi-arm-r {
+  animation: lumi-hover-flail-r 0.14s ease-in-out infinite;
+}
+
+@keyframes lumi-hover-flail-l {
+  0% { transform: rotate(68deg) translateY(-28px) translateX(10px); }
+  50% { transform: rotate(32deg) translateY(-14px) translateX(4px); }
+  100% { transform: rotate(68deg) translateY(-28px) translateX(10px); }
+}
+@keyframes lumi-hover-flail-r {
+  0% { transform: rotate(-68deg) translateY(-28px) translateX(-10px); }
+  50% { transform: rotate(-32deg) translateY(-14px) translateX(-4px); }
+  100% { transform: rotate(-68deg) translateY(-28px) translateX(-10px); }
+}
+
+@keyframes lumi-hover-shiver {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* --- DÜŞÜŞ (HAVADAN YERE DOĞRU) --- */
+.lumi-shimeji.is-falling #lumi-arm-l {
+  transform: rotate(62deg) translateY(-24px);
+}
+.lumi-shimeji.is-falling #lumi-arm-r {
+  transform: rotate(-62deg) translateY(-24px);
+}
+.lumi-shimeji.is-falling #lumi-leg-l {
+  transform: rotate(-16deg);
+}
+.lumi-shimeji.is-falling #lumi-leg-r {
+  transform: rotate(16deg);
+}
+
+/* --- YERE İNİŞTE ESNE VE YAYLAN (SQUASH & STRETCH) --- */
+.lumi-shimeji.is-landing .lumi-shimeji-body-wrap {
+  animation: lumi-shimeji-land 0.42s var(--bounce);
+}
+@keyframes lumi-shimeji-land {
+  0% { transform: scale(1.3, 0.68) translateY(16px); }
+  45% { transform: scale(0.9, 1.12) translateY(-6px); }
+  100% { transform: scale(1, 1) translateY(0); }
+}
+
+/* --- ZIPLAMA (HOP) --- */
+.lumi-shimeji.is-hop #lumi-arm-l {
+  transform: rotate(50deg) translateY(-18px);
+}
+.lumi-shimeji.is-hop #lumi-arm-r {
+  transform: rotate(-50deg) translateY(-18px);
+}
+.lumi-shimeji.is-hop #lumi-leg-l,
+.lumi-shimeji.is-hop #lumi-leg-r {
+  transform: translateY(-6px) scaleY(0.9);
+}
+
+/* --- OTURMA (SIT) --- */
+.lumi-shimeji.is-sitting .lumi-character-svg #lumi-master {
+  transform: translateY(14px) scaleY(0.88);
+}
+.lumi-shimeji.is-sitting #lumi-leg-l {
+  transform: rotate(-32deg) translateX(-8px);
+}
+.lumi-shimeji.is-sitting #lumi-leg-r {
+  transform: rotate(32deg) translateX(8px);
+}
+
+/* --- DUVARA TIRMANMA MOTORU (WALL CLIMBING) --- */
+.lumi-shimeji.is-climbing {
+  z-index: 2506;
+}
+.lumi-shimeji.is-climbing.climb-left #lumi-shimeji-body-wrap {
+  transform: rotate(-12deg);
+}
+.lumi-shimeji.is-climbing.climb-right #lumi-shimeji-body-wrap {
+  transform: scaleX(-1) rotate(-12deg);
+}
+.lumi-shimeji.is-climbing .lumi-shimeji-shadow {
+  opacity: 0.08;
+  transform: translateX(-50%) scale(0.3);
+}
+
+.lumi-shimeji.is-climbing #lumi-arm-l {
+  animation: lumi-climb-arm-l 0.48s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-climbing #lumi-arm-r {
+  animation: lumi-climb-arm-r 0.48s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-climbing #lumi-leg-l {
+  animation: lumi-climb-leg-l 0.48s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-climbing #lumi-leg-r {
+  animation: lumi-climb-leg-r 0.48s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-climbing .lumi-character-svg #lumi-body {
+  animation: lumi-climb-body-bob 0.48s ease-in-out infinite alternate;
+}
+
+@keyframes lumi-climb-arm-l {
+  0% { transform: rotate(74deg) translateY(-28px) translateX(12px); }
+  100% { transform: rotate(22deg) translateY(-6px) translateX(4px); }
+}
+@keyframes lumi-climb-arm-r {
+  0% { transform: rotate(22deg) translateY(-6px) translateX(-4px); }
+  100% { transform: rotate(74deg) translateY(-28px) translateX(-12px); }
+}
+@keyframes lumi-climb-leg-l {
+  0% { transform: rotate(-32deg) translateY(-4px); }
+  100% { transform: rotate(20deg) translateY(4px); }
+}
+@keyframes lumi-climb-leg-r {
+  0% { transform: rotate(20deg) translateY(4px); }
+  100% { transform: rotate(-32deg) translateY(-4px); }
+}
+@keyframes lumi-climb-body-bob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+/* --- TAVANDA VE ÇİZGİLERDE ASILI KALMA & SALLANMA (HANGING & SWING) --- */
+.lumi-shimeji.is-hanging {
+  z-index: 2506;
+}
+.lumi-shimeji.is-hanging #lumi-arm-l {
+  transform: rotate(84deg) translateY(-32px);
+}
+.lumi-shimeji.is-hanging #lumi-arm-r {
+  transform: rotate(-84deg) translateY(-32px);
+}
+.lumi-shimeji.is-hanging #lumi-leg-l {
+  animation: lumi-dangle-leg-l 0.48s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-hanging #lumi-leg-r {
+  animation: lumi-dangle-leg-r 0.48s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-hanging #lumi-shimeji-body-wrap {
+  animation: lumi-hang-swing 1.45s ease-in-out infinite alternate;
+  transform-origin: 50% 12%;
+}
+@keyframes lumi-hang-swing {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* --- PLATFORM KENARINDAN SARKIP BAKMA (PEEKING) --- */
+.lumi-shimeji.is-peeking #lumi-head-group {
+  transform: translateY(16px) rotate(14deg);
+}
+.lumi-shimeji.is-peeking #lumi-arm-l {
+  transform: rotate(35deg) translateY(-10px);
+}
+.lumi-shimeji.is-peeking #lumi-arm-r {
+  transform: rotate(-35deg) translateY(-10px);
+}
+
+/* =========================================================
+   CHAT PANELLİ (BÜYÜTÜLMÜŞ LÜKS BOYUT)
+   ========================================================= */
+
+#lumi-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 480px;
+  max-width: calc(100vw - 28px);
+  height: min(740px, calc(100vh - 48px));
+  background: var(--lumi-bg);
+  color: var(--lumi-text);
+  border: 2.5px solid var(--lumi-ink);
+  box-shadow: 8px 8px 0 var(--lumi-ink);
+  border-radius: 24px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+  pointer-events: auto;
+  z-index: 2510;
+}
+#lumi-root.is-open #lumi-panel {
+  display: flex;
+  animation: lumi-pop .28s var(--bounce);
+}
+@keyframes lumi-pop {
+  from { transform: scale(.75); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* PANEL BAŞLIĞI: SADECE BÜYÜK VE NET KARAKTER SAHNESİ */
+.lumi-header {
+  background: var(--lumi-purple);
+  color: #fff;
+  padding: 14px 16px 14px;
+  min-height: 148px;
+  border-bottom: 2.5px solid var(--lumi-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+}
+
+.lumi-header-hero {
+  width: 175px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 auto;
+  transition: transform .25s var(--bounce);
+}
+.lumi-header-hero:hover {
+  transform: scale(1.06);
+}
+
+/* Kapatma Butonu (Sağ Üst Köşede) */
+.lumi-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: transform .15s, background .15s;
+  z-index: 10;
+}
+.lumi-close:hover {
+  transform: scale(1.12);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Ruh Hali Rozeti (Karakterin Altında) */
+.lumi-mood-pill {
+  position: absolute;
+  bottom: 8px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Bildirim Bandı */
+.lumi-notice {
+  background: var(--lumi-yellow);
+  color: #1D1D1D;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-bottom: 2px dashed #1D1D1D;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.lumi-notice a { color: #7934ED; font-weight: 800; text-decoration: underline; }
+
+/* Mesaj Alanı */
+.lumi-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.lumi-msg {
+  max-width: 88%;
+  padding: 12px 16px;
+  border: 2px solid var(--lumi-ink);
+  border-radius: 18px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+.lumi-msg ul { margin: 6px 0; padding-left: 20px; }
+.lumi-msg li { margin: 3px 0; }
+.lumi-msg p { margin: 0 0 7px; }
+.lumi-msg p:last-child { margin: 0; }
+
+.lumi-msg.bot {
+  align-self: flex-start;
+  background: var(--lumi-soft);
+  border-bottom-left-radius: 4px;
+  box-shadow: 3px 3px 0 var(--lumi-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Bot Mesajı İçindeki Canlı Karakter */
+.lumi-msg-char-wrap {
+  width: 84px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.lumi-msg-body {
+  width: 100%;
+}
+
+.lumi-msg.user {
+  align-self: flex-end;
+  background: var(--lumi-purple);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 3px 3px 0 var(--lumi-ink);
+}
+.lumi-msg.blocked {
+  background: #FEE2E2;
+  color: #7F1D1D;
+  text-decoration: line-through;
+  opacity: .8;
+}
+.lumi-msg.system {
+  align-self: center;
+  background: #FEF3C7;
+  color: #78350F;
+  font-size: 13px;
+  text-align: center;
+  max-width: 95%;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-weight: 700;
+}
+.lumi-day {
+  align-self: center;
+  font-size: 11.5px;
+  color: var(--lumi-muted);
+  margin: 6px 0;
+  font-weight: 700;
+}
+
+/* Hızlı Butonlar */
+.lumi-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 0 16px 12px;
+}
+.lumi-chip {
+  background: var(--lumi-bg);
+  color: var(--lumi-text);
+  border: 2px solid var(--lumi-ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--lumi-ink);
+  transition: transform .15s, background .15s;
+}
+.lumi-chip:hover {
+  transform: translate(-1.5px, -1.5px);
+  background: var(--lumi-yellow);
+  color: #1D1D1D;
+}
+.lumi-chip:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+/* Giriş Alanı */
+.lumi-input {
+  border-top: 2.5px solid var(--lumi-ink);
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.lumi-input textarea {
+  flex: 1;
+  resize: none;
+  max-height: 120px;
+  min-height: 44px;
+  border: 2px solid var(--lumi-ink);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 14.5px;
+  background: var(--lumi-bg);
+  color: var(--lumi-text);
+  outline: none;
+}
+.lumi-input textarea:focus {
+  box-shadow: 2.5px 2.5px 0 var(--lumi-purple);
+}
+.lumi-send {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--lumi-yellow);
+  border: 2px solid #1D1D1D;
+  box-shadow: 2.5px 2.5px 0 #1D1D1D;
+  font-size: 19px;
+  cursor: pointer;
+  transition: transform .15s;
+}
+.lumi-send:hover:not(:disabled) { transform: translate(-1px, -1px); }
+.lumi-send:disabled { opacity: .5; cursor: not-allowed; }
+
+.lumi-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--lumi-muted);
+  padding: 0 16px 10px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .lumi-shimeji {
+    width: 80px;
+    height: 80px;
+  }
+  #lumi-panel {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    height: calc(100vh - 24px);
+    border-radius: 20px;
+  }
+}
+
+/* --- ANA SAYFA SABİT ZIPLAMA & EL SALLAMA --- */
+.lumi-shimeji.is-home-fixed {
+  position: fixed !important;
+  z-index: 99998;
+}
+
+.lumi-shimeji.is-waving #lumi-arm-r {
+  animation: lumiWaveHand 0.75s ease-in-out infinite alternate !important;
+  transform-origin: 32px 55px;
+}
+@keyframes lumiWaveHand {
+  0% { transform: rotate(-35deg) translateY(-12px); }
+  100% { transform: rotate(-85deg) translateY(-22px) rotate(15deg); }
+}
+
+.lumi-shimeji.is-home-hop .lumi-character-svg {
+  animation: lumiHomeHop 2.2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+@keyframes lumiHomeHop {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-16px) scale(0.96, 1.05); }
+  50% { transform: translateY(0) scale(1.06, 0.94); }
+  65% { transform: translateY(-7px) scale(0.98, 1.02); }
+  80% { transform: translateY(0) scale(1, 1); }
+}
+
+/* --- MİSAFİR KAYIT & GİRİŞ BUTONLARI --- */
+.lumi-auth-cta {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1.5px dashed rgba(29, 29, 29, 0.2);
+  flex-wrap: wrap;
+}
+.lumi-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 2px solid #1D1D1D;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 2.5px 2.5px 0px #1D1D1D;
+  transition: all 0.15s ease;
+}
+.lumi-cta-reg {
+  background: #FDE047;
+  color: #1D1D1D;
+}
+.lumi-cta-reg:hover {
+  background: #FACC15;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+.lumi-cta-log {
+  background: #E9D5FF;
+  color: #581C87;
+}
+.lumi-cta-log:hover {
+  background: #D8B4FE;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+

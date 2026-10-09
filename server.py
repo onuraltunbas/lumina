@@ -19,6 +19,7 @@ from database import init_db
 from html_404 import render_404
 import routes_api
 import routes_html
+import lumi_chat
 
 # =====================================================================
 # FASTAPI UYGULAMASI
@@ -97,6 +98,7 @@ def shutdown_event():
 # =====================================================================
 app.include_router(routes_api.router)
 app.include_router(routes_html.router)
+app.include_router(lumi_chat.router)
 
 
 # =====================================================================
