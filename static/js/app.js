@@ -57,11 +57,11 @@
       const data = await res.json();
 
       if (data.authenticated && data.user) {
-        // Desktop Navbar: Panelim linki + Çıkış butonu
+        // Desktop Navbar: Profilim linki + Çıkış butonu
         if (authBox) {
           authBox.innerHTML = `
             <div style="display: flex; align-items: center; gap: 12px;">
-              <a href="/dashboard" class="nav-link" title="Panele Git" style="color: #7934ED;">
+              <a href="/dashboard" class="nav-link" title="Profilim" style="color: #7934ED;">
                 🧠 ${escapeHtml(data.user.username)}
               </a>
               <button type="button" class="comic-nav-logout-btn" id="nav-quick-logout-btn" title="Çıkış Yap" style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 0;">🚪</button>
@@ -80,7 +80,8 @@
         // Mobile Navbar
         if (authBtnMobile) {
           authBtnMobile.href = '/dashboard';
-          authBtnMobile.innerHTML = `🧠 Panelim (${escapeHtml(data.user.username)})`;
+          authBtnMobile.title = 'Profilim';
+          authBtnMobile.innerHTML = `🧠 Profilim (${escapeHtml(data.user.username)})`;
         }
       }
     } catch (e) {
