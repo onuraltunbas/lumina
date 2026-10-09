@@ -1,5 +1,5 @@
 {
-  "model": "gemini-3.8-flash",
+  "model": "gemini-3.5-flash-lite",
   "temperature": 0.8,
   "max_output_tokens": 2048,
 
