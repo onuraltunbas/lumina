@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <title>Lumina | Kullanıcı Kontrol Paneli</title>
+  <meta content="Lumina Studio - Öğrenme stilleri test sonuçların, nöral zihin haritan ve kişisel gelişim panelin." name="description"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="/static/css/main.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/images/64427d8f1fc82a6fb0791e81_favicon.png" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/static/images/64427d923fb922a5adafc5ba_webclip.png" rel="apple-touch-icon"/>
+  <style>
+    /* Dashboard Çizgi Roman / Comic Tasarım */
+    .dashboard-header {
+      background: #FFFFFF;
+      border-bottom: 2.5px solid #1D1D1D;
+      padding: 18px 0;
+    }
+    .dashboard-nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    .dashboard-user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #FDF4E3;
+      border: 2px solid #1D1D1D;
+      box-shadow: 3px 3px 0px #1D1D1D;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 16px;
+      color: #1D1D1D;
+    }
+    .dashboard-logout-btn {
+      background: #FFE4E6;
+      border: 2px solid #1D1D1D;
+      box-shadow: 3px 3px 0px #1D1D1D;
+      border-radius: 10px;
+      padding: 7px 16px;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 16px;
+      color: #9F1239;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .dashboard-logout-btn:hover {
+      background: #FDA4AF;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #1D1D1D;
+    }
+    .dashboard-hero-card {
+      background: #FFFFFF;
+      border: 3px solid #1D1D1D;
+      box-shadow: 7px 7px 0px #1D1D1D;
+      border-radius: 18px;
+      padding: 35px 40px;
+      margin: 35px 0 25px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .dashboard-stats-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .dashboard-stat-tag {
+      background: #F8F9FA;
+      border: 1.5px solid #1D1D1D;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      box-shadow: 2px 2px 0px #1D1D1D;
+    }
+    .dashboard-grid {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 60px;
+      align-items: flex-start;
+    }
+    .dashboard-col-left {
+      flex: 1 1 55%;
+      width: 100%;
+    }
+    .dashboard-col-right {
+      flex: 1 1 45%;
+      width: 100%;
+      position: sticky;
+      top: 30px;
+    }
+    /* Skor Kartları */
+    .dashboard-score-card {
+      background: #FFFFFF;
+      border: 2.5px solid #1D1D1D;
+      box-shadow: 4px 4px 0px #1D1D1D;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .dashboard-score-card:hover,
+    .dashboard-score-card.is-active {
+      transform: translateX(6px) translateY(-2px);
+      box-shadow: 6px 6px 0px #1D1D1D;
+      border-color: #1D1D1D;
+    }
+    .dashboard-score-card.is-dominant {
+      border: 3px solid #1D1D1D;
+      box-shadow: 6px 6px 0px #1D1D1D;
+      background: #FFFDF5;
+    }
+    .score-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .score-card-title {
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 21px;
+      color: #1D1D1D;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .score-card-pct {
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      padding: 4px 12px;
+      border: 2px solid #1D1D1D;
+      border-radius: 999px;
+      box-shadow: 2px 2px 0px #1D1D1D;
+    }
+    .score-progress-bar-bg {
+      width: 100%;
+      height: 16px;
+      background: #E5E7EB;
+      border: 2px solid #1D1D1D;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .score-progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .score-reason-text {
+      font-size: 14.5px;
+      color: #374151;
+      line-height: 1.5;
+      background: #F9FAFB;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    /* Bekleme / Soru Hazırlık Kutusu */
+    .dashboard-waiting-box {
+      background: #FFFFFF;
+      border: 3px dashed #1D1D1D;
+      box-shadow: 6px 6px 0px #1D1D1D;
+      border-radius: 18px;
+      padding: 45px 35px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .dashboard-preview-toggle-bar {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px dashed #E5E7EB;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    @media screen and (max-width: 991px) {
+      .dashboard-grid {
+        flex-direction: column;
+      }
+      .dashboard-col-right {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body class="body background-purple" style="min-height: 100vh;">
+
+  <!-- Üst Menü -->
+  <header class="dashboard-header">
+    <div class="container">
+      <div class="dashboard-nav-inner">
+        <a href="/" style="display: flex; align-items: center; text-decoration: none;">
+          <img alt="Lumina" class="logo" height="48" src="/static/images/644290cf40e714e0668a1a45_logo.svg"/>
+        </a>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div class="dashboard-user-pill">
+            <span>👤</span>
+            <span id="dash-username">Yükleniyor...</span>
+          </div>
+
+          <a href="/test" class="button w-inline-block" style="display: inline-block;">
+            <div class="button-front" style="padding: 7px 16px; font-size: 16px;">
+              <div class="button-text">Nasıl Öğreniyorum?</div>
+            </div>
+            <div class="button-edge"></div>
+          </a>
+
+          <button type="button" class="dashboard-logout-btn" id="btn-logout">
+            <span>🚪</span> Çıkış Yap
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ana İçerik -->
+  <main class="container" style="max-width: 1200px;">
+    <!-- Kullanıcı Karşılama Kartı -->
+    <div class="dashboard-hero-card">
+      <div>
+        <div class="badge margin-bottom-15" style="display: inline-block;">
+          <div class="badge-text">🎯 Bireysel Öğrenme Paneli</div>
+        </div>
+        <h1 class="display-2" style="margin-bottom: 6px;">
+          Hoş Geldin, <span id="dash-greeting-name" style="color: #7934ED;">Öğrenci</span>! 👋
+        </h1>
+        <p style="color: #555; margin-bottom: 0; font-size: 16px;">
+          Bu panelde 5 temel öğrenme stilinin her biri için bağımsız başarı yüzdelerini inceleyebilir ve 3D nöral loblarını gözlemleyebilirsin.
+        </p>
+      </div>
+
+      <div class="dashboard-stats-row">
+        <div class="dashboard-stat-tag">
+          🗓️ Kayıt: <strong id="dash-created-at">-</strong>
+        </div>
+        <div class="dashboard-stat-tag">
+          ⏱️ Son Giriş: <strong id="dash-last-login">-</strong>
+        </div>
+        <div class="dashboard-stat-tag" id="dash-test-status-tag" style="background: #FEF08A;">
+          ⏳ Test: <strong>Hazırlanıyor</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 Sütunlu Grid: Sol Skorlar / Sağ 3D Beyin -->
+    <div class="dashboard-grid">
+      
+      <!-- SOL SÜTUN: Skorlar & Durum -->
+      <div class="dashboard-col-left">
+
+        <!-- 1. DURUM: TEST SORULARI BEKLENİYOR (VARSAYILAN DURUM) -->
+        <div id="section-waiting-questions" class="dashboard-waiting-box">
+          <div style="font-size: 52px; margin-bottom: 15px;">⏳</div>
+          <h2 class="display-3" style="margin-bottom: 12px;">Test Soruları Hazırlanıyor!</h2>
+          <p style="color: #555; max-width: 580px; margin: 0 auto 20px auto; font-size: 15.5px; line-height: 1.5;">
+            Öğrenme stilleri değerlendirme sorularımız sisteme eklendiğinde test burada aktif olacaktır.
+            Sorular tamamlandığında her öğrenme stili <strong>%0 ile %100 arasında bağımsız</strong> olarak hesaplanacak (diğer stillerin puanını düşürmeden) ve gerekçeleriyle listelenecektir.
+          </p>
+
+          <div style="background: #F9FAFB; border: 2px solid #1D1D1D; border-radius: 12px; padding: 18px 20px; max-width: 560px; margin: 0 auto 20px auto; text-align: left;">
+            <div style="font-family: 'Love Ya Like A Sister', cursive; font-size: 18px; margin-bottom: 8px; color: #1D1D1D;">
+              💡 Bağımsız Puanlama Nasıl Çalışır?
+            </div>
+            <p style="font-size: 13.5px; color: #4B5563; margin-bottom: 0;">
+              Her model bağımsız bir yetenektir. Bir öğrenci hem <strong>%100 Görsel</strong> hem de <strong>%85 İşitsel</strong> veya <strong>%70 Deneyimsel</strong> öğrenme becerisine sahip olabilir. Toplam 100%'e bölünmez; her stil kendi içerisinde değerlendirilir.
+            </p>
+          </div>
+
+          <div class="dashboard-preview-toggle-bar">
+            <button type="button" class="button w-inline-block" id="btn-run-simulation">
+              <div class="button-front background-yellow" style="padding: 10px 22px;">
+                <div class="button-text" style="font-size: 17px;">
+                  <span>🧪</span> Örnek Test Simülasyonunu Gör
+                </div>
+              </div>
+              <div class="button-edge"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. DURUM: TEST SONUÇLARI GÖRÜNÜMÜ -->
+        <div id="section-test-results" style="display: none;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div class="badge" style="background: #DCFCE7; border-color: #1D1D1D;">
+                <div class="badge-text" style="color: #14532D;" id="badge-dominant-title">🏆 Baskın Model: İşitsel Öğrenme (%95)</div>
+              </div>
+            </div>
+            <button type="button" class="button w-inline-block" id="btn-reset-simulation">
+              <div class="button-front background-white" style="padding: 6px 14px; font-size: 14px;">
+                <div class="button-text">🔄 Testi Yeniden Değerlendir</div>
+              </div>
+              <div class="button-edge"></div>
+            </button>
+          </div>
+
+          <!-- 5 Bağımsız Skor Kartı -->
+          <div id="score-cards-container">
+            <!-- 1. Görsel -->
+            <div class="dashboard-score-card" data-model="gorsel" id="card-gorsel">
+              <div class="score-card-header">
+                <div class="score-card-title">👁️ Görsel Öğrenme (Visual)</div>
+                <div class="score-card-pct" style="background: #F3E8FF; color: #7E22CE;" id="pct-gorsel">%70</div>
+              </div>
+              <div class="score-progress-bar-bg">
+                <div class="score-progress-bar-fill" id="fill-gorsel" style="width: 70%; background: #A855F7;"></div>
+              </div>
+              <div class="score-reason-text" id="reason-gorsel">
+                <strong>Neden %70?</strong> Zihninde şemalar, renk kodları ve görsel haritalarla bilgiyi canlandırma gücün oldukça yüksek. Görseller hafızada kalıcılığı hızlandırıyor.
+              </div>
+            </div>
+
+            <!-- 2. İşitsel -->
+            <div class="dashboard-score-card is-dominant is-active" data-model="isitsel" id="card-isitsel">
+              <div class="score-card-header">
+                <div class="score-card-title">
+                  🎧 İşitsel Öğrenme (Auditory)
+                  <span style="font-size: 12px; background: #10B981; color: white; padding: 2px 8px; border-radius: 999px;">Baskın</span>
+                </div>
+                <div class="score-card-pct" style="background: #DCFCE7; color: #15803D;" id="pct-isitsel">%95</div>
+              </div>
+              <div class="score-progress-bar-bg">
+                <div class="score-progress-bar-fill" id="fill-isitsel" style="width: 95%; background: #10B981;"></div>
+              </div>
+              <div class="score-reason-text" id="reason-isitsel">
+                <strong>Neden %95?</strong> Sesli anlatımlar, soru-cevap tartışmaları ve podcast'ler senin için birincil kavrama kanalı. Dinlediğin bilgiyi doğrudan kalıcı hafızaya kaydediyorsun.
+              </div>
+            </div>
+
+            <!-- 3. Yazarak -->
+            <div class="dashboard-score-card" data-model="yazarak" id="card-yazarak">
+              <div class="score-card-header">
+                <div class="score-card-title">✍️ Yazarak Öğrenme (Writing)</div>
+                <div class="score-card-pct" style="background: #FCE7F3; color: #BE185D;" id="pct-yazarak">%50</div>
+              </div>
+              <div class="score-progress-bar-bg">
+                <div class="score-progress-bar-fill" id="fill-yazarak" style="width: 50%; background: #EC4899;"></div>
+              </div>
+              <div class="score-reason-text" id="reason-yazarak">
+                <strong>Neden %50?</strong> Kendi cümlelerinle not aldığında ve özet çıkardığında kavramlar netleşiyor ancak ana çalışma stratejin ses ve görsellere kıyasla daha destekleyici düzeyde.
+              </div>
+            </div>
+
+            <!-- 4. Okuyarak -->
+            <div class="dashboard-score-card" data-model="okuyarak" id="card-okuyarak">
+              <div class="score-card-header">
+                <div class="score-card-title">📖 Okuyarak Öğrenme (Reading)</div>
+                <div class="score-card-pct" style="background: #E0F2FE; color: #0369A1;" id="pct-okuyarak">%60</div>
+              </div>
+              <div class="score-progress-bar-bg">
+                <div class="score-progress-bar-fill" id="fill-okuyarak" style="width: 60%; background: #0284C7;"></div>
+              </div>
+              <div class="score-reason-text" id="reason-okuyarak">
+                <strong>Neden %60?</strong> Kitaplar ve detaylı metinlerden bağımsız okumalarla kavramları derinlemesine anlama potansiyelin dengeli ve istikrarlı.
+              </div>
+            </div>
+
+            <!-- 5. Deneyimsel -->
+            <div class="dashboard-score-card" data-model="deneyimsel" id="card-deneyimsel">
+              <div class="score-card-header">
+                <div class="score-card-title">🛠️ Deneyimsel Öğrenme (Experiential)</div>
+                <div class="score-card-pct" style="background: #FEF3C7; color: #B45309;" id="pct-deneyimsel">%80</div>
+              </div>
+              <div class="score-progress-bar-bg">
+                <div class="score-progress-bar-fill" id="fill-deneyimsel" style="width: 80%; background: #F59E0B;"></div>
+              </div>
+              <div class="score-reason-text" id="reason-deneyimsel">
+                <strong>Neden %80?</strong> Bizzat deneyerek, pratik uygulamalarla ve modellerle çalıştığında bilginin hafızada kalıcılığı belirgin şekilde artıyor.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- SAĞ SÜTUN: 3D NÖRAL BEYİN & YANIP SÖNEN LOBLAR -->
+      <div class="dashboard-col-right">
+        <div class="brain-canvas-wrapper" style="height: 600px; box-shadow: 7px 7px 0px #1D1D1D;">
+          
+          <div class="brain-info-pill">
+            <span class="brain-info-dot" id="brain-glow-dot"></span>
+            <span id="brain-status-text">🧠 Nöral Model Yükleniyor...</span>
+          </div>
+
+          <!-- 3D Canvas -->
+          <div id="brain-3d-container" data-dominant-model="isitsel"></div>
+
+          <div class="brain-active-regions-badge" id="brain-active-regions-badge" style="display: block;">
+            <span style="color:#71717A;font-size:10px;text-transform:uppercase;">Aktif Loblar & Ağlar:</span><br/>
+            <strong>İşitsel Korteks, Temporal Lob, Dil Ağları</strong>
+          </div>
+
+          <div class="brain-hint-badge">3D Döndür / Yakınlaştır</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 14px;">
+          <small style="color: #4B5563; font-weight: 500;">
+            🖱️ Kartlara tıklayarak o öğrenme stiline ait aktif nöral lobların parıltısını 3D olarak izleyebilirsiniz.
+          </small>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="wrapper background-purple border-top" style="padding: 25px 0;">
+      <div class="container cc-narrow">
+        <div style="text-align: center;">
+          <p class="margin-bottom-none" style="font-size: 14px; color: #1D1D1D;">© 2026 Lumina Design Studio. Tüm hakları saklıdır.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Three.js Import Map -->
+  <script type="importmap">
+  {
+      "imports": {
+          "three": "/static/js/three.module.js",
+          "three/addons/controls/OrbitControls.js": "/static/js/OrbitControls.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+  }
+  </script>
+  <script type="module" src="/static/js/brain-3d.js"></script>
+
+  <!-- Dashboard Yönetim Betiği -->
+  <script>
+    (function() {
+      const dashUsername = document.getElementById('dash-username');
+      const dashGreetingName = document.getElementById('dash-greeting-name');
+      const dashCreatedAt = document.getElementById('dash-created-at');
+      const dashLastLogin = document.getElementById('dash-last-login');
+      const dashTestStatusTag = document.getElementById('dash-test-status-tag');
+      const btnLogout = document.getElementById('btn-logout');
+
+      const sectionWaiting = document.getElementById('section-waiting-questions');
+      const sectionResults = document.getElementById('section-test-results');
+      const btnRunSimulation = document.getElementById('btn-run-simulation');
+      const btnResetSimulation = document.getElementById('btn-reset-simulation');
+
+      let currentUser = null;
+      let currentResult = null;
+
+      // Kullanıcı Verilerini Çek
+      async function fetchUserInfo() {
+        try {
+          const res = await fetch('/api/auth/me');
+          if (!res.ok) {
+            window.location.href = '/auth';
+            return;
+          }
+          const data = await res.json();
+          if (!data.authenticated) {
+            window.location.href = '/auth';
+            return;
+          }
+
+          currentUser = data.user;
+          currentResult = data.latest_result;
+
+          // Bilgileri ekrana yaz
+          dashUsername.textContent = currentUser.username;
+          dashGreetingName.textContent = currentUser.username;
+          dashCreatedAt.textContent = currentUser.created_at || 'Yeni';
+          dashLastLogin.textContent = currentUser.last_login || 'Şimdi';
+
+          if (currentResult) {
+            renderResults(currentResult);
+          } else {
+            showWaitingState();
+          }
+        } catch (e) {
+          console.error('Kullanıcı verisi alınamadı:', e);
+        }
+      }
+
+      function showWaitingState() {
+        sectionWaiting.style.display = 'block';
+        sectionResults.style.display = 'none';
+        dashTestStatusTag.innerHTML = '⏳ Test: <strong>Hazırlanıyor</strong>';
+        dashTestStatusTag.style.background = '#FEF08A';
+
+        // 3D Beyin varsayılan modda
+        if (window.resetBrainModel) {
+          window.resetBrainModel();
+        }
+      }
+
+      function renderResults(result) {
+        sectionWaiting.style.display = 'none';
+        sectionResults.style.display = 'block';
+        dashTestStatusTag.innerHTML = '✅ Test: <strong>Tamamlandı</strong>';
+        dashTestStatusTag.style.background = '#DCFCE7';
+
+        // Yüzdeleri ve barları güncelle
+        setScore('gorsel', result.score_gorsel);
+        setScore('isitsel', result.score_isitsel);
+        setScore('yazarak', result.score_yazarak);
+        setScore('okuyarak', result.score_okuyarak);
+        setScore('deneyimsel', result.score_deneyimsel);
+
+        // Baskın stili belirle
+        const dominant = result.dominant_style || 'isitsel';
+        const modelNames = {
+          gorsel: 'Görsel Öğrenme 👁️',
+          isitsel: 'İşitsel Öğrenme 🎧',
+          yazarak: 'Yazarak Öğrenme ✍️',
+          okuyarak: 'Okuyarak Öğrenme 📖',
+          deneyimsel: 'Deneyimsel Öğrenme 🛠️'
+        };
+        const dominantScore = result['score_' + dominant] || 0;
+
+        const badgeTitle = document.getElementById('badge-dominant-title');
+        if (badgeTitle) {
+          badgeTitle.textContent = `🏆 Baskın Model: ${modelNames[dominant] || dominant} (%${Math.round(dominantScore)})`;
+        }
+
+        // Kartlardaki baskın sınıfı güncelle
+        document.querySelectorAll('.dashboard-score-card').forEach(c => {
+          c.classList.remove('is-dominant', 'is-active');
+        });
+        const domCard = document.getElementById('card-' + dominant);
+        if (domCard) {
+          domCard.classList.add('is-dominant', 'is-active');
+        }
+
+        // 3D Beyin üzerinde o bölgeyi parlat ve yanıp söndür
+        const brainContainer = document.getElementById('brain-3d-container');
+        if (brainContainer) {
+          brainContainer.setAttribute('data-dominant-model', dominant);
+        }
+        if (window.activateBrainModel) {
+          window.activateBrainModel(dominant);
+        }
+      }
+
+      function setScore(modelKey, scoreVal) {
+        const pctElem = document.getElementById('pct-' + modelKey);
+        const fillElem = document.getElementById('fill-' + modelKey);
+        const roundVal = Math.round(scoreVal);
+
+        if (pctElem) pctElem.textContent = '%' + roundVal;
+        if (fillElem) fillElem.style.width = roundVal + '%';
+      }
+
+      // Örnek Test Simülasyonu (Kullanıcı sorular gelene kadar deneyimleyebilsin)
+      if (btnRunSimulation) {
+        btnRunSimulation.addEventListener('click', async () => {
+          const sampleResult = {
+            score_gorsel: 70.0,
+            score_isitsel: 95.0,
+            score_yazarak: 50.0,
+            score_okuyarak: 60.0,
+            score_deneyimsel: 80.0,
+            dominant_style: 'isitsel',
+            details_json: JSON.stringify({ note: "Örnek Test Değerlendirmesi" })
+          };
+
+          // Sunucuya da kaydet
+          try {
+            await fetch('/api/auth/results', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(sampleResult)
+            });
+          } catch(e) {}
+
+          renderResults(sampleResult);
+        });
+      }
+
+      if (btnResetSimulation) {
+        btnResetSimulation.addEventListener('click', () => {
+          showWaitingState();
+        });
+      }
+
+      // Çıkış Yap
+      if (btnLogout) {
+        btnLogout.addEventListener('click', async () => {
+          try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/auth';
+          } catch (e) {
+            window.location.href = '/auth';
+          }
+        });
+      }
+
+      // Başlat
+      fetchUserInfo();
+    })();
+  </script>
+</body>
+</html>

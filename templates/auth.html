@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <title>Lumina | Kayıt Ol & Giriş Yap</title>
+  <meta content="Lumina Studio - Öğrenme stillerini keşfet, testlerini kaydet ve sana özel gelişim paneline eriş." name="description"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="/static/css/main.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/images/64427d8f1fc82a6fb0791e81_favicon.png" rel="shortcut icon" type="image/x-icon"/>
+  <link href="/static/images/64427d923fb922a5adafc5ba_webclip.png" rel="apple-touch-icon"/>
+  <style>
+    /* Auth Ekranına Özel Çizgi Roman / Comic Tasarım */
+    .auth-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: radial-gradient(circle at 15% 20%, #FFFDF0 0%, #F5EEFD 60%, #E9DAFE 100%);
+      position: relative;
+      overflow-x: hidden;
+    }
+    .auth-container {
+      max-width: 540px;
+      margin: 40px auto 60px auto;
+      padding: 0 20px;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 10;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border: 3px solid #1D1D1D;
+      box-shadow: 8px 8px 0px #1D1D1D;
+      border-radius: 20px;
+      padding: 40px 36px;
+      position: relative;
+    }
+    .auth-header-doodle {
+      position: absolute;
+      top: -28px;
+      right: 25px;
+      background: #FFE600;
+      border: 2.5px solid #1D1D1D;
+      box-shadow: 4px 4px 0px #1D1D1D;
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 15px;
+      color: #1D1D1D;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transform: rotate(3deg);
+    }
+    .auth-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      border-bottom: 2.5px solid #1D1D1D;
+      padding-bottom: 16px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 12px 14px;
+      border: 2.5px solid #1D1D1D;
+      border-radius: 12px;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 20px;
+      cursor: pointer;
+      background: #F8F9FA;
+      color: #555;
+      box-shadow: 3px 3px 0px #1D1D1D;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .auth-tab-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #1D1D1D;
+      color: #1D1D1D;
+    }
+    .auth-tab-btn.active {
+      background: #FFE600;
+      color: #1D1D1D;
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px #1D1D1D;
+      border-color: #1D1D1D;
+    }
+    .auth-form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .auth-label {
+      display: block;
+      margin-bottom: 8px;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 17px;
+      color: #1D1D1D;
+      letter-spacing: 0.5px;
+    }
+    .auth-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px 16px;
+      border: 2.5px solid #1D1D1D;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      background: #FFFFFF;
+      box-shadow: 3px 3px 0px rgba(29, 29, 29, 0.15);
+      transition: all 0.18s ease;
+    }
+    .auth-input:focus {
+      outline: none;
+      box-shadow: 4px 4px 0px #1D1D1D;
+      border-color: #1D1D1D;
+      background: #FFFDF5;
+    }
+    .auth-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0 24px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .auth-checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid #1D1D1D;
+      border-radius: 6px;
+      cursor: pointer;
+      accent-color: #1D1D1D;
+    }
+    .auth-checkbox-label {
+      font-size: 15px;
+      color: #333;
+      font-weight: 500;
+    }
+    .auth-submit-btn {
+      width: 100%;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      padding: 0;
+      margin-top: 10px;
+    }
+    .auth-submit-btn .button-front {
+      width: 100%;
+      justify-content: center;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    .auth-switch-prompt {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 2px dashed #E2E8F0;
+      text-align: center;
+      font-size: 15px;
+      color: #555;
+    }
+    .auth-switch-link {
+      background: none;
+      border: none;
+      color: #7934ED;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 19px;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 6px;
+      padding: 0;
+      display: inline-block;
+      transition: color 0.15s ease;
+    }
+    .auth-switch-link:hover {
+      color: #5312C2;
+    }
+    .auth-alert {
+      display: none;
+      border: 2.5px solid #1D1D1D;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 14.5px;
+      font-weight: 500;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 3px 3px 0px #1D1D1D;
+      animation: alertSlide 0.25s ease-out;
+    }
+    .auth-alert.error {
+      background: #FFE4E6;
+      color: #9F1239;
+    }
+    .auth-alert.success {
+      background: #DCFCE7;
+      color: #14532D;
+    }
+    @keyframes alertSlide {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .auth-nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: #1D1D1D;
+      text-decoration: none;
+      font-family: 'Love Ya Like A Sister', cursive, sans-serif;
+      font-size: 18px;
+      background: #FFFFFF;
+      border: 2px solid #1D1D1D;
+      box-shadow: 3px 3px 0px #1D1D1D;
+      border-radius: 10px;
+      padding: 6px 14px;
+      transition: all 0.15s ease;
+    }
+    .auth-nav-back:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #1D1D1D;
+      background: #FFE600;
+    }
+  </style>
+</head>
+<body class="body">
+
+  <div class="auth-page-wrapper">
+    <!-- Navbar / Üst Kısım -->
+    <header class="navbar border-bottom">
+      <div class="navbar-space"></div>
+      <div class="navbar-inner w-nav" role="banner">
+        <div class="container">
+          <div class="navbar-wrapper">
+            <nav class="nav-menu-wrapper w-nav-menu" role="navigation">
+              <div class="nav-menu-grid">
+                <a class="w-nav-brand" href="/">
+                  <img alt="Lumina" class="logo" loading="lazy" src="/static/images/644290cf40e714e0668a1a45_logo.svg"/>
+                </a>
+                <ul class="nav-menu w-list-unstyled" role="list">
+                  <li><a class="nav-link" href="/#home">Ana Sayfa</a></li>
+                  <li><a class="nav-link" href="/#services">Öğrenme Modelleri</a></li>
+                  <li><a class="nav-link" href="/#about">Farkındalık</a></li>
+                  <li><a class="nav-link" href="/test">Nasıl Öğreniyorum?</a></li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="navbar-space"></div>
+    </header>
+
+    <!-- Ana Form Bölümü -->
+    <main class="auth-container">
+      <div>
+        <a href="/" class="auth-nav-back">← Ana Sayfaya Dön</a>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-header-doodle">
+          <span>🧠</span> Lumina Kimlik
+        </div>
+
+        <div style="text-align: center; margin-bottom: 24px;">
+          <div class="badge margin-bottom-15" style="display: inline-block;">
+            <div class="badge-text" id="auth-badge-text">✨ Kişisel Gelişim Portalı</div>
+          </div>
+          <h1 class="display-3" id="auth-title" style="margin-bottom: 8px;">Öğrenme Yolculuğuna Başla</h1>
+          <p style="color: #666; font-size: 15px; margin: 0 auto; max-width: 420px;" id="auth-subtitle">
+            Kendi hesabını oluşturarak test sonuçlarını kaydet ve sana özel rehbere dilediğin an ulaş.
+          </p>
+        </div>
+
+        <!-- Bildirim Alanı (Hata / Başarı) -->
+        <div class="auth-alert" id="auth-alert-box">
+          <span id="auth-alert-icon">⚠️</span>
+          <span id="auth-alert-msg"></span>
+        </div>
+
+        <!-- Sekme Düğmeleri (Kayıt Ol / Giriş Yap) -->
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="auth-tab-btn active" id="tab-btn-register" role="tab" aria-selected="true">
+            <span>📝</span> Kayıt Ol
+          </button>
+          <button type="button" class="auth-tab-btn" id="tab-btn-login" role="tab" aria-selected="false">
+            <span>🔑</span> Giriş Yap
+          </button>
+        </div>
+
+        <!-- 1. FORM: KAYIT OL -->
+        <form id="form-register" autocomplete="on">
+          <div class="auth-form-group">
+            <label class="auth-label" for="reg-username">👤 Kullanıcı Adı</label>
+            <input class="auth-input" id="reg-username" name="username" type="text" placeholder="Örn: onur_ogrenci" required minlength="3" maxlength="30" autocomplete="username"/>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="reg-password">🔒 Şifre (En az 4 karakter)</label>
+            <input class="auth-input" id="reg-password" name="password" type="password" placeholder="••••••••" required minlength="4" maxlength="128" autocomplete="new-password"/>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="reg-password-confirm">🔒 Şifre Tekrar</label>
+            <input class="auth-input" id="reg-password-confirm" name="password_confirm" type="password" placeholder="••••••••" required minlength="4" maxlength="128" autocomplete="new-password"/>
+          </div>
+
+          <button type="submit" class="auth-submit-btn button w-inline-block">
+            <div class="button-front background-yellow">
+              <div class="button-text">
+                <div>Hesabımı Oluştur</div>
+                <div class="unicon"></div>
+              </div>
+            </div>
+            <div class="button-edge"></div>
+          </button>
+
+          <div class="auth-switch-prompt">
+            <span>Daha önce kaydoldunuz mu?</span>
+            <button type="button" class="auth-switch-link" id="switch-to-login-btn">Giriş Yapın ➜</button>
+          </div>
+        </form>
+
+        <!-- 2. FORM: GİRİŞ YAP -->
+        <form id="form-login" style="display: none;" autocomplete="on">
+          <div class="auth-form-group">
+            <label class="auth-label" for="login-username">👤 Kullanıcı Adı</label>
+            <input class="auth-input" id="login-username" name="username" type="text" placeholder="Kullanıcı adınızı girin" required autocomplete="username"/>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="login-password">🔒 Şifre</label>
+            <input class="auth-input" id="login-password" name="password" type="password" placeholder="Şifrenizi girin" required autocomplete="current-password"/>
+          </div>
+
+          <label class="auth-checkbox-row">
+            <input type="checkbox" class="auth-checkbox" id="login-remember-me" name="remember_me" checked/>
+            <span class="auth-checkbox-label">Beni Hatırla (30 gün açık tut)</span>
+          </label>
+
+          <button type="submit" class="auth-submit-btn button w-inline-block">
+            <div class="button-front background-purple" style="color: #FFFFFF;">
+              <div class="button-text">
+                <div>Giriş Yap</div>
+                <div class="unicon"></div>
+              </div>
+            </div>
+            <div class="button-edge"></div>
+          </button>
+
+          <div class="auth-switch-prompt">
+            <span>Henüz bir hesabınız yok mu?</span>
+            <button type="button" class="auth-switch-link" id="switch-to-register-btn">Hemen Kayıt Olun ➜</button>
+          </div>
+        </form>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="wrapper background-purple border-top" style="padding: 25px 0;">
+        <div class="container cc-narrow">
+          <div style="text-align: center;">
+            <p class="margin-bottom-none" style="font-size: 14px; color: #1D1D1D;">© 2026 Lumina Design Studio. Tüm hakları saklıdır.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      // DOM Elemanları
+      const tabRegister = document.getElementById('tab-btn-register');
+      const tabLogin = document.getElementById('tab-btn-login');
+      const formRegister = document.getElementById('form-register');
+      const formLogin = document.getElementById('form-login');
+      const switchToLoginBtn = document.getElementById('switch-to-login-btn');
+      const switchToRegisterBtn = document.getElementById('switch-to-register-btn');
+      const authTitle = document.getElementById('auth-title');
+      const authSubtitle = document.getElementById('auth-subtitle');
+      const authAlertBox = document.getElementById('auth-alert-box');
+      const authAlertIcon = document.getElementById('auth-alert-icon');
+      const authAlertMsg = document.getElementById('auth-alert-msg');
+
+      function showAlert(type, message) {
+        authAlertBox.className = 'auth-alert ' + type;
+        authAlertIcon.textContent = type === 'error' ? '❌' : '🎉';
+        authAlertMsg.textContent = message;
+        authAlertBox.style.display = 'flex';
+      }
+
+      function hideAlert() {
+        authAlertBox.style.display = 'none';
+      }
+
+      function setTab(tabName) {
+        hideAlert();
+        if (tabName === 'login') {
+          tabLogin.classList.add('active');
+          tabLogin.setAttribute('aria-selected', 'true');
+          tabRegister.classList.remove('active');
+          tabRegister.setAttribute('aria-selected', 'false');
+
+          formRegister.style.display = 'none';
+          formLogin.style.display = 'block';
+
+          authTitle.textContent = 'Tekrar Hoş Geldiniz!';
+          authSubtitle.textContent = 'Kullanıcı adı ve şifrenizi girerek öğrenme panelinize giriş yapın.';
+          document.getElementById('login-username').focus();
+        } else {
+          tabRegister.classList.add('active');
+          tabRegister.setAttribute('aria-selected', 'true');
+          tabLogin.classList.remove('active');
+          tabLogin.setAttribute('aria-selected', 'false');
+
+          formLogin.style.display = 'none';
+          formRegister.style.display = 'block';
+
+          authTitle.textContent = 'Öğrenme Yolculuğuna Başla';
+          authSubtitle.textContent = 'Kendi hesabını oluşturarak test sonuçlarını kaydet ve sana özel rehbere dilediğin an ulaş.';
+          document.getElementById('reg-username').focus();
+        }
+      }
+
+      // URL Query Parametresi Kontrolü (?tab=login)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('tab') === 'login') {
+        setTab('login');
+      }
+
+      tabRegister.addEventListener('click', () => setTab('register'));
+      tabLogin.addEventListener('click', () => setTab('login'));
+      switchToLoginBtn.addEventListener('click', () => setTab('login'));
+      switchToRegisterBtn.addEventListener('click', () => setTab('register'));
+
+      // 1. KAYIT OL İŞLEMİ
+      formRegister.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideAlert();
+
+        const username = document.getElementById('reg-username').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const passwordConfirm = document.getElementById('reg-password-confirm').value;
+
+        if (!username || !password) {
+          showAlert('error', 'Lütfen tüm alanları doldurunuz.');
+          return;
+        }
+
+        if (password !== passwordConfirm) {
+          showAlert('error', 'Girdiğiniz şifreler birbiriyle eşleşmiyor. Lütfen kontrol ediniz.');
+          return;
+        }
+
+        const submitBtn = formRegister.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            showAlert('error', data.detail || 'Kayıt sırasında bir hata oluştu.');
+            submitBtn.disabled = false;
+            return;
+          }
+
+          showAlert('success', data.message || 'Kayıt başarılı! Yönlendiriliyorsunuz...');
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 800);
+        } catch (err) {
+          showAlert('error', 'Sunucu bağlantı hatası: ' + err.message);
+          submitBtn.disabled = false;
+        }
+      });
+
+      // 2. GİRİŞ YAP İŞLEMİ
+      formLogin.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideAlert();
+
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value;
+        const rememberMe = document.getElementById('login-remember-me').checked;
+
+        if (!username || !password) {
+          showAlert('error', 'Lütfen kullanıcı adı ve şifrenizi giriniz.');
+          return;
+        }
+
+        const submitBtn = formLogin.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, remember_me: rememberMe })
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            showAlert('error', data.detail || 'Giriş yapılamadı. Bilgilerinizi kontrol edin.');
+            submitBtn.disabled = false;
+            return;
+          }
+
+          showAlert('success', data.message || 'Giriş başarılı! Yönlendiriliyorsunuz...');
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 700);
+        } catch (err) {
+          showAlert('error', 'Sunucu bağlantı hatası: ' + err.message);
+          submitBtn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

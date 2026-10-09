@@ -1,5 +1,5 @@
 // 3D Interactive Neural Brain for Lumina Studio
-// Connects with the 5 Learning Styles cards on hover/click
+// Connects with the 5 Learning Styles cards on hover/click and in the user Dashboard
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -98,85 +98,100 @@ function initBrain() {
     controls.autoRotate = true;
     controls.autoRotateSpeed = 1.0; 
     controls.minDistance = 20;
-    controls.maxDistance = 120;
-    controls.enableZoom = false; // Sayfa kaydırma ile çakışmayı önler, döndürme serbesttir
+    controls.maxDistance = 150;
 
+    // NÖRAL BEYİN GEOMETRİSİ ÜRETİMİ
     const brainGroup = new THREE.Group();
     scene.add(brainGroup);
 
-    const numNeurons = 2400; 
+    const R_BASE = 14.5;
+    const TOTAL_NEURONS = 1150;
     const neuronsRaw = [];
-    const scale = 17; 
 
-    // Beyin formu sınırları içinde nöron noktaları üretimi
-    let attempts = 0;
-    while(neuronsRaw.length < numNeurons && attempts < 500000) {
-        attempts++;
-        let rx = (Math.random() - 0.5) * 2; 
-        let ry = (Math.random() - 0.5) * 2; 
-        let rz = (Math.random() - 0.5) * 2; 
-        
-        let zFactor = rz < 0 ? 1.1 : 0.9; 
-        let cerebrumVal = Math.pow(rx / 0.7, 2) + Math.pow(ry / 0.75, 2) + Math.pow(rz / (1.0 * zFactor), 2);
-        
-        let cx = rx / 0.4;
-        let cy = (ry + 0.6) / 0.35;
-        let cz = (rz + 0.6) / 0.4;
-        let cerebellumVal = (cx*cx + cy*cy + cz*cz);
-        
-        if (cerebrumVal <= 1.0 || cerebellumVal <= 1.0) {
-            // Beyin sapını boş bırak
-            if (ry < -0.2 && rz > -0.3 && rz < 0.6 && rx > -0.3 && rx < 0.3 && cerebellumVal > 1.0) {
-                continue; 
-            }
-            
-            const pos = new THREE.Vector3(rx * scale, ry * scale, rz * scale);
-            let tooClose = false;
-            for(let i=0; i<neuronsRaw.length; i++) {
-                if(pos.distanceTo(neuronsRaw[i].pos) < 0.55) {
-                    tooClose = true;
-                    break;
-                }
-            }
-            
-            if(!tooClose) {
-                neuronsRaw.push({ pos: pos, rx: rx, ry: ry, rz: rz });
-            }
+    // Gerçekçi beyin lobu dış sınır fonksiyonu
+    function getBrainBoundary(theta, phi) {
+        let r = R_BASE;
+        r += 1.8 * Math.cos(2 * phi);
+        r += 1.2 * Math.cos(4 * theta);
+        const yNorm = Math.cos(phi);
+        const xNorm = Math.sin(phi) * Math.cos(theta);
+        const zNorm = Math.sin(phi) * Math.sin(theta);
+
+        if (yNorm < -0.2 && xNorm > 0.1) {
+            r += 1.5 * Math.sin((yNorm + 0.2) * Math.PI);
         }
+        if (xNorm < -0.3 && yNorm > -0.1) {
+            r += 1.4 * Math.cos(xNorm * Math.PI);
+        }
+        return r;
     }
 
-    // InstancedMesh ile 2400 düğümü tek draw call ile çiz
-    const sphereGeo = new THREE.SphereGeometry(1, 14, 14);
-    const toonMat = new THREE.MeshToonMaterial({ color: 0xffffff });
-    const outlineMat = new THREE.MeshBasicMaterial({ color: 0x1D1D1D, side: THREE.BackSide });
+    const tempRegions = Object.entries(BEYIN_BOLGELERI).map(([name, conf]) => ({
+        name,
+        center: new THREE.Vector3(conf.cx * R_BASE, conf.cy * R_BASE, conf.cz * R_BASE),
+        radiusSq: (conf.radius * R_BASE) * (conf.radius * R_BASE)
+    }));
 
-    const innerMesh = new THREE.InstancedMesh(sphereGeo, toonMat, neuronsRaw.length);
-    const outlineMesh = new THREE.InstancedMesh(sphereGeo, outlineMat, neuronsRaw.length);
-    
+    for (let i = 0; i < TOTAL_NEURONS; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const maxR = getBrainBoundary(theta, phi);
+        const u = Math.pow(Math.random(), 0.65);
+        const r = maxR * (0.28 + 0.72 * u);
+
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.cos(phi);
+        let z = r * Math.sin(phi) * Math.sin(theta);
+
+        const hemisphere = (i % 2 === 0) ? 1 : -1;
+        const zGap = 0.8;
+        z = hemisphere * (Math.abs(z) * 0.78 + zGap);
+
+        neuronsRaw.push({
+            pos: new THREE.Vector3(x, y, z),
+            index: i
+        });
+    }
+
+    // Nöron Düğümleri (InstancedMesh)
+    const sphereGeom = new THREE.SphereGeometry(1, 10, 10);
+    const innerMaterial = new THREE.MeshStandardMaterial({
+        roughness: 0.35,
+        metalness: 0.15,
+        vertexColors: true
+    });
+
+    const outlineGeom = new THREE.SphereGeometry(1, 8, 8);
+    const outlineMaterial = new THREE.MeshBasicMaterial({
+        color: 0x1D1D1D,
+        side: THREE.BackSide
+    });
+
+    const innerMesh = new THREE.InstancedMesh(sphereGeom, innerMaterial, TOTAL_NEURONS);
+    const outlineMesh = new THREE.InstancedMesh(outlineGeom, outlineMaterial, TOTAL_NEURONS);
+
     const dummy = new THREE.Object3D();
     const defaultColor = new THREE.Color(0xffffff);
+    const whiteColor = new THREE.Color(0xffffff);
+    const tempGlowColor = new THREE.Color();
     const nodesData = [];
     const neuronRegions = [];
 
-    // Her nöronun hangi bölgelerde yer aldığını belirle
-    for(let i = 0; i < neuronsRaw.length; i++) {
+    for (let i = 0; i < TOTAL_NEURONS; i++) {
         const data = neuronsRaw[i];
-        const inRegs = [];
+        
+        dummy.position.copy(data.pos);
+        dummy.scale.setScalar(0.1);
+        dummy.updateMatrix();
+        innerMesh.setMatrixAt(i, dummy.matrix);
+        outlineMesh.setMatrixAt(i, dummy.matrix);
 
-        for (const key in BEYIN_BOLGELERI) {
-            const reg = BEYIN_BOLGELERI[key];
-            const d1 = Math.sqrt(
-                Math.pow(data.rx - reg.cx, 2) + 
-                Math.pow(data.ry - reg.cy, 2) + 
-                Math.pow(data.rz - reg.cz, 2)
-            );
-            const d2 = Math.sqrt(
-                Math.pow(data.rx - reg.cx, 2) + 
-                Math.pow(data.ry - reg.cy, 2) + 
-                Math.pow(data.rz - (-reg.cz), 2)
-            );
-            if (d1 <= reg.radius || d2 <= reg.radius) {
-                inRegs.push(key);
+        const inRegs = [];
+        for (const reg of tempRegions) {
+            const symCenter = reg.center.clone();
+            symCenter.z = Math.sign(data.pos.z) * Math.abs(symCenter.z);
+            if (data.pos.distanceToSquared(symCenter) < reg.radiusSq) {
+                inRegs.push(reg.name);
             }
         }
         neuronRegions.push(inRegs);
@@ -191,7 +206,8 @@ function initBrain() {
             targetMultiplier: 1.0,
             pulseSpeed: 2 + Math.random() * 4,
             pulsePhase: Math.random() * Math.PI * 2,
-            activePulse: false
+            activePulse: false,
+            baseColor: null
         });
     }
     
@@ -240,11 +256,14 @@ function initBrain() {
     const lineSegments = new THREE.LineSegments(lineGeometry, lineMaterial);
     brainGroup.add(lineSegments);
 
-    // KART ETKİLEŞİMİ (AKTİF BÖLGELERİ VURGULAMA)
+    // KART ETKİLEŞİMİ (AKTİF BÖLGELERİ VURGULAMA & YANIP SÖNME)
     let currentActiveModel = null;
 
     function activateModel(modelKey) {
-        if (currentActiveModel === modelKey) return;
+        if (!modelKey) {
+            resetModel();
+            return;
+        }
         currentActiveModel = modelKey;
         
         const config = MODEL_CONFIG[modelKey];
@@ -257,12 +276,14 @@ function initBrain() {
             const isActivated = neuronRegions[i].some(r => config.regions.includes(r));
             if (isActivated) {
                 innerMesh.setColorAt(i, activeColor);
-                nodesData[i].targetMultiplier = 1.6;
+                nodesData[i].targetMultiplier = 1.75;
                 nodesData[i].activePulse = true;
+                nodesData[i].baseColor = activeColor.clone();
             } else {
                 innerMesh.setColorAt(i, dimColor);
-                nodesData[i].targetMultiplier = 0.85;
+                nodesData[i].targetMultiplier = 0.8;
                 nodesData[i].activePulse = false;
+                nodesData[i].baseColor = null;
             }
         }
         if (innerMesh.instanceColor) {
@@ -283,12 +304,12 @@ function initBrain() {
 
     function resetModel() {
         currentActiveModel = null;
-        const whiteColor = new THREE.Color(0xffffff);
 
         for (let i = 0; i < neuronsRaw.length; i++) {
             innerMesh.setColorAt(i, whiteColor);
             nodesData[i].targetMultiplier = 1.0;
             nodesData[i].activePulse = false;
+            nodesData[i].baseColor = null;
         }
         if (innerMesh.instanceColor) {
             innerMesh.instanceColor.needsUpdate = true;
@@ -305,18 +326,25 @@ function initBrain() {
         }
     }
 
-    // Kart hover & click olaylarını bağla
-    const cards = document.querySelectorAll('.service-model-card');
+    // Dışarıya metodları aç (Dashboard ve dinamik tetiklemeler için)
+    window.activateBrainModel = activateModel;
+    window.resetBrainModel = resetModel;
+
+    // Kart hover & click olaylarını bağla (Hem ana sayfa hem de dashboard kartları)
+    const cards = document.querySelectorAll('.service-model-card, .dashboard-score-card');
     cards.forEach(card => {
         const model = card.getAttribute('data-model');
+        if (!model) return;
+
         card.addEventListener('mouseenter', () => {
             activateModel(model);
         });
         card.addEventListener('mouseleave', () => {
-            // Eğer herhangi bir kart tıklanarak seçilmediyse sıfırla
-            const anyActive = document.querySelector('.service-model-card.is-active');
+            const anyActive = document.querySelector('.service-model-card.is-active, .dashboard-score-card.is-active');
             if (anyActive) {
                 activateModel(anyActive.getAttribute('data-model'));
+            } else if (container.getAttribute('data-dominant-model')) {
+                activateModel(container.getAttribute('data-dominant-model'));
             } else {
                 resetModel();
             }
@@ -327,11 +355,19 @@ function initBrain() {
             if (!wasActive) {
                 card.classList.add('is-active');
                 activateModel(model);
+            } else if (container.getAttribute('data-dominant-model')) {
+                activateModel(container.getAttribute('data-dominant-model'));
             } else {
                 resetModel();
             }
         });
     });
+
+    // Sayfa açılışında baskın model varsa otomatik aktive et
+    const dominantModel = container.getAttribute('data-dominant-model');
+    if (dominantModel && MODEL_CONFIG[dominantModel]) {
+        activateModel(dominantModel);
+    }
 
     // Boyut güncellemesi
     function onResize() {
@@ -354,6 +390,7 @@ function initBrain() {
     function animate() {
         requestAnimationFrame(animate);
         const elapsedTime = clock.getElapsedTime();
+        let colorNeedsUpdate = false;
         
         for(let i = 0; i < nodesData.length; i++) {
             const node = nodesData[i];
@@ -361,8 +398,9 @@ function initBrain() {
             // Hedef boyuta yumuşak geçiş
             node.currentMultiplier += (node.targetMultiplier - node.currentMultiplier) * 0.12;
             
-            const pulseAmp = node.activePulse ? 0.28 : 0.14;
-            const pulseSpeed = node.activePulse ? (node.pulseSpeed * 1.5) : node.pulseSpeed;
+            // Aktif bölgeler daha canlı nabız ve renk parıltısı ile yanıp söner
+            const pulseAmp = node.activePulse ? 0.35 : 0.14;
+            const pulseSpeed = node.activePulse ? (node.pulseSpeed * 1.8) : node.pulseSpeed;
             const pulse = Math.sin(elapsedTime * pulseSpeed + node.pulsePhase) * pulseAmp;
             
             const currentScale = node.baseScale * node.currentMultiplier * (1.0 + pulse);
@@ -376,10 +414,22 @@ function initBrain() {
             dummy.scale.setScalar(currentScale + 0.026); 
             dummy.updateMatrix();
             outlineMesh.setMatrixAt(i, dummy.matrix);
+
+            // Yanıp sönen renk parıltısı (renkli renkli neon efekti)
+            if (node.activePulse && node.baseColor) {
+                const glowFactor = (Math.sin(elapsedTime * 4.5 + node.pulsePhase) + 1.0) * 0.5;
+                tempGlowColor.copy(node.baseColor).lerp(whiteColor, glowFactor * 0.42);
+                innerMesh.setColorAt(i, tempGlowColor);
+                colorNeedsUpdate = true;
+            }
         }
         
         innerMesh.instanceMatrix.needsUpdate = true;
         outlineMesh.instanceMatrix.needsUpdate = true;
+
+        if (colorNeedsUpdate && innerMesh.instanceColor) {
+            innerMesh.instanceColor.needsUpdate = true;
+        }
         
         // Beyin yüzme (bobbing) efekti
         brainGroup.position.y = Math.sin(elapsedTime * 2.0) * 1.4;

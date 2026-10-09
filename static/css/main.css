@@ -4163,10 +4163,12 @@ figcaption {
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
+    gap: 20px;
   }
   .nav-menu {
     width: auto !important;
     margin-left: auto !important;
+    margin-right: 20px !important;
   }
 }
 
@@ -4616,3 +4618,53 @@ figcaption {
     height: 44px !important;
   }
 }
+
+/* =====================================================================
+   NAVBAR AUTH BUTTON & ACTION LAYOUT
+   ===================================================================== */
+.navbar-auth-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.btn-nav-auth {
+  display: inline-block !important;
+  text-decoration: none !important;
+}
+
+.btn-nav-auth .button-front {
+  padding: 8px 18px !important;
+  border: 2px solid #1D1D1D !important;
+  box-shadow: 3px 3px 0px #1D1D1D !important;
+  border-radius: 10px !important;
+}
+
+.btn-nav-auth .button-text {
+  font-size: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+  color: #1D1D1D !important;
+}
+
+.comic-nav-logout-btn {
+  background: #FFE4E6;
+  border: 2px solid #1D1D1D;
+  box-shadow: 2.5px 2.5px 0px #1D1D1D;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.comic-nav-logout-btn:hover {
+  background: #FDA4AF;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+

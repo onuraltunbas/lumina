@@ -166,17 +166,76 @@
     });
   }
 
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+    });
+  }
+
+  // Navbar Auth Durumu Senkronizasyonu
+  async function initNavbarAuth() {
+    const authBox = document.getElementById('nav-auth-container');
+    const authBtnMobile = document.getElementById('nav-auth-btn-mobile');
+    if (!authBox && !authBtnMobile) return;
+
+    try {
+      const res = await fetch('/api/auth/me');
+      if (!res.ok) return;
+      const data = await res.json();
+
+      if (data.authenticated && data.user) {
+        // Desktop Navbar: Panelim butonu + Çıkış butonu
+        if (authBox) {
+          authBox.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <a href="/dashboard" class="button w-inline-block btn-nav-auth" title="Panele Git">
+                <div class="button-front background-yellow">
+                  <div class="button-text">
+                    <span style="font-size: 15px;">🧠</span> ${escapeHtml(data.user.username)}
+                  </div>
+                </div>
+                <div class="button-edge"></div>
+              </a>
+              <button type="button" class="comic-nav-logout-btn" id="nav-quick-logout-btn" title="Çıkış Yap">🚪</button>
+            </div>
+          `;
+
+          const quickLogout = document.getElementById('nav-quick-logout-btn');
+          if (quickLogout) {
+            quickLogout.addEventListener('click', async () => {
+              await fetch('/api/auth/logout', { method: 'POST' });
+              window.location.reload();
+            });
+          }
+        }
+
+        // Mobile Navbar
+        if (authBtnMobile) {
+          authBtnMobile.href = '/dashboard';
+          const textElem = authBtnMobile.querySelector('.button-text');
+          if (textElem) textElem.innerHTML = `🧠 Panelim (${escapeHtml(data.user.username)})`;
+        }
+      }
+    } catch (e) {
+      // Çevrimdışı veya hata durumunda varsayılan buton kalır
+    }
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initContactForm();
       initSmoothScroll();
       initDiffModal();
       initEngineRefresh();
+      initNavbarAuth();
     });
   } else {
     initContactForm();
     initSmoothScroll();
     initDiffModal();
     initEngineRefresh();
+    initNavbarAuth();
   }
 })();
+
