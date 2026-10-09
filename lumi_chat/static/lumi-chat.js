@@ -114,19 +114,15 @@
       '  </defs>' +
       '  <g id="lumi-master" class="smooth-part">' +
       '    <g id="lumi-legs">' +
-      '      <path class="anim-part" d="M 310,650 C 270,650 280,710 320,715 C 360,720 370,660 350,650 Z" fill="url(#bg_' + sid + ')"/>' +
-      '      <path class="anim-part" d="M 490,650 C 530,650 520,710 480,715 C 440,720 430,660 450,650 Z" fill="url(#bg_' + sid + ')"/>' +
+      '      <g id="lumi-leg-l" class="anim-part">' +
+      '        <path d="M 310,650 C 270,650 280,710 320,715 C 360,720 370,660 350,650 Z" fill="url(#bg_' + sid + ')"/>' +
+      '      </g>' +
+      '      <g id="lumi-leg-r" class="anim-part">' +
+      '        <path d="M 490,650 C 530,650 520,710 480,715 C 440,720 430,660 450,650 Z" fill="url(#bg_' + sid + ')"/>' +
+      '      </g>' +
       '    </g>' +
       '    <g id="lumi-body" class="anim-part">' +
       '      <path d="M 310,480 C 200,530 220,680 400,680 C 580,680 600,530 490,480 C 450,460 350,460 310,480 Z" fill="url(#bg_' + sid + ')"/>' +
-      '    </g>' +
-      '    <g id="lumi-arms">' +
-      '      <g id="lumi-arm-l" class="anim-part">' +
-      '        <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#ag_' + sid + ')"/>' +
-      '      </g>' +
-      '      <g id="lumi-arm-r" class="anim-part">' +
-      '        <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#ag_' + sid + ')"/>' +
-      '      </g>' +
       '    </g>' +
       '    <g id="lumi-head-group" class="anim-part">' +
       '      <g id="lumi-tuft-l" class="anim-part">' +
@@ -205,6 +201,14 @@
       '        <path d="M 620,160 L 625,175 L 640,180 L 625,185 L 620,200 L 615,185 L 600,180 L 615,175 Z" fill="#FFF"/>' +
       '      </g>' +
       '    </g>' +
+      '    <g id="lumi-arms">' +
+      '      <g id="lumi-arm-l" class="anim-part">' +
+      '        <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#ag_' + sid + ')"/>' +
+      '      </g>' +
+      '      <g id="lumi-arm-r" class="anim-part">' +
+      '        <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#ag_' + sid + ')"/>' +
+      '      </g>' +
+      '    </g>' +
       '  </g>' +
       '</svg>' +
       '</div>'
@@ -254,7 +258,7 @@
     return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
-  // ---------- DOM Ağacını İnşa Et (Büyük Header Sahnesi) ----------
+  // ---------- DOM Ağacını İnşa Et (Büyük Header Sahnesi & Shimeji Maskotu) ----------
   var root = el('div');
   root.id = 'lumi-root';
   root.innerHTML =
@@ -275,15 +279,23 @@
     '  </form>' +
     '  <div class="lumi-footer"><span class="lumi-count">0/500</span><span class="lumi-usage"></span></div>' +
     '</div>' +
-    '<button id="lumi-fab" aria-label="Lumi ile sohbet et" title="Lumi ile sohbet et">' +
-    '  <div class="fab-character-wrap">' + getLumiSvg('stage-fab', 'normal') + '</div>' +
-    '</button>';
+    '<div id="lumi-shimeji" class="lumi-shimeji" role="button" tabindex="0" aria-label="Lumi ile konuş veya gezdir" title="Lumi\'ye tıkla veya sürükle!">' +
+    '  <div class="lumi-shimeji-bubble" id="lumi-shimeji-bubble" style="display:none;"></div>' +
+    '  <div class="lumi-shimeji-body-wrap" id="lumi-shimeji-body-wrap">' +
+    '    ' + getLumiSvg('stage-shimeji', 'normal') +
+    '  </div>' +
+    '  <div class="lumi-shimeji-shadow"></div>' +
+    '</div>';
 
   function mount() {
     document.body.appendChild(root);
     var $ = function (s) { return root.querySelector(s); };
     var panel = $('#lumi-panel'),
-        fab = $('#lumi-fab'),
+        shimeji = $('#lumi-shimeji'),
+        shimejiBody = $('#lumi-shimeji-body-wrap'),
+        shimejiBubble = $('#lumi-shimeji-bubble'),
+        stageHeader = document.getElementById('stage-header'),
+        stageShimeji = document.getElementById('stage-shimeji'),
         msgs = $('.lumi-messages'),
         quick = $('.lumi-quick'),
         form = $('.lumi-input'),
@@ -293,9 +305,7 @@
         countEl = $('.lumi-count'),
         usageEl = $('.lumi-usage'),
         moodPill = $('#lumi-mood-pill'),
-        headerHero = $('#lumi-header-hero'),
-        stageHeader = document.getElementById('stage-header'),
-        stageFab = document.getElementById('stage-fab');
+        headerHero = $('#lumi-header-hero');
 
     // Canlı Duygu / Mimik Güncelleyici (Tüm sahneleri senkronize eder)
     function setLumiMood(mood, tempDuration) {
@@ -304,7 +314,7 @@
       if (!MOOD_LABELS[mood]) mood = 'normal';
       state.currentMood = mood;
       if (stageHeader) stageHeader.setAttribute('data-state', mood);
-      if (stageFab) stageFab.setAttribute('data-state', mood);
+      if (stageShimeji) stageShimeji.setAttribute('data-state', mood);
       if (moodPill) moodPill.textContent = MOOD_LABELS[mood] || '✨ Hazır';
 
       // 90 saniye hareketsizlikte uykuya dalma
@@ -515,27 +525,327 @@
       }
     }
 
-    // Panel Açma / Kapatma
-    fab.onclick = function () {
-      root.classList.toggle('is-open');
-      if (root.classList.contains('is-open')) {
+    // ========================================================
+    // SHIMEJI OTONOM DOLAŞMA VE FİZİK MOTORU (shimejis.xyz)
+    // ========================================================
+    var FLOOR_PAD = 10;
+    function getCharSize() {
+      return window.innerWidth <= 640 ? { w: 80, h: 80 } : { w: 96, h: 96 };
+    }
+    function getFloorY() {
+      var sz = getCharSize();
+      return Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
+    }
+
+    var posX = Math.max(20, window.innerWidth - 130);
+    var posY = getFloorY();
+    var targetX = posX;
+    var facingDir = 1; // 1 = sağ, -1 = sol
+    var behavior = 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling'
+    var isDragging = false;
+    var dragPointerId = null;
+    var dragStartX = 0, dragStartY = 0;
+    var dragOffsetX = 0, dragOffsetY = 0;
+    var hasMovedSignificantly = false;
+    var velocityY = 0;
+    var velocityX = 0;
+    var behaviorTimer = null;
+    var speechTimer = null;
+    var lastInteract = Date.now();
+
+    function updateTransform() {
+      if (!shimeji) return;
+      shimeji.style.transform = 'translate3d(' + Math.round(posX) + 'px, ' + Math.round(posY) + 'px, 0)';
+    }
+
+    function setFacing(dir) {
+      facingDir = dir;
+      if (shimejiBody) {
+        shimejiBody.style.transform = dir === -1 ? 'scaleX(-1)' : 'scaleX(1)';
+      }
+    }
+
+    function clampPos() {
+      var sz = getCharSize();
+      var maxW = Math.max(10, window.innerWidth - sz.w - 10);
+      var maxH = getFloorY();
+      posX = Math.max(10, Math.min(posX, maxW));
+      posY = Math.max(10, Math.min(posY, maxH));
+    }
+
+    // Başlangıç konumu
+    updateTransform();
+    setFacing(1);
+
+    var ENCOURAGING_QUOTES = [
+      'Ders çalışırken mola vermeyi unutma! 🍅',
+      'Bir sorun olursa bana tıkla! 💬',
+      'Bugün harika gidiyorsun! ✨',
+      'Pomodoro molası vakti geldi mi? ⏱️',
+      'Takıldığın konuyu bana sorabilirsin! 💡',
+      'Odaklanma modunu açtın mı? 🎯',
+      'Sana özel çalışma taktikleri burda! 🧠'
+    ];
+
+    function showBubble(text, duration) {
+      if (!shimejiBubble) return;
+      shimejiBubble.textContent = text;
+      shimejiBubble.style.display = 'block';
+      requestAnimationFrame(function () {
+        shimejiBubble.classList.add('is-visible');
+      });
+      clearTimeout(speechTimer);
+      speechTimer = setTimeout(function () {
+        shimejiBubble.classList.remove('is-visible');
+        setTimeout(function () {
+          if (!shimejiBubble.classList.contains('is-visible')) {
+            shimejiBubble.style.display = 'none';
+          }
+        }, 250);
+      }, duration || 4500);
+    }
+
+    if (shimejiBubble) {
+      shimejiBubble.onclick = function (e) {
+        e.stopPropagation();
+        togglePanel(true);
+      };
+    }
+
+    // Panel Açma / Kapatma Fonksiyonu
+    function togglePanel(forceOpen) {
+      var shouldOpen = forceOpen !== undefined ? forceOpen : !root.classList.contains('is-open');
+      if (shouldOpen) {
+        root.classList.add('is-open');
         if (!state.initDone) init();
         setLumiMood('dinliyor');
-        setTimeout(function () { ta.focus(); scroll(); }, 60);
+        setTimeout(function () { ta.focus(); scroll(); }, 80);
       } else {
+        root.classList.remove('is-open');
         setLumiMood('normal');
+        scheduleBehavior(1500);
       }
-    };
+    }
+
+    // Fizik Döngüsü (60fps)
+    function physicsStep() {
+      var floorY = getFloorY();
+      var sz = getCharSize();
+      var maxW = Math.max(10, window.innerWidth - sz.w - 10);
+
+      if (behavior === 'falling') {
+        velocityY += 0.85; // Yerçekimi
+        posY += velocityY;
+        if (posY >= floorY) {
+          posY = floorY;
+          velocityY = 0;
+          behavior = 'idle';
+          shimeji.classList.remove('is-falling', 'is-dragged');
+          shimeji.classList.add('is-landing');
+          setTimeout(function () { shimeji.classList.remove('is-landing'); }, 420);
+          setLumiMood('mutlu', 1800);
+          scheduleBehavior(2200);
+        }
+        updateTransform();
+      } else if (behavior === 'hop') {
+        velocityY += 0.6;
+        posY += velocityY;
+        posX += velocityX;
+        if (posX < 10) { posX = 10; velocityX *= -1; setFacing(1); }
+        if (posX > maxW) { posX = maxW; velocityX *= -1; setFacing(-1); }
+        if (posY >= floorY) {
+          posY = floorY;
+          velocityY = 0;
+          velocityX = 0;
+          shimeji.classList.remove('is-hop');
+          behavior = 'idle';
+          scheduleBehavior(2500);
+        }
+        updateTransform();
+      } else if (behavior === 'walk') {
+        var diff = targetX - posX;
+        var dist = Math.abs(diff);
+        if (dist < 3) {
+          posX = targetX;
+          shimeji.classList.remove('is-walking');
+          behavior = 'idle';
+          scheduleBehavior(3000 + Math.random() * 3000);
+        } else {
+          var step = Math.min(dist, 1.3);
+          var dir = diff > 0 ? 1 : -1;
+          posX += dir * step;
+          if (facingDir !== dir) setFacing(dir);
+          updateTransform();
+        }
+      }
+
+      requestAnimationFrame(physicsStep);
+    }
+    requestAnimationFrame(physicsStep);
+
+    // Otonom Davranış Planlayıcı (State Machine)
+    function scheduleBehavior(delay) {
+      if (isDragging || behavior === 'falling' || behavior === 'hop') return;
+      clearTimeout(behaviorTimer);
+      behaviorTimer = setTimeout(function () {
+        if (isDragging || behavior === 'falling' || behavior === 'hop') return;
+
+        // Panel açıksa uslu durup beklesin
+        if (root.classList.contains('is-open')) {
+          behavior = 'idle';
+          shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop');
+          scheduleBehavior(4000);
+          return;
+        }
+
+        // 60 saniye hareketsizlikte uykuya dalsın
+        var idleTime = Date.now() - lastInteract;
+        if (idleTime > 60000) {
+          behavior = 'nap';
+          setLumiMood('uykulu');
+          shimeji.classList.add('is-sitting');
+          return;
+        }
+
+        var r = Math.random();
+        var sz = getCharSize();
+        var maxW = Math.max(10, window.innerWidth - sz.w - 15);
+
+        if (r < 0.60) {
+          // YÜRÜME
+          behavior = 'walk';
+          shimeji.classList.remove('is-sitting', 'is-hop');
+          shimeji.classList.add('is-walking');
+          targetX = Math.round(15 + Math.random() * (maxW - 15));
+          setFacing(targetX > posX ? 1 : -1);
+        } else if (r < 0.75) {
+          // ZIPLAMA (HOP)
+          behavior = 'hop';
+          shimeji.classList.remove('is-walking', 'is-sitting');
+          shimeji.classList.add('is-hop');
+          velocityY = -7.5;
+          velocityX = (facingDir || 1) * 1.6;
+          setLumiMood('heyecanli', 1500);
+        } else if (r < 0.88) {
+          // OTURMA
+          behavior = 'sit';
+          shimeji.classList.remove('is-walking', 'is-hop');
+          shimeji.classList.add('is-sitting');
+          scheduleBehavior(4000 + Math.random() * 4000);
+        } else {
+          // IDLE (Etrafa bakınma)
+          behavior = 'idle';
+          shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop');
+          if (Math.random() < 0.5) setFacing(facingDir === 1 ? -1 : 1);
+          scheduleBehavior(3000 + Math.random() * 3000);
+        }
+      }, delay || 2000);
+    }
+    scheduleBehavior(2500);
+
+    // Pointer Olayları (Mouse ve Dokunmatik Sürükleme)
+    shimeji.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+      lastInteract = Date.now();
+      clearTimeout(behaviorTimer);
+
+      dragPointerId = e.pointerId;
+      try { shimeji.setPointerCapture(e.pointerId); } catch (_) {}
+
+      isDragging = true;
+      hasMovedSignificantly = false;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      dragOffsetX = e.clientX - posX;
+      dragOffsetY = e.clientY - posY;
+
+      if (behavior === 'nap' || state.currentMood === 'uykulu') {
+        setLumiMood('saskin', 1200);
+      }
+
+      shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop', 'is-landing');
+      shimeji.classList.add('is-dragged');
+      behavior = 'dragged';
+    });
+
+    shimeji.addEventListener('pointermove', function (e) {
+      if (!isDragging || e.pointerId !== dragPointerId) return;
+
+      var dist = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
+      if (dist > 6) {
+        hasMovedSignificantly = true;
+        if (state.currentMood !== 'saskin' && state.currentMood !== 'heyecanli') {
+          setLumiMood('saskin');
+        }
+      }
+
+      var sz = getCharSize();
+      var maxW = Math.max(10, window.innerWidth - sz.w - 10);
+      var floorY = getFloorY();
+
+      posX = Math.max(8, Math.min(e.clientX - dragOffsetX, maxW));
+      posY = Math.max(8, Math.min(e.clientY - dragOffsetY, floorY));
+
+      updateTransform();
+    });
+
+    function handlePointerUp(e) {
+      if (!isDragging || e.pointerId !== dragPointerId) return;
+      isDragging = false;
+      try { shimeji.releasePointerCapture(e.pointerId); } catch (_) {}
+      dragPointerId = null;
+
+      shimeji.classList.remove('is-dragged');
+
+      if (!hasMovedSignificantly) {
+        // TIKLAMA / DOKUNMA -> PANELİ AÇ/KAPAT
+        togglePanel();
+        scheduleBehavior(2000);
+      } else {
+        // HAVADA BIRAKILDI -> DÜŞME FİZİĞİ
+        var floorY = getFloorY();
+        if (posY < floorY - 5) {
+          behavior = 'falling';
+          shimeji.classList.add('is-falling');
+          velocityY = 0;
+        } else {
+          posY = floorY;
+          behavior = 'idle';
+          updateTransform();
+          shimeji.classList.add('is-landing');
+          setTimeout(function () { shimeji.classList.remove('is-landing'); }, 420);
+          setLumiMood('normal');
+          scheduleBehavior(2500);
+        }
+      }
+    }
+
+    shimeji.addEventListener('pointerup', handlePointerUp);
+    shimeji.addEventListener('pointercancel', handlePointerUp);
+
+    // Ekran Boyutu Değiştiğinde Güvenli Sınır
+    window.addEventListener('resize', function () {
+      clampPos();
+      updateTransform();
+    });
+
+    // Periyodik Olarak Tatlı Teşvik Baloncuğu
+    setInterval(function () {
+      if (!isDragging && behavior !== 'nap' && !root.classList.contains('is-open')) {
+        if (Math.random() < 0.65) {
+          var quote = ENCOURAGING_QUOTES[Math.floor(Math.random() * ENCOURAGING_QUOTES.length)];
+          showBubble(quote, 4500);
+        }
+      }
+    }, 30000);
 
     $('.lumi-close').onclick = function () {
-      root.classList.remove('is-open');
-      setLumiMood('normal');
+      togglePanel(false);
     };
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && root.classList.contains('is-open')) {
-        root.classList.remove('is-open');
-        setLumiMood('normal');
+        togglePanel(false);
       }
     });
 

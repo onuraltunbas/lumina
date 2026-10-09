@@ -56,8 +56,13 @@ def dev_dashboard(request):
     return HTMLResponse(html.replace("</body>", f"  {WIDGET_TAG}\n</body>"))
 
 
+def dev_character(request):
+    html = (HERE / "character" / "lumi.html").read_text(encoding="utf-8")
+    return HTMLResponse(html)
+
 # Lumina'nın /dashboard route'unun önüne geç
 app.router.routes.insert(0, Route("/dashboard", dev_dashboard, methods=["GET", "HEAD"]))
+app.router.routes.insert(0, Route("/character", dev_character, methods=["GET", "HEAD"]))
 
 if __name__ == "__main__":
     import uvicorn

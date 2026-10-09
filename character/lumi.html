@@ -156,9 +156,11 @@
 
         /* Kesin Vektörel Koordinat Pivot Noktaları (Göz kayması ve deformasyonu önler) */
         #lumi-body { transform-origin: 400px 600px; }
+        #lumi-leg-l { transform-origin: 320px 650px; }
+        #lumi-leg-r { transform-origin: 480px 650px; }
+        #lumi-arm-l { transform-origin: 290px 510px; }
+        #lumi-arm-r { transform-origin: 510px 510px; }
         #lumi-head-group { transform-origin: 400px 480px; }
-        #lumi-arm-l { transform-origin: 290px 520px; }
-        #lumi-arm-r { transform-origin: 510px 520px; }
         #lumi-tuft-l { transform-origin: 230px 320px; }
         #lumi-tuft-r { transform-origin: 570px 320px; }
         #lumi-eyes { transform-origin: 400px 360px; }
@@ -285,7 +287,8 @@
         [data-state="dinliyor"] #brow-l { opacity: 0.45; }
         [data-state="dinliyor"] #lid-l { transform: translateY(16px); }
         [data-state="dinliyor"] #lid-r { transform: translateY(-12px); }
-        [data-state="dinliyor"] #lumi-arm-l { transform: rotate(15deg) translateY(-6px); }
+        [data-state="dinliyor"] #lumi-arm-l { transform: rotate(-18deg) translateY(-8px); }
+        [data-state="dinliyor"] #lumi-arm-r { transform: rotate(10deg); }
         [data-state="dinliyor"] #orb-core { transform: scale(1.12); }
 
         /* 3. DÜŞÜNÜYOR / AI CEVAP ÜRETİYOR (Nöral Sinaps Halesi) */
@@ -296,7 +299,8 @@
         [data-state="dusunuyor"] #brow-r { opacity: 0.85; transform: translateY(-16px) rotate(12deg); }
         [data-state="dusunuyor"] #brow-l { opacity: 0.65; transform: translateY(4px) rotate(-6deg); }
         [data-state="dusunuyor"] #mouth-o { opacity: 1; transform: scale(0.68); }
-        [data-state="dusunuyor"] #lumi-arm-l { transform: rotate(38deg) translateY(-24px) translateX(12px); }
+        [data-state="dusunuyor"] #lumi-arm-l { transform: rotate(-48deg) translateY(-22px) translateX(14px); }
+        [data-state="dusunuyor"] #lumi-arm-r { transform: rotate(16deg) translateX(-8px); }
         [data-state="dusunuyor"] #orb-core { fill: #C084FC; animation: orbNeuralPulse 1.3s ease-in-out infinite; }
 
         /* 4. TAKTİK / FİKİR ("Aha! Buldum!" - Ampul gibi parlayan küre) */
@@ -304,7 +308,8 @@
         [data-state="taktik"] #mouth-smile { opacity: 1; transform: scale(1.18); }
         [data-state="taktik"] #brow-l, [data-state="taktik"] #brow-r { opacity: 0.85; transform: translateY(-16px); }
         [data-state="taktik"] #lid-l, [data-state="taktik"] #lid-r { transform: translateY(-12px); }
-        [data-state="taktik"] #lumi-arm-r { transform: rotate(-48deg) translateY(-26px); }
+        [data-state="taktik"] #lumi-arm-r { transform: rotate(-68deg) translateY(-22px); }
+        [data-state="taktik"] #lumi-arm-l { transform: rotate(-18deg) translateX(10px); }
         [data-state="taktik"] #orb-core { fill: #FFFFFF; transform: scale(1.4); animation: none; }
         [data-state="taktik"] #cheek-l, [data-state="taktik"] #cheek-r { opacity: 1; transform: scale(1.15); }
         [data-state="taktik"] #efx-stars { opacity: 1; }
@@ -316,8 +321,8 @@
         [data-state="mutlu"] #eye-happy-l, [data-state="mutlu"] #eye-happy-r { opacity: 1; }
         [data-state="mutlu"] #brow-l, [data-state="mutlu"] #brow-r { opacity: 0.8; transform: translateY(-12px); }
         [data-state="mutlu"] #mouth-happy { opacity: 1; transform: scale(1); }
-        [data-state="mutlu"] #lumi-arm-l { transform: rotate(18deg); }
-        [data-state="mutlu"] #lumi-arm-r { transform: rotate(-18deg); }
+        [data-state="mutlu"] #lumi-arm-l { transform: rotate(22deg) translateY(-6px); }
+        [data-state="mutlu"] #lumi-arm-r { transform: rotate(-22deg) translateY(-6px); }
         [data-state="mutlu"] #cheek-l, [data-state="mutlu"] #cheek-r { opacity: 1; transform: scale(1.25) translateY(-4px); }
         [data-state="mutlu"] #orb-core { animation: orbPulse 2s ease-in-out infinite; fill: #FFE49A; }
 
@@ -331,8 +336,10 @@
         [data-state="heyecanli"] #brow-l, [data-state="heyecanli"] #brow-r { opacity: 0.9; transform: translateY(-18px); }
         [data-state="heyecanli"] #lumi-tuft-l { transform: rotate(-8deg) translateY(-6px); }
         [data-state="heyecanli"] #lumi-tuft-r { transform: rotate(8deg) translateY(-6px); }
-        [data-state="heyecanli"] #lumi-arm-l { transform: rotate(50deg) translateY(-22px); }
-        [data-state="heyecanli"] #lumi-arm-r { transform: rotate(-50deg) translateY(-22px); }
+        [data-state="heyecanli"] #lumi-arm-l { transform: rotate(60deg) translateY(-26px); }
+        [data-state="heyecanli"] #lumi-arm-r { transform: rotate(-60deg) translateY(-26px); }
+        [data-state="heyecanli"] #lumi-leg-l { transform: rotate(-15deg) translateY(-4px); }
+        [data-state="heyecanli"] #lumi-leg-r { transform: rotate(15deg) translateY(-4px); }
         [data-state="heyecanli"] #orb-core { fill: #FFFFFF; transform: scale(1.35); animation: none; }
         [data-state="heyecanli"] #efx-stars { opacity: 1; }
 
@@ -344,6 +351,8 @@
         [data-state="merakli"] #lid-l { transform: translateY(24px) rotate(6deg); }
         [data-state="merakli"] #lid-r { transform: translateY(-12px); }
         [data-state="merakli"] #pupils-l, [data-state="merakli"] #pupils-r { transform: translate(8px, -8px); }
+        [data-state="merakli"] #lumi-arm-l { transform: rotate(-35deg) translateY(-12px); }
+        [data-state="merakli"] #lumi-arm-r { transform: rotate(15deg); }
         [data-state="merakli"] #orb-core { animation-duration: 1.6s; }
         [data-state="merakli"] #efx-question { opacity: 1; transform: translateY(-18px); }
 
@@ -354,7 +363,8 @@
         [data-state="saskin"] #brow-l, [data-state="saskin"] #brow-r { opacity: 0.95; transform: translateY(-24px); }
         [data-state="saskin"] #lid-l, [data-state="saskin"] #lid-r { transform: translateY(-15px); }
         [data-state="saskin"] #orb-core { transform: scale(1.35); animation: none; }
-        [data-state="saskin"] #lumi-arm-l, [data-state="saskin"] #lumi-arm-r { transform: translateY(-12px); }
+        [data-state="saskin"] #lumi-arm-l { transform: rotate(32deg) translateX(-15px); }
+        [data-state="saskin"] #lumi-arm-r { transform: rotate(-32deg) translateX(15px); }
 
         /* 9. MAHCUP (Kızarık Allık, Kaçık Bakış) */
         [data-state="mahcup"] #lumi-head-group { transform: rotate(-8deg) translateY(8px); }
@@ -364,8 +374,10 @@
         [data-state="mahcup"] #lid-l, [data-state="mahcup"] #lid-r { transform: translateY(32px); }
         [data-state="mahcup"] #brow-l { opacity: 0.6; transform: translateY(-2px) rotate(-8deg); }
         [data-state="mahcup"] #brow-r { opacity: 0.6; transform: translateY(-2px) rotate(8deg); }
-        [data-state="mahcup"] #lumi-arm-l { transform: rotate(-25deg) translateX(15px); }
-        [data-state="mahcup"] #lumi-arm-r { transform: rotate(25deg) translateX(-15px); }
+        [data-state="mahcup"] #lumi-arm-l { transform: rotate(-30deg) translateX(22px); }
+        [data-state="mahcup"] #lumi-arm-r { transform: rotate(30deg) translateX(-22px); }
+        [data-state="mahcup"] #lumi-leg-l { transform: rotate(10deg); }
+        [data-state="mahcup"] #lumi-leg-r { transform: rotate(-10deg); }
         [data-state="mahcup"] #orb-core { fill: #FFA9BD; }
 
         /* 10. TESELLİ / ÜZGÜN (Empati, Düşük Kulaklar) */
@@ -379,8 +391,8 @@
         [data-state="uzgun"] #pupils-l, [data-state="uzgun"] #pupils-r { transform: translateY(6px); }
         [data-state="teselli"] #lumi-tuft-l, [data-state="uzgun"] #lumi-tuft-l { transform: rotate(16deg); }
         [data-state="teselli"] #lumi-tuft-r, [data-state="uzgun"] #lumi-tuft-r { transform: rotate(-16deg); }
-        [data-state="teselli"] #lumi-arm-l { transform: rotate(12deg) translateY(-6px); }
-        [data-state="teselli"] #lumi-arm-r { transform: rotate(-12deg) translateY(-6px); }
+        [data-state="teselli"] #lumi-arm-l { transform: rotate(18deg) translateY(-8px) translateX(8px); }
+        [data-state="teselli"] #lumi-arm-r { transform: rotate(-18deg) translateY(-8px) translateX(-8px); }
         [data-state="teselli"] #orb-core, [data-state="uzgun"] #orb-core { animation: sleepPulse 4s infinite; fill: var(--lumi-gold); }
 
         /* 11. UYARI / KORUMA (Kızgın/Çatık, Kırmızı Küre) */
@@ -390,8 +402,8 @@
         [data-state="uyari"] #brow-r, [data-state="kizgin"] #brow-r { opacity: 1; transform: translateY(14px) rotate(-22deg); stroke-width: 14; }
         [data-state="uyari"] #lid-l, [data-state="kizgin"] #lid-l { transform: translateY(44px) rotate(16deg); }
         [data-state="uyari"] #lid-r, [data-state="kizgin"] #lid-r { transform: translateY(44px) rotate(-16deg); }
-        [data-state="uyari"] #lumi-arm-l, [data-state="kizgin"] #lumi-arm-l { transform: rotate(-22deg) translateX(12px); }
-        [data-state="uyari"] #lumi-arm-r, [data-state="kizgin"] #lumi-arm-r { transform: rotate(22deg) translateX(-12px); }
+        [data-state="uyari"] #lumi-arm-l, [data-state="kizgin"] #lumi-arm-l { transform: rotate(-32deg) translateX(22px) translateY(-10px); }
+        [data-state="uyari"] #lumi-arm-r, [data-state="kizgin"] #lumi-arm-r { transform: rotate(32deg) translateX(-22px) translateY(-10px); }
         [data-state="uyari"] #orb-core, [data-state="kizgin"] #orb-core { fill: #FFAAA6; filter: url(#glow-orb-red); animation: none; }
         [data-state="uyari"] .cheek, [data-state="kizgin"] .cheek { opacity: 0.15; }
 
@@ -403,7 +415,9 @@
         [data-state="uykulu"] #lid-l, [data-state="uykulu"] #lid-r { transform: translateY(82px); }
         [data-state="uykulu"] #pupils-l, [data-state="uykulu"] #pupils-r { transform: translateY(12px); }
         [data-state="uykulu"] #mouth-flat { opacity: 1; transform: scale(0.65); }
-        [data-state="uykulu"] #lumi-arm-l, [data-state="uykulu"] #lumi-arm-r { transform: translateY(14px); }
+        [data-state="uykulu"] #lumi-arm-l { transform: translateY(14px) rotate(6deg); }
+        [data-state="uykulu"] #lumi-arm-r { transform: translateY(14px) rotate(-6deg); }
+        [data-state="uykulu"] #lumi-leg-l, [data-state="uykulu"] #lumi-leg-r { transform: translateY(-4px) scaleY(0.85); }
         [data-state="uykulu"] #orb-core { animation: sleepPulse 5s infinite; fill: #FFE0B2; }
         [data-state="uykulu"] #efx-zzz { opacity: 1; animation: zzzFloat 3s ease-in-out infinite; }
 
@@ -606,8 +620,12 @@
                     
                     <!-- Bacaklar -->
                     <g id="lumi-legs" filter="url(#shadow-drop)">
-                        <path class="anim-part" d="M 310,650 C 270,650 280,710 320,715 C 360,720 370,660 350,650 Z" fill="url(#body-grad)"/>
-                        <path class="anim-part" d="M 490,650 C 530,650 520,710 480,715 C 440,720 430,660 450,650 Z" fill="url(#body-grad)"/>
+                        <g id="lumi-leg-l" class="anim-part">
+                            <path d="M 310,650 C 270,650 280,710 320,715 C 360,720 370,660 350,650 Z" fill="url(#body-grad)"/>
+                        </g>
+                        <g id="lumi-leg-r" class="anim-part">
+                            <path d="M 490,650 C 530,650 520,710 480,715 C 440,720 430,660 450,650 Z" fill="url(#body-grad)"/>
+                        </g>
                     </g>
 
                     <!-- Gövde -->
@@ -617,16 +635,6 @@
                                  C 580,680 600,530 490,480 
                                  C 450,460 350,460 310,480 Z" 
                               fill="url(#body-grad)"/>
-                    </g>
-
-                    <!-- Kollar -->
-                    <g id="lumi-arms">
-                        <g id="lumi-arm-l" class="anim-part" filter="url(#shadow-limb)">
-                            <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#arm-grad)"/>
-                        </g>
-                        <g id="lumi-arm-r" class="anim-part" filter="url(#shadow-limb)">
-                            <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#arm-grad)"/>
-                        </g>
                     </g>
 
                     <!-- BAŞ GRUBU -->
@@ -744,6 +752,16 @@
                             <path d="M 620,160 L 625,175 L 640,180 L 625,185 L 620,200 L 615,185 L 600,180 L 615,175 Z" fill="#FFF" filter="drop-shadow(0 0 8px #FFF)"/>
                         </g>
                         
+                    </g>
+
+                    <!-- Kollar (Ön Katman - Çene ve Gövdenin Önünde) -->
+                    <g id="lumi-arms">
+                        <g id="lumi-arm-l" class="anim-part" filter="url(#shadow-limb)">
+                            <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#arm-grad)"/>
+                        </g>
+                        <g id="lumi-arm-r" class="anim-part" filter="url(#shadow-limb)">
+                            <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#arm-grad)"/>
+                        </g>
                     </g>
                 </g>
             </svg>
