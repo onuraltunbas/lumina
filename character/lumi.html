@@ -421,6 +421,58 @@
         [data-state="uykulu"] #orb-core { animation: sleepPulse 5s infinite; fill: #FFE0B2; }
         [data-state="uykulu"] #efx-zzz { opacity: 1; animation: zzzFloat 3s ease-in-out infinite; }
 
+        /* 13. TIRMANIYOR (Duvara Tırmanma) */
+        [data-state="tirmaniyor"] #lumi-head-group { transform: rotate(-8deg) translateY(-8px); }
+        [data-state="tirmaniyor"] #mouth-smile { opacity: 1; transform: scale(1.05); }
+        [data-state="tirmaniyor"] #lid-l, [data-state="tirmaniyor"] #lid-r { transform: translateY(-12px); }
+        [data-state="tirmaniyor"] #pupils-l, [data-state="tirmaniyor"] #pupils-r { transform: translate(4px, -10px); }
+        [data-state="tirmaniyor"] #lumi-arm-l { animation: climbArmL 0.38s ease-in-out infinite alternate; }
+        [data-state="tirmaniyor"] #lumi-arm-r { animation: climbArmR 0.38s ease-in-out infinite alternate; }
+        [data-state="tirmaniyor"] #lumi-leg-l { animation: climbLegL 0.38s ease-in-out infinite alternate; }
+        [data-state="tirmaniyor"] #lumi-leg-r { animation: climbLegR 0.38s ease-in-out infinite alternate; }
+
+        @keyframes climbArmL {
+            0% { transform: rotate(74deg) translateY(-28px) translateX(12px); }
+            100% { transform: rotate(22deg) translateY(-6px) translateX(4px); }
+        }
+        @keyframes climbArmR {
+            0% { transform: rotate(22deg) translateY(-6px) translateX(-4px); }
+            100% { transform: rotate(74deg) translateY(-28px) translateX(-12px); }
+        }
+        @keyframes climbLegL {
+            0% { transform: rotate(-32deg) translateY(-4px); }
+            100% { transform: rotate(20deg) translateY(4px); }
+        }
+        @keyframes climbLegR {
+            0% { transform: rotate(20deg) translateY(4px); }
+            100% { transform: rotate(-32deg) translateY(-4px); }
+        }
+
+        /* 14. ASILI (Tavanda Asılma & Sallanma) */
+        [data-state="asili"] #lumi-head-group { transform: translateY(-6px); }
+        [data-state="asili"] .eye-open-parts { opacity: 0; }
+        [data-state="asili"] .lid { opacity: 0; }
+        [data-state="asili"] #eye-happy-l, [data-state="asili"] #eye-happy-r { opacity: 1; }
+        [data-state="asili"] #mouth-happy { opacity: 1; transform: scale(1.15); }
+        [data-state="asili"] #lumi-arm-l { transform: rotate(84deg) translateY(-32px); }
+        [data-state="asili"] #lumi-arm-r { transform: rotate(-84deg) translateY(-32px); }
+        [data-state="asili"] #lumi-leg-l { animation: dangleLegL 0.35s ease-in-out infinite alternate; }
+        [data-state="asili"] #lumi-leg-r { animation: dangleLegR 0.35s ease-in-out infinite alternate; }
+        [data-state="asili"] #lumi-master { animation: hangSwing 1.1s ease-in-out infinite alternate; transform-origin: 50% 12%; }
+
+        @keyframes dangleLegL {
+            0% { transform: rotate(-18deg) translateY(4px); }
+            100% { transform: rotate(18deg) translateY(2px); }
+        }
+        @keyframes dangleLegR {
+            0% { transform: rotate(18deg) translateY(2px); }
+            100% { transform: rotate(-18deg) translateY(4px); }
+        }
+        @keyframes hangSwing {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
+        }
+
         /* Kontrol Paneli */
         #controls-panel {
             width: 100%;
@@ -781,6 +833,8 @@
             <button class="btn-emotion" data-target="teselli">😔 Teselli</button>
             <button class="btn-emotion" data-target="uyari">🛡️ Koruma / Uyarı</button>
             <button class="btn-emotion" data-target="uykulu">💤 Uykulu</button>
+            <button class="btn-emotion" data-target="tirmaniyor">🧗 Tırmanıyor</button>
+            <button class="btn-emotion" data-target="asili">🌟 Tavanda Asılı</button>
         </div>
     </div>
 
@@ -797,7 +851,9 @@
             "mahcup": "Şey... güzel sözlerin için teşekkürler, beni biraz utandırdın 😳💖",
             "teselli": "Bazen odaklanmak zor olabilir, hiç canını sıkma. 5 dakika mola verip baştan deneyelim 🤝",
             "uyari": "Hop! Kişisel verilerini korumam ve kurallara uymam gerekiyor, bunu yapamam 🛡️🔒",
-            "uykulu": "Bugün çok verimli çalıştık ama göz kapaklarım ağırlaşıyor... ZzZz 💤"
+            "uykulu": "Bugün çok verimli çalıştık ama göz kapaklarım ağırlaşıyor... ZzZz 💤",
+            "tirmaniyor": "Tuttum duvarı, yukarı doğru tırmanıyorum! Kollarıma ve bacaklarıma bak! 🧗✨",
+            "asili": "Tavandayım! Burası çok havalı, biraz sallanıp aşağı atlayacağım! 🌟🪂"
         };
 
         const stage = document.getElementById('lumi-stage');

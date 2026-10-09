@@ -532,16 +532,82 @@
     function getCharSize() {
       return window.innerWidth <= 640 ? { w: 80, h: 80 } : { w: 96, h: 96 };
     }
+    var currentPlatform = null; // null ise ekran zemini, aksi halde { el, top, left, right }
+    var climbWall = null; // 'left' veya 'right'
+
     function getFloorY() {
       var sz = getCharSize();
       return Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
+    }
+
+    // Sayfadaki tüm platform yüzeylerini (kartlar, kutular, tablolar, çizgiler, barlar) bulur
+    function getCandidatePlatforms() {
+      var sel = [
+        '.card', '.dashboard-card', '.stat-card', '.study-card', '.feature-card',
+        '.box', '.panel', '.widget', 'table', 'thead', 'hr',
+        'header', 'nav', '.navbar', '.header',
+        'section', 'article', 'aside',
+        '.btn', 'button', '.chip', '.tab-nav',
+        '[data-platform="true"]'
+      ].join(',');
+
+      var elements = document.querySelectorAll(sel);
+      var platforms = [];
+      var vH = window.innerHeight;
+
+      for (var i = 0; i < elements.length; i++) {
+        var el = elements[i];
+        if (root.contains(el)) continue; // Lumi'nin kendi arayüzünü atla
+
+        var r = el.getBoundingClientRect();
+        // Ekranda görünür ve basılabilir büyüklükte olmalı
+        if (r.width >= 36 && r.height >= 4 && r.bottom > 20 && r.top < vH - 35) {
+          platforms.push({
+            el: el,
+            top: r.top,
+            left: r.left,
+            right: r.right,
+            width: r.width
+          });
+        }
+      }
+      return platforms;
+    }
+
+    // Ayağın altındaki en yakın zemini (platform veya ekran altı) hesaplar
+    function findFloorUnder(footX, currentFootY) {
+      var sz = getCharSize();
+      var defaultFloor = Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
+      var platforms = getCandidatePlatforms();
+      var bestPlatform = null;
+      var bestFloor = defaultFloor;
+      var minDistance = Infinity;
+
+      for (var i = 0; i < platforms.length; i++) {
+        var p = platforms[i];
+        // Ayak platformun yatay sınırları içinde mi?
+        if (footX >= p.left - 12 && footX <= p.right + 12) {
+          var surfaceY = p.top - sz.h + 8; // Çizgi veya kartın tam üstüne oturt
+          // Platform ayağın altında veya hemen hizasında olmalı
+          if (surfaceY >= currentFootY - 18 && surfaceY <= defaultFloor) {
+            var dist = surfaceY - currentFootY;
+            if (dist >= -18 && dist < minDistance) {
+              minDistance = dist;
+              bestFloor = surfaceY;
+              bestPlatform = p;
+            }
+          }
+        }
+      }
+
+      return { floorY: bestFloor, platform: bestPlatform };
     }
 
     var posX = Math.max(20, window.innerWidth - 130);
     var posY = getFloorY();
     var targetX = posX;
     var facingDir = 1; // 1 = sağ, -1 = sol
-    var behavior = 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling'
+    var behavior = 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling', 'climb', 'hang'
     var isDragging = false;
     var dragPointerId = null;
     var dragStartX = 0, dragStartY = 0;
@@ -569,8 +635,8 @@
       var sz = getCharSize();
       var maxW = Math.max(10, window.innerWidth - sz.w - 10);
       var maxH = getFloorY();
-      posX = Math.max(10, Math.min(posX, maxW));
-      posY = Math.max(10, Math.min(posY, maxH));
+      posX = Math.max(8, Math.min(posX, maxW));
+      posY = Math.max(8, Math.min(posY, maxH));
     }
 
     // Başlangıç konumu
@@ -627,56 +693,178 @@
       }
     }
 
-    // Fizik Döngüsü (60fps)
+    // Fizik ve Hareket Çerçeve Döngüsü (60fps)
     function physicsStep() {
-      var floorY = getFloorY();
       var sz = getCharSize();
       var maxW = Math.max(10, window.innerWidth - sz.w - 10);
+      var footX = posX + sz.w / 2;
 
-      if (behavior === 'falling') {
+      // 1. DUVARA TIRMANMA MODU
+      if (behavior === 'climb') {
+        posY -= 1.35; // Yukarı tırman
+        if (climbWall === 'left') {
+          posX = 8;
+        } else {
+          posX = maxW;
+        }
+
+        // Tavana ulaştı mı?
+        if (posY <= 18) {
+          posY = 18;
+          behavior = 'hang';
+          shimeji.classList.remove('is-climbing', 'climb-left', 'climb-right');
+          shimeji.classList.add('is-hanging');
+          setLumiMood('mutlu');
+          showBubble('Tavandayım! Burası çok havalı! 🌟', 2200);
+
+          setTimeout(function () {
+            if (behavior === 'hang') {
+              shimeji.classList.remove('is-hanging');
+              behavior = 'falling';
+              shimeji.classList.add('is-falling');
+              velocityY = 1.0;
+              velocityX = (climbWall === 'left' ? 3.2 : -3.2);
+              setFacing(climbWall === 'left' ? 1 : -1);
+              setLumiMood('heyecanli', 1800);
+            }
+          }, 1800);
+        }
+        updateTransform();
+      }
+
+      // 2. DÜŞME / YERÇEKİMİ MODU (Platforma veya Zemine İniş)
+      else if (behavior === 'falling') {
         velocityY += 0.85; // Yerçekimi
         posY += velocityY;
-        if (posY >= floorY) {
-          posY = floorY;
+        posX += velocityX;
+        velocityX *= 0.96; // Hava direnci
+
+        if (posX < 8) { posX = 8; velocityX *= -0.5; }
+        if (posX > maxW) { posX = maxW; velocityX *= -0.5; }
+
+        var floorInfo = findFloorUnder(footX, posY + sz.h - 12);
+
+        if (posY >= floorInfo.floorY) {
+          posY = floorInfo.floorY;
           velocityY = 0;
+          velocityX = 0;
+          currentPlatform = floorInfo.platform;
           behavior = 'idle';
-          shimeji.classList.remove('is-falling', 'is-dragged');
+          shimeji.classList.remove('is-falling', 'is-dragged', 'is-climbing', 'climb-left', 'climb-right', 'is-hanging', 'is-peeking');
           shimeji.classList.add('is-landing');
           setTimeout(function () { shimeji.classList.remove('is-landing'); }, 420);
           setLumiMood('mutlu', 1800);
           scheduleBehavior(2200);
         }
         updateTransform();
-      } else if (behavior === 'hop') {
+      }
+
+      // 3. HOP (ZIPLAMA) MODU
+      else if (behavior === 'hop') {
         velocityY += 0.6;
         posY += velocityY;
         posX += velocityX;
         if (posX < 10) { posX = 10; velocityX *= -1; setFacing(1); }
         if (posX > maxW) { posX = maxW; velocityX *= -1; setFacing(-1); }
-        if (posY >= floorY) {
-          posY = floorY;
+
+        var floorInfo = findFloorUnder(footX, posY + sz.h - 12);
+
+        if (posY >= floorInfo.floorY) {
+          posY = floorInfo.floorY;
           velocityY = 0;
           velocityX = 0;
+          currentPlatform = floorInfo.platform;
           shimeji.classList.remove('is-hop');
           behavior = 'idle';
           scheduleBehavior(2500);
         }
         updateTransform();
-      } else if (behavior === 'walk') {
-        var diff = targetX - posX;
-        var dist = Math.abs(diff);
-        if (dist < 3) {
-          posX = targetX;
-          shimeji.classList.remove('is-walking');
-          behavior = 'idle';
-          scheduleBehavior(3000 + Math.random() * 3000);
+      }
+
+      // 4. YÜRÜME MODU (Platform Üstünde veya Ekran Zemininde)
+      else if (behavior === 'walk') {
+        if (currentPlatform && currentPlatform.el) {
+          var rect = currentPlatform.el.getBoundingClientRect();
+          // Platform ekranda hâlâ görünür mü?
+          if (rect.bottom < 10 || rect.top > window.innerHeight - 10) {
+            currentPlatform = null;
+            behavior = 'falling';
+            shimeji.classList.remove('is-walking');
+            shimeji.classList.add('is-falling');
+            velocityY = 0.5;
+          } else {
+            // Platform yüzeyine bas
+            posY = rect.top - sz.h + 8;
+
+            // Platform kenarına ulaştı mı?
+            if (footX <= rect.left + 8 || footX >= rect.right - 8) {
+              // Tercih A2: Bazen geri dön, bazen aşağı atla!
+              if (Math.random() < 0.5) {
+                facingDir = (footX <= rect.left + 8) ? 1 : -1;
+                setFacing(facingDir);
+                targetX = (facingDir === 1) ? (rect.right - 25) : (rect.left + 25);
+              } else {
+                currentPlatform = null;
+                behavior = 'falling';
+                shimeji.classList.remove('is-walking');
+                shimeji.classList.add('is-falling');
+                velocityY = 0.8;
+                velocityX = facingDir * 1.6;
+                setLumiMood('saskin', 1200);
+              }
+            } else {
+              var diff = targetX - posX;
+              var dist = Math.abs(diff);
+              if (dist < 3) {
+                posX = targetX;
+                shimeji.classList.remove('is-walking');
+                behavior = 'idle';
+                scheduleBehavior(3000 + Math.random() * 3000);
+              } else {
+                var step = Math.min(dist, 1.3);
+                var dir = diff > 0 ? 1 : -1;
+                posX += dir * step;
+                if (facingDir !== dir) setFacing(dir);
+              }
+            }
+          }
         } else {
-          var step = Math.min(dist, 1.3);
-          var dir = diff > 0 ? 1 : -1;
-          posX += dir * step;
-          if (facingDir !== dir) setFacing(dir);
-          updateTransform();
+          // Zemin üzerinde yürüme
+          var atLeftWall = posX <= 12;
+          var atRightWall = posX >= maxW - 2;
+
+          if (atLeftWall || atRightWall) {
+            // Duvara tosladı! Tercih: Kollarıyla duvara tırmanma!
+            if (Math.random() < 0.45) {
+              behavior = 'climb';
+              climbWall = atLeftWall ? 'left' : 'right';
+              shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop');
+              shimeji.classList.add('is-climbing', 'climb-' + climbWall);
+              setFacing(climbWall === 'left' ? 1 : -1);
+              setLumiMood('merakli');
+              showBubble('Duvara tırmanıyorum! 🧗', 2200);
+            } else {
+              facingDir = atLeftWall ? 1 : -1;
+              setFacing(facingDir);
+              targetX = posX + facingDir * (120 + Math.random() * 180);
+            }
+          } else {
+            var diff = targetX - posX;
+            var dist = Math.abs(diff);
+            if (dist < 3) {
+              posX = targetX;
+              shimeji.classList.remove('is-walking');
+              behavior = 'idle';
+              scheduleBehavior(3000 + Math.random() * 3000);
+            } else {
+              var step = Math.min(dist, 1.3);
+              var dir = diff > 0 ? 1 : -1;
+              posX += dir * step;
+              if (facingDir !== dir) setFacing(dir);
+            }
+          }
         }
+        updateTransform();
       }
 
       requestAnimationFrame(physicsStep);
@@ -685,15 +873,15 @@
 
     // Otonom Davranış Planlayıcı (State Machine)
     function scheduleBehavior(delay) {
-      if (isDragging || behavior === 'falling' || behavior === 'hop') return;
+      if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang') return;
       clearTimeout(behaviorTimer);
       behaviorTimer = setTimeout(function () {
-        if (isDragging || behavior === 'falling' || behavior === 'hop') return;
+        if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang') return;
 
         // Panel açıksa uslu durup beklesin
         if (root.classList.contains('is-open')) {
           behavior = 'idle';
-          shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop');
+          shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop', 'is-climbing', 'climb-left', 'climb-right');
           scheduleBehavior(4000);
           return;
         }
@@ -714,28 +902,34 @@
         if (r < 0.60) {
           // YÜRÜME
           behavior = 'walk';
-          shimeji.classList.remove('is-sitting', 'is-hop');
+          shimeji.classList.remove('is-sitting', 'is-hop', 'is-climbing', 'climb-left', 'climb-right', 'is-hanging');
           shimeji.classList.add('is-walking');
-          targetX = Math.round(15 + Math.random() * (maxW - 15));
+
+          if (currentPlatform && currentPlatform.el) {
+            var rct = currentPlatform.el.getBoundingClientRect();
+            targetX = Math.round(rct.left + 15 + Math.random() * Math.max(10, rct.width - sz.w - 30));
+          } else {
+            targetX = Math.round(15 + Math.random() * (maxW - 15));
+          }
           setFacing(targetX > posX ? 1 : -1);
-        } else if (r < 0.75) {
+        } else if (r < 0.74) {
           // ZIPLAMA (HOP)
           behavior = 'hop';
-          shimeji.classList.remove('is-walking', 'is-sitting');
+          shimeji.classList.remove('is-walking', 'is-sitting', 'is-climbing', 'climb-left', 'climb-right');
           shimeji.classList.add('is-hop');
-          velocityY = -7.5;
-          velocityX = (facingDir || 1) * 1.6;
+          velocityY = -7.2;
+          velocityX = (facingDir || 1) * 1.5;
           setLumiMood('heyecanli', 1500);
         } else if (r < 0.88) {
           // OTURMA
           behavior = 'sit';
-          shimeji.classList.remove('is-walking', 'is-hop');
+          shimeji.classList.remove('is-walking', 'is-hop', 'is-climbing', 'climb-left', 'climb-right');
           shimeji.classList.add('is-sitting');
           scheduleBehavior(4000 + Math.random() * 4000);
         } else {
           // IDLE (Etrafa bakınma)
           behavior = 'idle';
-          shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop');
+          shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop', 'is-climbing', 'climb-left', 'climb-right');
           if (Math.random() < 0.5) setFacing(facingDir === 1 ? -1 : 1);
           scheduleBehavior(3000 + Math.random() * 3000);
         }
@@ -763,9 +957,10 @@
         setLumiMood('saskin', 1200);
       }
 
-      shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop', 'is-landing');
+      shimeji.classList.remove('is-walking', 'is-sitting', 'is-hop', 'is-landing', 'is-climbing', 'climb-left', 'climb-right', 'is-hanging', 'is-peeking');
       shimeji.classList.add('is-dragged');
       behavior = 'dragged';
+      currentPlatform = null;
     });
 
     shimeji.addEventListener('pointermove', function (e) {
@@ -802,26 +997,58 @@
         togglePanel();
         scheduleBehavior(2000);
       } else {
-        // HAVADA BIRAKILDI -> DÜŞME FİZİĞİ
-        var floorY = getFloorY();
-        if (posY < floorY - 5) {
-          behavior = 'falling';
-          shimeji.classList.add('is-falling');
-          velocityY = 0;
+        var sz = getCharSize();
+        var footX = posX + sz.w / 2;
+        var maxW = Math.max(10, window.innerWidth - sz.w - 10);
+
+        // Duvar dibine mi bırakıldı? (Duvara tutunma)
+        if ((posX <= 18 || posX >= maxW - 8) && posY < getFloorY() - 90 && Math.random() < 0.6) {
+          behavior = 'climb';
+          climbWall = posX <= 18 ? 'left' : 'right';
+          shimeji.classList.add('is-climbing', 'climb-' + climbWall);
+          setFacing(climbWall === 'left' ? 1 : -1);
+          setLumiMood('merakli');
+          showBubble('Duvara tutundum! 🧗', 2000);
         } else {
-          posY = floorY;
-          behavior = 'idle';
-          updateTransform();
-          shimeji.classList.add('is-landing');
-          setTimeout(function () { shimeji.classList.remove('is-landing'); }, 420);
-          setLumiMood('normal');
-          scheduleBehavior(2500);
+          // Zemin veya kart/çizgi platformu üstüne bırakıldı
+          var floorInfo = findFloorUnder(footX, posY + sz.h - 12);
+          if (posY < floorInfo.floorY - 6) {
+            behavior = 'falling';
+            shimeji.classList.add('is-falling');
+            velocityY = 0;
+            velocityX = 0;
+          } else {
+            posY = floorInfo.floorY;
+            currentPlatform = floorInfo.platform;
+            behavior = 'idle';
+            updateTransform();
+            shimeji.classList.add('is-landing');
+            setTimeout(function () { shimeji.classList.remove('is-landing'); }, 420);
+            setLumiMood('normal');
+            scheduleBehavior(2500);
+          }
         }
       }
     }
 
     shimeji.addEventListener('pointerup', handlePointerUp);
     shimeji.addEventListener('pointercancel', handlePointerUp);
+
+    // Sayfa Kaydırıldığında Platformla Birlikte Hareket Et (Scroll Sync)
+    window.addEventListener('scroll', function () {
+      if (currentPlatform && currentPlatform.el && !isDragging && behavior !== 'falling' && behavior !== 'climb' && behavior !== 'hang') {
+        var r = currentPlatform.el.getBoundingClientRect();
+        if (r.bottom > 20 && r.top < window.innerHeight - 30) {
+          posY = r.top - getCharSize().h + 8;
+          updateTransform();
+        } else {
+          currentPlatform = null;
+          behavior = 'falling';
+          shimeji.classList.add('is-falling');
+          velocityY = 0.5;
+        }
+      }
+    }, { passive: true });
 
     // Ekran Boyutu Değiştiğinde Güvenli Sınır
     window.addEventListener('resize', function () {
