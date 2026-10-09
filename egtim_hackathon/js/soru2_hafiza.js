@@ -208,13 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
         inputCevap.disabled = true;
         btnCevapla.disabled = true;
         
-        if (temizKullaniciCevabi === temizDogruCevap || temizKullaniciCevabi.includes(temizDogruCevap) || temizDogruCevap.includes(temizKullaniciCevabi)) {
+        const isCorrect = (temizKullaniciCevabi === temizDogruCevap || temizKullaniciCevabi.includes(temizDogruCevap) || temizDogruCevap.includes(temizKullaniciCevabi));
+        const puan = isCorrect ? 100 : 0;
+        window.testSonuclari.gorselPuan = puan;
+
+        if (isCorrect) {
             // DOĞRU
             feedbackSoru2.innerHTML = `✅ Tebrikler! (1 / 1) - Doğru cevap: <strong>${eksikNesne}</strong>`;
             feedbackSoru2.className = "feedback success";
             
-            window.testSonuclari.cevaplar.soru2 = { cevap: kullaniciCevabi, dogru: true, eksikNesne };
-            window.testSonuclari.gorselPuan = Math.min(100, (window.testSonuclari.gorselPuan || 0) + 50);
+            window.testSonuclari.cevaplar.soru2 = { cevap: kullaniciCevabi, dogru: true, eksikNesne, puan: puan };
             
             if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
             
@@ -229,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackSoru2.innerHTML = `❌ Yanlış. (0 / 1) - Eksik olan nesne <strong>${eksikNesne}</strong> idi.`;
             feedbackSoru2.className = "feedback error";
             
-            window.testSonuclari.cevaplar.soru2 = { cevap: kullaniciCevabi, dogru: false, eksikNesne };
+            window.testSonuclari.cevaplar.soru2 = { cevap: kullaniciCevabi, dogru: false, eksikNesne, puan: puan };
             
             setTimeout(() => {
                 if (typeof sonrakiSoruyaGec === 'function') {

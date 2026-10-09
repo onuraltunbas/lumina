@@ -31,11 +31,15 @@ function soru3OkumaBaslat() {
     }, 1000);
 }
 
+let soru3BaslangicZamani = 0;
+
 function soru3SiralamaGoster() {
     const okumaAlani = document.getElementById('soru3-okuma');
     const siralamaAlani = document.getElementById('soru3-siralama');
     if (okumaAlani) okumaAlani.classList.add('hidden');
     if (siralamaAlani) siralamaAlani.classList.remove('hidden');
+
+    soru3BaslangicZamani = Date.now();
 
     const ilkKutu = document.querySelector('#soru3-siralama .sort-input');
     if (ilkKutu) ilkKutu.focus();
@@ -67,17 +71,29 @@ function soru3KontrolEt() {
     const kutular = document.querySelectorAll('#soru3-siralama .sort-input');
     const cevaplar = Array.from(kutular).map(k => k.value.trim().toUpperCase());
 
-    let dogruSayisi = 0;
-    cevaplar.forEach((harf, i) => {
-        if (harf === SORU3_DOGRU_SIRA[i]) dogruSayisi += 1;
-    });
+    const cozumSuresi = soru3BaslangicZamani > 0 ? (Date.now() - soru3BaslangicZamani) / 1000 : 0;
 
-    soru3OkumaPuan = dogruSayisi * 25; // 4 x 25 = 100 puan
+    // Bağlam (bağ) sayısını hesapla
+    let dogruBagSayisi = 0;
+    let islenecekDizi = cevaplar.slice(0, 4);
+    if (new Set(islenecekDizi).size === islenecekDizi.length) {
+        for (let i = 0; i < islenecekDizi.length - 1; i++) {
+            let orjIndex = SORU3_DOGRU_SIRA.indexOf(islenecekDizi[i]);
+            if (orjIndex !== -1 && orjIndex < SORU3_DOGRU_SIRA.length - 1) {
+                if (SORU3_DOGRU_SIRA[orjIndex + 1] === islenecekDizi[i + 1]) dogruBagSayisi++;
+            }
+        }
+    }
+
+    const tamDogruMu = cevaplar.join('') === SORU3_DOGRU_SIRA.join('');
+
+    soru3OkumaPuan = soru3_Hesapla(cevaplar, SORU3_DOGRU_SIRA, cozumSuresi);
     window.testSonuclari.okumaPuan = soru3OkumaPuan;
     window.testSonuclari.cevaplar.soru3 = {
         cevap: cevaplar.join(''),
         dogruSira: SORU3_DOGRU_SIRA.join(''),
-        dogruSayisi: dogruSayisi,
+        dogruBagSayisi: dogruBagSayisi,
+        sure: cozumSuresi,
         puan: soru3OkumaPuan
     };
 
@@ -86,12 +102,20 @@ function soru3KontrolEt() {
     if (kontrolBtn) kontrolBtn.classList.add('hidden');
 
     const puanText = document.getElementById('soru3-puan-text');
-    if (puanText) puanText.innerHTML = `✅ Doğru sayısı: <strong>${dogruSayisi} / 4</strong>`;
+    if (puanText) {
+        if (tamDogruMu) {
+            puanText.innerHTML = `✅ <strong>3 bağlam doğru (Doğru sıralama)</strong>`;
+        } else if (dogruBagSayisi > 0) {
+            puanText.innerHTML = `✅ <strong>${dogruBagSayisi} bağlam doğru ama yerleri yanlış</strong>`;
+        } else {
+            puanText.innerHTML = `❌ <strong>0 bağlam doğru</strong>`;
+        }
+    }
 
     const sonuc = document.getElementById('soru3-sonuc');
     if (sonuc) sonuc.classList.remove('hidden');
 
-    if (dogruSayisi === 4 && typeof confetti === 'function') {
+    if (tamDogruMu && typeof confetti === 'function') {
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 }

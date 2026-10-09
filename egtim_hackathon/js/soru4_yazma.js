@@ -117,6 +117,8 @@ function soru4OkumaBaslat() {
     }, 1000);
 }
 
+let soru4BaslangicZamani = 0;
+
 function soru4SorulariGoster() {
     if (soru4MetinZamanlayici) clearInterval(soru4MetinZamanlayici);
 
@@ -128,33 +130,10 @@ function soru4SorulariGoster() {
     if (kagitUyari) kagitUyari.classList.add('hidden');
     if (sorular) sorular.classList.remove('hidden');
 
+    soru4BaslangicZamani = Date.now();
+
     const ilkKutu = document.getElementById('soru4-cevap1');
     if (ilkKutu) ilkKutu.focus();
-
-    soru4CevapBaslat();
-}
-
-function soru4CevapBaslat() {
-    const sayac = document.getElementById('soru4-sayac-cevap');
-    const timerBar = document.getElementById('soru4-timer-bar-cevap');
-    if (!sayac) return;
-
-    soru4KalanCevap = SORU4_CEVAP_SURE;
-    sayac.textContent = soru4KalanCevap;
-    if (timerBar) timerBar.style.width = '100%';
-
-    if (soru4CevapZamanlayici) clearInterval(soru4CevapZamanlayici);
-
-    soru4CevapZamanlayici = setInterval(() => {
-        soru4KalanCevap -= 1;
-        sayac.textContent = Math.max(soru4KalanCevap, 0);
-        if (timerBar) timerBar.style.width = `${(Math.max(soru4KalanCevap, 0) / SORU4_CEVAP_SURE) * 100}%`;
-
-        if (soru4KalanCevap <= 0) {
-            clearInterval(soru4CevapZamanlayici);
-            soru4Cevapla();
-        }
-    }, 1000);
 }
 
 function soru4Normalize(metin) {
@@ -172,8 +151,9 @@ function soru4Cevapla() {
     const dogru1 = cevap1.includes('140');
     const dogru2 = cevap2.includes('kristal') || cevap2.includes('bağ') || cevap2.includes('bag');
 
+    const cozumSuresi = soru4BaslangicZamani > 0 ? (Date.now() - soru4BaslangicZamani) / 1000 : 0;
     const dogruSayisi = (dogru1 ? 1 : 0) + (dogru2 ? 1 : 0);
-    soru4YazarakPuan = dogruSayisi * 50; // 2 x 50 = 100 puan
+    soru4YazarakPuan = soru4_Hesapla(dogru1, dogru2, cozumSuresi);
 
     window.testSonuclari.yazarakPuan = soru4YazarakPuan;
     window.testSonuclari.cevaplar.soru4 = {
@@ -182,6 +162,7 @@ function soru4Cevapla() {
         dogru1,
         dogru2,
         dogruSayisi,
+        sure: cozumSuresi,
         puan: soru4YazarakPuan
     };
 

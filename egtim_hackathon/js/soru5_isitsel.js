@@ -38,7 +38,7 @@ function soru5EkleKutu() {
     if (!konteyner) return;
 
     const mevcutKutuSayisi = document.querySelectorAll('#soru5-kutular .soru5-kutu').length;
-    if (mevcutKutuSayisi >= 6) {
+    if (mevcutKutuSayisi >= 10) {
         const ekleBtn = document.getElementById('soru5-ekle-btn');
         if (ekleBtn) ekleBtn.style.display = 'none';
         return;
@@ -58,7 +58,7 @@ function soru5EkleKutu() {
     konteyner.appendChild(div);
     input.focus();
 
-    if (yeniSayisi >= 6) {
+    if (yeniSayisi >= 10) {
         const ekleBtn = document.getElementById('soru5-ekle-btn');
         if (ekleBtn) ekleBtn.style.display = 'none';
     }
@@ -76,11 +76,11 @@ function soru5Normalizasyon(m) {
 
 function soru5Degerlendir() {
     const kutular = document.querySelectorAll('#soru5-kutular .soru5-kutu');
-    const girilenCevaplar = new Set();
+    const girilenCevaplar = [];
 
     kutular.forEach(k => {
-        const v = soru5Normalizasyon(k.value);
-        if (v) girilenCevaplar.add(v);
+        const val = (k.value || '').trim();
+        if (val) girilenCevaplar.push(val);
     });
 
     const FOTO_VARYANT = new Set([
@@ -93,23 +93,27 @@ function soru5Degerlendir() {
         'fotograf'
     ]);
 
-    const dogruFinal = new Set();
-
-    girilenCevaplar.forEach(v => {
-        if (v === 'semsiye') dogruFinal.add('şemsiye');
-        if (v === 'elma') dogruFinal.add('elma');
-        if (FOTO_VARYANT.has(v)) dogruFinal.add('fotoğraf makinesi');
-        if (v === 'corap') dogruFinal.add('çorap');
-        if (v === 'vida') dogruFinal.add('vida');
-        if (v === 'kalem') dogruFinal.add('kalem');
+    const mappedCevaplar = girilenCevaplar.map(c => {
+        const v = soru5Normalizasyon(c);
+        if (v === 'semsiye') return 'şemsiye';
+        if (v === 'elma') return 'elma';
+        if (FOTO_VARYANT.has(v)) return 'fotoğraf makinesi';
+        if (v === 'corap') return 'çorap';
+        if (v === 'vida') return 'vida';
+        if (v === 'kalem') return 'kalem';
+        return c;
     });
 
+    const dogruFinal = new Set(
+        mappedCevaplar.filter(c => SORU5_DOGRU_NESNELER.includes(c.toLowerCase()))
+    );
     const dogruAdet = dogruFinal.size;
-    soru5IsitselPuan = Math.round((dogruAdet / 6) * 100);
+
+    soru5IsitselPuan = soru5_Hesapla(mappedCevaplar, SORU5_DOGRU_NESNELER);
 
     window.testSonuclari.isitselPuan = soru5IsitselPuan;
     window.testSonuclari.cevaplar.soru5 = {
-        girilenler: Array.from(girilenCevaplar),
+        girilenler: girilenCevaplar,
         hatirlananlar: Array.from(dogruFinal),
         dogruAdet: dogruAdet,
         puan: soru5IsitselPuan

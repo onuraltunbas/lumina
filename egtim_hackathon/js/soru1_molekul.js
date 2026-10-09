@@ -176,10 +176,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    let soru1BaslangicZamani = 0;
+
     // Deneyi bitir ve Soruya geç
     btnFinishExperiment.addEventListener('click', () => {
         molekulOyunuEkrani.classList.add('hidden');
         soruKismi.classList.remove('hidden');
+        soru1BaslangicZamani = Date.now();
     });
     
     
@@ -195,28 +198,23 @@ document.addEventListener('DOMContentLoaded', () => {
             answered = true;
             
             const isCorrect = btn.dataset.correct === "true";
+            const cozumSuresi = soru1BaslangicZamani > 0 ? (Date.now() - soru1BaslangicZamani) / 1000 : 0;
+            const puan = soru1_Hesapla(isCorrect, cozumSuresi);
             
             if (isCorrect) {
                 btn.classList.add('correct');
                 feedbackEl.innerHTML = "✅ Doğru Cevap! (1 / 1)";
                 feedbackEl.className = "feedback success";
                 if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
-                
-                // Doğru cevaplandı, puan hesapla ve tamamla
-                window.testSonuclari.cevaplar.soru1 = true;
-                soru1Tamamla(100, 100); // 100 görsel, 100 deneyimsel tam puan
-                
             } else {
                 btn.classList.add('wrong');
-                // Doğru olanı da göster
                 document.querySelector('.option-btn[data-correct="true"]').classList.add('correct');
-                
                 feedbackEl.innerHTML = "❌ Yanlış Cevap. (0 / 1) Doğru kombinasyon A ve C (Su) olmalıydı.";
                 feedbackEl.className = "feedback error";
-                
-                window.testSonuclari.cevaplar.soru1 = false;
-                soru1Tamamla(50, 20); // Yanlış olsa bile deneyimden puan alır
             }
+
+            window.testSonuclari.cevaplar.soru1 = { dogru: isCorrect, sure: cozumSuresi, puan: puan };
+            soru1Tamamla(puan);
         });
     });
 });

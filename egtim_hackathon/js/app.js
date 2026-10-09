@@ -65,10 +65,133 @@ function adimGostergesiniGuncelle(adimNo) {
     }
 }
 
+// ==========================================
+// PUANLAMA ALGORİTMALARI
+// ==========================================
+
+// ==========================================
+// PUANLAMA ALGORİTMALARI (GÜNCEL)
+// ==========================================
+
+// 1. Soru
+function soru1_Hesapla(dogruMu, cozumSuresi) {
+    if (!Boolean(dogruMu)) return 0;
+
+    cozumSuresi = isNaN(cozumSuresi) || cozumSuresi < 0 ? 0 : Number(cozumSuresi);
+    let hamPuan = 100;
+    let ceza = cozumSuresi > 5 ? Math.floor(cozumSuresi - 5) * 3 : 0;
+
+    return Math.max(0, hamPuan - ceza);
+}
+
+// 2. Soru (Göreli Kutu Sıralaması)
+function soru2_Hesapla(kullaniciSiralama, dogruSiralama, cozumSuresi) {
+    if (!Array.isArray(kullaniciSiralama) || !Array.isArray(dogruSiralama) || dogruSiralama.length < 2) return 0;
+
+    let dogruBagSayisi = 0;
+    let toplamBagSayisi = dogruSiralama.length - 1;
+    let islenecekDizi = kullaniciSiralama.slice(0, dogruSiralama.length);
+    if (new Set(islenecekDizi).size !== islenecekDizi.length) return 0;
+
+    for (let i = 0; i < islenecekDizi.length - 1; i++) {
+        let orjIndex = dogruSiralama.indexOf(islenecekDizi[i]);
+        if (orjIndex !== -1 && orjIndex < dogruSiralama.length - 1) {
+            if (dogruSiralama[orjIndex + 1] === islenecekDizi[i + 1]) dogruBagSayisi++;
+        }
+    }
+
+    let hamPuan = (dogruBagSayisi / toplamBagSayisi) * 100;
+
+    if (hamPuan > 0) {
+        cozumSuresi = isNaN(cozumSuresi) || cozumSuresi < 0 ? 0 : Number(cozumSuresi);
+        let ceza = 0;
+        if (cozumSuresi > 15) ceza = 10 + (Math.floor(cozumSuresi - 15) * 3);
+        else if (cozumSuresi > 5) ceza = Math.floor(cozumSuresi - 5) * 1;
+
+        hamPuan -= ceza;
+    }
+
+    return Number(Math.max(0, hamPuan).toFixed(2));
+}
+
+// 3. Soru (4 harf sıralama - göreli)
+function soru3_Hesapla(kullaniciSiralama, dogruSiralama, cozumSuresi) {
+    if (!Array.isArray(kullaniciSiralama) || !Array.isArray(dogruSiralama) || dogruSiralama.length !== 4) return 0;
+
+    let dogruBagSayisi = 0;
+    let toplamBagSayisi = 3;
+    let islenecekDizi = kullaniciSiralama.slice(0, 4);
+    if (new Set(islenecekDizi).size !== islenecekDizi.length) return 0;
+
+    for (let i = 0; i < islenecekDizi.length - 1; i++) {
+        let orjIndex = dogruSiralama.indexOf(islenecekDizi[i]);
+        if (orjIndex !== -1 && orjIndex < dogruSiralama.length - 1) {
+            if (dogruSiralama[orjIndex + 1] === islenecekDizi[i + 1]) dogruBagSayisi++;
+        }
+    }
+
+    let hamPuan = (dogruBagSayisi / toplamBagSayisi) * 100;
+
+    if (hamPuan > 0) {
+        cozumSuresi = isNaN(cozumSuresi) || cozumSuresi < 0 ? 0 : Number(cozumSuresi);
+        let ceza = 0;
+        if (cozumSuresi > 15) ceza = 10 + (Math.floor(cozumSuresi - 15) * 3);
+        else if (cozumSuresi > 5) ceza = Math.floor(cozumSuresi - 5) * 1;
+        hamPuan -= ceza;
+    }
+
+    return Number(Math.max(0, hamPuan).toFixed(2));
+}
+
+// 4. Soru
+function soru4_Hesapla(dogruA, dogruB, cozumSuresi) {
+    let hamPuan = (Boolean(dogruA) ? 50 : 0) + (Boolean(dogruB) ? 50 : 0);
+
+    if (hamPuan > 0) {
+        cozumSuresi = isNaN(cozumSuresi) || cozumSuresi < 0 ? 0 : Number(cozumSuresi);
+        let ceza = cozumSuresi > 5 ? Math.floor(cozumSuresi - 5) * 1 : 0;
+
+        hamPuan -= ceza;
+    }
+
+    return Math.max(0, hamPuan);
+}
+
+// 5. Soru
+function soru5_Hesapla(kullaniciCevapDizisi, hedefCevaplar) {
+    if (!Array.isArray(kullaniciCevapDizisi) || !Array.isArray(hedefCevaplar) || hedefCevaplar.length === 0) return 0;
+
+    let temizKullaniciCevaplari = [...new Set(
+        kullaniciCevapDizisi
+            .filter(c => typeof c === 'string' && c.trim() !== '')
+            .map(c => c.toLocaleLowerCase('tr-TR').trim())
+    )];
+
+    let temizHedefCevaplar = hedefCevaplar
+        .filter(c => typeof c === 'string')
+        .map(c => c.toLocaleLowerCase('tr-TR').trim());
+
+    let dogruPuanToplami = 0;
+    let cezaToplami = 0;
+    let basariDegeri = 100 / temizHedefCevaplar.length;
+
+    temizKullaniciCevaplari.forEach((cevap, index) => {
+        if (temizHedefCevaplar.includes(cevap)) {
+            dogruPuanToplami += basariDegeri;
+        } else {
+            if (index < 6) cezaToplami += 3;
+            else cezaToplami += 5;
+        }
+    });
+
+    let hesaplananPuan = dogruPuanToplami - cezaToplami;
+
+    return Number(Math.max(0, Math.min(100, hesaplananPuan)).toFixed(2));
+}
+
 // 1. Soru (Molekül Testi) Tamamlandığında
-function soru1Tamamla(gorsel, deneyimsel) {
-    window.testSonuclari.gorselPuan += gorsel;
-    window.testSonuclari.deneyimselPuan += deneyimsel;
+function soru1Tamamla(puan) {
+    window.testSonuclari.deneyimselPuan = puan;
     
     setTimeout(() => {
         sonrakiSoruyaGec(2);
@@ -116,10 +239,63 @@ function sonucEkraniGoster() {
         btnAnaliz.onclick = () => {
             if (btnAnaliz.disabled) return;
             console.log("Test sonuçları:", window.testSonuclari);
-            // Sitenizin istatistik/sonuç sayfasına buradan yönlendirme veya olay bağlayabilirsiniz:
-            // window.location.href = "https://siteniz.com/istatistikler";
+            testPuanTablosunuDoldur();
         };
     }
+}
+
+function testPuanTablosunuDoldur() {
+    const tbody = document.getElementById('test-puan-tbody');
+    const testEkrani = document.getElementById('test-puan-ekrani');
+    if (!tbody || !testEkrani) return;
+
+    const c1 = window.testSonuclari.cevaplar.soru1 || {};
+    const c2 = window.testSonuclari.cevaplar.soru2 || {};
+    const c3 = window.testSonuclari.cevaplar.soru3 || {};
+    const c4 = window.testSonuclari.cevaplar.soru4 || {};
+    const c5 = window.testSonuclari.cevaplar.soru5 || {};
+
+    const p1 = window.testSonuclari.deneyimselPuan || 0;
+    const p2 = window.testSonuclari.gorselPuan || 0;
+    const p3 = window.testSonuclari.okumaPuan || 0;
+    const p4 = window.testSonuclari.yazarakPuan || 0;
+    const p5 = window.testSonuclari.isitselPuan || 0;
+
+    tbody.innerHTML = `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <td style="padding: 10px 8px; font-weight: 600; color: #818cf8;">1. Molekül Testi</td>
+            <td style="padding: 10px 8px;">${c1.dogru ? '✓ Doğru (A+C)' : '✗ Yanlış'}</td>
+            <td style="padding: 10px 8px;">${c1.sure ? c1.sure.toFixed(1) + ' sn' : '-'}</td>
+            <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: #34d399;">${p1} Puan</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <td style="padding: 10px 8px; font-weight: 600; color: #818cf8;">2. Kim's Game</td>
+            <td style="padding: 10px 8px;">"${c2.cevap || ''}" (${c2.dogru ? '✓ Doğru' : '✗ Yanlış, Doğru: ' + (c2.eksikNesne || '')})</td>
+            <td style="padding: 10px 8px; color: var(--text-muted);">Zaman cezası yok</td>
+            <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: #34d399;">${p2} Puan</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <td style="padding: 10px 8px; font-weight: 600; color: #818cf8;">3. Metin İnceleme</td>
+            <td style="padding: 10px 8px;">Sıralama: "${c3.cevap || ''}" (${c3.dogruBagSayisi !== undefined ? c3.dogruBagSayisi : 0}/3 Bağlam Doğru)</td>
+            <td style="padding: 10px 8px;">${c3.sure ? c3.sure.toFixed(1) + ' sn' : '-'}</td>
+            <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: #34d399;">${p3} Puan</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <td style="padding: 10px 8px; font-weight: 600; color: #818cf8;">4. Zeta-4 (Yazarak)</td>
+            <td style="padding: 10px 8px;">1: "${c4.cevap1 || ''}" (${c4.dogru1 ? '✓' : '✗'}), 2: "${c4.cevap2 || ''}" (${c4.dogru2 ? '✓' : '✗'})</td>
+            <td style="padding: 10px 8px;">${c4.sure ? c4.sure.toFixed(1) + ' sn' : '-'}</td>
+            <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: #34d399;">${p4} Puan</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <td style="padding: 10px 8px; font-weight: 600; color: #818cf8;">5. Seçici Dinleme</td>
+            <td style="padding: 10px 8px;">Hatırlanan: ${(c5.hatirlananlar || []).join(', ') || 'Yok'} (${c5.dogruAdet || 0}/6)</td>
+            <td style="padding: 10px 8px; color: var(--text-muted);">Zaman cezası yok</td>
+            <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: #34d399;">${p5} Puan</td>
+        </tr>
+    `;
+
+    testEkrani.classList.remove('hidden');
+    testEkrani.scrollIntoView({ behavior: 'smooth' });
 }
 
 function setBar(id, val) {
