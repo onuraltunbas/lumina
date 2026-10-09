@@ -4258,9 +4258,16 @@ figcaption {
   outline: none !important;
 }
 
-.star-badge {
-  border: var(--comic-border) !important;
-  box-shadow: 3px 3px 0px #1D1D1D !important;
+.star-badge,
+.star-badge-blue {
+  border: none !important;
+  box-shadow: none !important;
+  filter: drop-shadow(4px 4px 0px #1D1D1D) !important;
+}
+
+.star-badge .label,
+.star-badge-blue .label {
+  transform: none !important;
 }
 
 /* =====================================================================

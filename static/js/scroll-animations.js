@@ -120,11 +120,27 @@
     });
 
     // Dönen yıldız rozetler (star-badge)
-    const starBadges = document.querySelectorAll('.star-badge, .star-badge-blue');
-    starBadges.forEach((badge) => {
-      gsap.to(badge, {
+    const heroStar = document.querySelector('#home .star-badge, .hero-grid .star-badge');
+    if (heroStar) {
+      gsap.set(heroStar, { rotation: 0, transformOrigin: 'center center' });
+      gsap.to(heroStar, {
         scrollTrigger: {
-          trigger: badge,
+          trigger: '#home',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8
+        },
+        rotation: 360,
+        ease: 'none'
+      });
+    }
+
+    const blueStar = document.querySelector('.star-badge-blue');
+    if (blueStar) {
+      gsap.set(blueStar, { rotation: 0, transformOrigin: 'center center' });
+      gsap.to(blueStar, {
+        scrollTrigger: {
+          trigger: '#about',
           start: 'top bottom',
           end: 'bottom top',
           scrub: 0.8
@@ -132,7 +148,7 @@
         rotation: 360,
         ease: 'none'
       });
-    });
+    }
 
     // =========================================================================
     // 3. (ÖĞE 4): BAŞARI TAKTİKLERİ KARTLARI GİRİŞ EFEKTİ (SLIDE & POP)
