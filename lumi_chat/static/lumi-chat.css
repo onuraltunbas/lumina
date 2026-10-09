@@ -438,6 +438,46 @@ html.dark-theme #lumi-root {
   100% { transform: translateY(-5px); }
 }
 
+/* --- HIZLI KOŞMA (FAST DASH / RUN) --- */
+.lumi-shimeji.is-running #lumi-leg-l {
+  animation: lumi-shimeji-run-l 0.16s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running #lumi-leg-r {
+  animation: lumi-shimeji-run-r 0.16s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running #lumi-arm-l {
+  animation: lumi-shimeji-run-arm-l 0.16s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running #lumi-arm-r {
+  animation: lumi-shimeji-run-arm-r 0.16s ease-in-out infinite alternate;
+}
+.lumi-shimeji.is-running .lumi-shimeji-body-wrap {
+  transform: skewX(-8deg);
+}
+
+@keyframes lumi-shimeji-run-l {
+  0% { transform: rotate(-34deg); }
+  100% { transform: rotate(34deg); }
+}
+@keyframes lumi-shimeji-run-r {
+  0% { transform: rotate(34deg); }
+  100% { transform: rotate(-34deg); }
+}
+@keyframes lumi-shimeji-run-arm-l {
+  0% { transform: rotate(36deg); }
+  100% { transform: rotate(-36deg); }
+}
+@keyframes lumi-shimeji-run-arm-r {
+  0% { transform: rotate(-36deg); }
+  100% { transform: rotate(36deg); }
+}
+
+/* --- ZIPLAMA ÖNCESİ ÇÖMELME (CROUCH PREP) --- */
+.lumi-shimeji.is-crouch .lumi-character-svg #lumi-master {
+  transform: translateY(14px) scale(1.15, 0.82);
+  transition: transform 0.15s ease-out;
+}
+
 /* --- HAVADA SÜRÜKLENME & BACAK SALLAMA --- */
 .lumi-shimeji.is-dragged .lumi-shimeji-shadow {
   opacity: 0.12;
