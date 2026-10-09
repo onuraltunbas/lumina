@@ -5376,24 +5376,63 @@ html.dark-theme .border-top {
 }
 
 /* Rozetler (Badges) */
+/* Comic Badges Dark Mod (Sarı Zemin & Siyah Yazı Korunur) */
 html.dark-theme .badge {
-  background-color: #242038 !important;
-  border: 2px solid #4C466D !important;
-  color: #F1F5F9 !important;
-  box-shadow: 3px 3px 0px #08070F !important;
+  background-color: #FEF08A !important;
+  border: 2px solid #1D1D1D !important;
+  color: #1D1D1D !important;
+  box-shadow: 3px 3px 0px #000000 !important;
 }
 
 html.dark-theme .badge-text {
-  color: #F1F5F9 !important;
+  color: #1D1D1D !important;
 }
 
+/* Yıldız Rozeti (Keşfetmeye Başla) - Kare Çerçeve Kesinlikle Yok & Siyah Yazı */
 html.dark-theme .star-badge,
 html.dark-theme .star-badge-blue {
-  background-color: #7934ED !important;
-  border: 2.5px solid #A78BFA !important;
-  box-shadow: 4px 4px 0px #08070F !important;
-  color: #FFFFFF !important;
+  background-color: transparent !important;
+  background-repeat: no-repeat !important;
+  border: none !important;
+  box-shadow: none !important;
+  filter: drop-shadow(4px 4px 0px #000000) !important;
 }
+
+html.dark-theme .star-badge .label,
+html.dark-theme .star-badge-blue .label {
+  color: #1D1D1D !important;
+}
+
+/* Comic Butonlar Dark Mod (Keşfetmeye Başla vb: Sarı Zemin, Siyah Yazı) */
+html.dark-theme .button-front {
+  background-color: #FFE600 !important;
+  border: 2.5px solid #1D1D1D !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+  color: #1D1D1D !important;
+}
+
+html.dark-theme .button-front.background-yellow {
+  background-color: #FFE600 !important;
+}
+
+html.dark-theme .button-front.background-white {
+  background-color: #FFFFFF !important;
+  color: #1D1D1D !important;
+}
+
+html.dark-theme .button-front,
+html.dark-theme .button-text,
+html.dark-theme .button-front div,
+html.dark-theme .button-text div,
+html.dark-theme .button-front .unicon {
+  color: #1D1D1D !important;
+}
+
+html.dark-theme .button-edge {
+  background-color: #000000 !important;
+  border: 2.5px solid #1D1D1D !important;
+}
+
 
 /* 5 Öğrenme Modeli Kartları (Karakteristik Renkli Çerçeveli Koyu Kartlar) */
 html.dark-theme .service-model-card {
@@ -5665,7 +5704,7 @@ html.dark-theme .site-details p {
   color: #94A3B8 !important;
 }
 
-/* Doodles Dark Glow */
+/* Doodles Dark Glow & Inversion (Siyah Çizgiler Aydınlık Beyaz Hatlara Dönüşür) */
 html.dark-theme .doodle-shine,
 html.dark-theme .doodle-breeze,
 html.dark-theme .doodle-flash,
@@ -5673,7 +5712,30 @@ html.dark-theme .doodle-wave,
 html.dark-theme .doodle-heart,
 html.dark-theme .doodle-arrow,
 html.dark-theme .doodle-cloud {
-  filter: brightness(1.25) drop-shadow(0 0 3px rgba(167, 139, 250, 0.3)) !important;
+  filter: invert(0.9) hue-rotate(180deg) brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.2)) !important;
+}
+
+/* 5 Öğrenme Modeli Kart İçi Açıklama Metni */
+html.dark-theme .service-model-card .service > div > div {
+  color: #E2E8F0 !important;
+}
+
+/* Dashboard Bekleme Kutusu Bağımsız Puanlama Kartı */
+html.dark-theme .dashboard-waiting-box div[style*="background: #F9FAFB"] {
+  background: #141224 !important;
+  border-color: #383452 !important;
+}
+
+html.dark-theme .dashboard-waiting-box div[style*="background: #F9FAFB"] div {
+  color: #FFFFFF !important;
+}
+
+html.dark-theme .dashboard-waiting-box div[style*="background: #F9FAFB"] p {
+  color: #A1A1AA !important;
+}
+
+html.dark-theme #dash-greeting-name {
+  color: #A78BFA !important;
 }
 
 /* Auth Sayfası Dark Mod İnce Ayarları */
@@ -5682,23 +5744,40 @@ html.dark-theme .auth-page-wrapper {
 }
 
 html.dark-theme .auth-nav-back {
-  background: #242038 !important;
-  color: #F1F5F9 !important;
-  border-color: #383452 !important;
-  box-shadow: 3px 3px 0px #08070F !important;
+  background: #FFE600 !important;
+  color: #1D1D1D !important;
+  border: 2px solid #1D1D1D !important;
+  box-shadow: 3px 3px 0px #000000 !important;
 }
 
 html.dark-theme .auth-nav-back:hover {
-  background: #7934ED !important;
-  color: #FFFFFF !important;
-  border-color: #A78BFA !important;
+  background: #FFF066 !important;
+  color: #1D1D1D !important;
+  box-shadow: 4px 4px 0px #000000 !important;
 }
 
 html.dark-theme .auth-header-doodle {
-  background: #7934ED !important;
-  color: #FFFFFF !important;
-  border-color: #A78BFA !important;
-  box-shadow: 4px 4px 0px #08070F !important;
+  background: #FFE600 !important;
+  color: #1D1D1D !important;
+  border: 2px solid #1D1D1D !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+
+html.dark-theme .auth-checkbox-label {
+  color: #E2E8F0 !important;
+}
+
+html.dark-theme .auth-switch-prompt {
+  border-top: 2px dashed #383452 !important;
+  color: #94A3B8 !important;
+}
+
+html.dark-theme .auth-switch-link {
+  color: #A78BFA !important;
+}
+
+html.dark-theme #auth-subtitle {
+  color: #A1A1AA !important;
 }
 
 html.dark-theme .auth-alert.error {
@@ -5716,6 +5795,7 @@ html.dark-theme .auth-alert.success {
 html.dark-theme .license-block {
   border-bottom: 2px dashed #383452 !important;
 }
+
 
 
 
