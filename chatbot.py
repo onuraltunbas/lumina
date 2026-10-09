@@ -16,6 +16,14 @@ from google.genai import types
 BASE = Path(__file__).parent
 CONFIG = json.loads((BASE / "config.json").read_text(encoding="utf-8"))
 
+# .env dosyasını yükle (varsa)
+_env = BASE / ".env"
+if _env.exists():
+    for _line in _env.read_text(encoding="utf-8").splitlines():
+        if "=" in _line and not _line.lstrip().startswith("#"):
+            _k, _v = _line.split("=", 1)
+            os.environ.setdefault(_k.strip(), _v.strip().strip('"\''))
+
 # Renkler
 C_USER, C_BOT, C_WARN, C_INFO, C_END = "\033[96m", "\033[92m", "\033[91m", "\033[93m", "\033[0m"
 

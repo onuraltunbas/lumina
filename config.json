@@ -1,5 +1,5 @@
 {
-  "model": "gemini-2.5-flash",
+  "model": "gemini-3.8-flash",
   "system_prompt": "Sen yardımsever bir Türkçe asistansın. Sadece izin verilen konularda cevap ver. Kısa ve net cevaplar ver.",
 
   "allowed_topics": ["programlama", "yazılım", "teknoloji", "matematik"],
