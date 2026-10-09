@@ -4189,9 +4189,26 @@ figcaption {
   font-size: 15px !important;
 }
 
+/* Comic Labels & Step Badges */
+.label,
+.star-badge .label,
+.timeline-info .label {
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 18px !important;
+  letter-spacing: 0.8px;
+}
+
 /* Comic Buttons */
 .button {
   transition: transform 0.15s ease !important;
+}
+
+.button-front,
+.button-text,
+.button-link {
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 21px !important;
+  letter-spacing: 0.5px;
 }
 
 .button-front {
@@ -4212,6 +4229,27 @@ figcaption {
 
 .button-edge {
   border: var(--comic-border) !important;
+}
+
+/* Comic Headings (Card Titles, Timeline Steps & 404 Title) */
+.service-model-card h3,
+.services .card h3,
+.card h3,
+.comic-diff-card h3 {
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 23px !important;
+  letter-spacing: 0.3px;
+  line-height: 1.25;
+}
+
+.timeline-content h3 {
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 24px !important;
+  letter-spacing: 0.4px;
+}
+
+._404 h1.page-title {
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
 }
 
 /* Comic Cards */
@@ -4465,9 +4503,9 @@ figcaption {
   color: #FFFFFF;
   padding: 8px 18px;
   border-radius: 999px;
-  font-family: Cabinet Grotesk, sans-serif;
-  font-size: 13px;
-  font-weight: 700;
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 15px !important;
+  letter-spacing: 0.5px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -4501,10 +4539,10 @@ figcaption {
   background-color: rgba(255, 255, 255, 0.92);
   border: 1.5px solid #1D1D1D;
   border-radius: 8px;
-  padding: 4px 10px;
-  font-family: Cabinet Grotesk, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
+  padding: 5px 12px;
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 13px !important;
+  letter-spacing: 0.4px;
   color: #1D1D1D;
   z-index: 10;
   pointer-events: none;
@@ -4519,9 +4557,9 @@ figcaption {
   border: 1.5px solid #1D1D1D;
   border-radius: 8px;
   padding: 6px 12px;
-  font-family: Cabinet Grotesk, sans-serif;
-  font-size: 11.5px;
-  font-weight: 700;
+  font-family: 'Love Ya Like A Sister', 'Cabinet Grotesk', cursive, sans-serif !important;
+  font-size: 13px !important;
+  letter-spacing: 0.3px;
   color: #1D1D1D;
   z-index: 10;
   pointer-events: none;
@@ -4556,5 +4594,25 @@ figcaption {
   .brain-info-pill {
     font-size: 11.5px;
     padding: 6px 12px;
+  }
+}
+
+/* =====================================================================
+   NAVBAR LOGO SIZING (2X ENLARGED)
+   ===================================================================== */
+.navbar .logo {
+  height: 48px !important;
+  width: auto !important;
+  max-width: none !important;
+  display: block;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-brand-mobile {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+  .navbar .logo {
+    height: 44px !important;
   }
 }
