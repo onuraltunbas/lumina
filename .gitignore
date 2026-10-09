@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .env
 chat_log.txt
+dev_lumina.db
+*.db

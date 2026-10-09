@@ -1,0 +1,38 @@
+{
+  "model": "gemini-3.8-flash",
+  "temperature": 0.8,
+  "max_output_tokens": 800,
+
+  "bot_name": "Lumi",
+
+  "rate_limit_per_minute": 10,
+  "rate_limit_per_day": 100,
+  "timezone": "Europe/Istanbul",
+
+  "max_input_chars": 500,
+  "history_turns_to_model": 10,
+
+  "banned_words": ["şifre", "password", "kredi kartı", "hack"],
+  "sensitive_regex": [
+    "\\b[1-9]\\d{10}\\b",
+    "\\b(?:\\d[ -]?){15,16}\\b",
+    "\\bTR\\d{2}(?:\\s?\\d{4}){5}\\s?\\d{2}\\b"
+  ],
+  "injection_regex": [
+    "(önceki|yukarıdaki|tüm|bütün)\\s+(talimat|kural|komut)\\w*\\s+(unut|yok say|görmezden gel|iptal)",
+    "(talimat|kural)\\w*\\s+(unut|yok say|görmezden gel)",
+    "sistem\\s+(prompt|talimat|mesaj)\\w*",
+    "ignore\\s+(all\\s+|the\\s+)?(previous|above|prior)\\s+(instructions|rules)",
+    "system\\s+prompt",
+    "\\b(jailbreak|DAN modu|developer mode|geliştirici modu)\\b",
+    "(artık|bundan sonra)\\s+(sen|sen bir)\\s+.{0,30}(değilsin|olarak davran)",
+    "rol\\s*yap|role\\s*play|act\\s+as"
+  ],
+
+  "quick_prompts": [
+    "Bugün nasıl çalışayım?",
+    "Sınav taktikleri",
+    "Odaklanamıyorum",
+    "Not alma yöntemi"
+  ]
+}
