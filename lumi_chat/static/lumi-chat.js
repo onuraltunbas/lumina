@@ -414,7 +414,7 @@
           sendBtn.disabled = true;
         }
 
-        if (!d.has_test && !state.is_guest) {
+        if (!d.has_test && !state.is_guest && window.location.pathname.indexOf('/test') === -1) {
           notice.innerHTML = '🧪 Testi henüz çözmedin, bu yüzden ipuçlarım genel. <a href="/test">Testi çöz</a>, sana özel teknikler vereyim!';
           notice.style.display = 'block';
         }
