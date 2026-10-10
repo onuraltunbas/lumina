@@ -10,6 +10,7 @@
   link.href = '/api/chat/widget.css';
   document.head.appendChild(link);
 
+  var isDashboard = window.location.pathname.indexOf('/dashboard') !== -1;
   var isHomepage = (window.location.pathname === '/' || window.location.pathname === '/index.html');
   var msgCounter = 0;
   var state = {
@@ -403,7 +404,7 @@
         state.usage = d.usage;
         state.initDone = true;
 
-        if (isHomepage || state.is_guest) {
+        if (!isDashboard || state.is_guest) {
           usageEl.style.display = 'none'; // Kullanıcı "1 soru hakkı" yazısını hiçbir yerde görmesin
         }
 
@@ -702,11 +703,11 @@
     }
 
     var szInit = getCharSize();
-    var posX = isHomepage ? Math.max(10, window.innerWidth - szInit.w - 28) : Math.max(20, window.innerWidth - 130);
-    var posY = isHomepage ? Math.max(10, window.innerHeight - szInit.h - 28) : getFloorY();
+    var posX = !isDashboard ? Math.max(10, window.innerWidth - szInit.w - 28) : Math.max(20, window.innerWidth - 130);
+    var posY = !isDashboard ? Math.max(10, window.innerHeight - szInit.h - 28) : getFloorY();
     var targetX = posX;
-    var facingDir = isHomepage ? -1 : 1; // 1 = sağ, -1 = sol
-    var behavior = isHomepage ? 'home_idle' : 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling', 'climb', 'hang'
+    var facingDir = !isDashboard ? -1 : 1; // 1 = sağ, -1 = sol
+    var behavior = !isDashboard ? 'home_idle' : 'idle'; // 'idle', 'walk', 'hop', 'sit', 'nap', 'dragged', 'falling', 'climb', 'hang'
     var isDragging = false;
     var dragPointerId = null;
     var dragStartX = 0, dragStartY = 0;
@@ -740,7 +741,12 @@
 
     // Başlangıç konumu
     updateTransform();
-    setFacing(1);
+    if (!isDashboard) {
+      setFacing(-1);
+      shimeji.classList.add('is-home-fixed');
+    } else {
+      setFacing(1);
+    }
 
     var ENCOURAGING_QUOTES = [
       'Ders çalışırken mola vermeyi unutma! 🍅',
@@ -785,18 +791,68 @@
       };
     }
 
+    // Panel kapandığında Lumi sağ üst tavandan aşağı rastgele bir yere düşer ve sağ alt köşeye koşar
+    function triggerDropFromCeilingAndReturn() {
+      clearTimeout(behaviorTimer);
+      shimeji.classList.remove('is-panel-hidden');
+      shimeji.classList.remove(
+        'is-walking', 'is-running', 'is-sitting', 'is-hop', 'is-landing',
+        'is-climbing', 'climb-left', 'climb-right', 'is-hanging', 'is-peeking',
+        'is-hover-drop', 'is-home-fixed', 'is-home-hop', 'is-waving', 'bubble-below'
+      );
+
+      var sz = getCharSize();
+      var homeY = Math.max(10, window.innerHeight - sz.h - 28);
+
+      // Sağ en üstten başla (tavan hizası)
+      posX = Math.max(20, window.innerWidth - sz.w - 30 - Math.floor(Math.random() * 40));
+      posY = -Math.floor(sz.h * 0.7);
+      updateTransform();
+
+      // Ekranın alt hizasında rastgele bir iniş noktası seç
+      var minX = Math.max(25, Math.floor(window.innerWidth * 0.12));
+      var maxX = Math.max(minX + 40, window.innerWidth - sz.w - 60);
+      var targetLandX = Math.floor(minX + Math.random() * (maxX - minX));
+
+      var deltaY = Math.max(100, homeY - posY);
+      var dropFrames = Math.max(20, Math.round((-1 + Math.sqrt(1 + 1.16 * deltaY)) / 0.58));
+      velocityX = (targetLandX - posX) / dropFrames;
+      velocityY = 1.0;
+      behavior = 'falling_to_return';
+
+      shimeji.classList.add('is-falling');
+      setLumiMood('saskin');
+      setFacing(velocityX >= 0 ? 1 : -1);
+    }
+
     // Panel Açma / Kapatma Fonksiyonu
     function togglePanel(forceOpen) {
-      var shouldOpen = forceOpen !== undefined ? forceOpen : !root.classList.contains('is-open');
+      var currentlyOpen = root.classList.contains('is-open');
+      var shouldOpen = forceOpen !== undefined ? forceOpen : !currentlyOpen;
       if (shouldOpen) {
-        root.classList.add('is-open');
+        if (!currentlyOpen) {
+          root.classList.add('is-open');
+          if (!isDashboard) {
+            shimeji.classList.add('is-panel-hidden');
+            if (shimejiBubble) {
+              shimejiBubble.style.display = 'none';
+              shimejiBubble.classList.remove('is-visible');
+            }
+          }
+        }
         if (!state.initDone) init();
         setLumiMood('dinliyor');
         setTimeout(function () { ta.focus(); scroll(); }, 80);
       } else {
-        root.classList.remove('is-open');
-        setLumiMood('normal');
-        scheduleBehavior(1200);
+        if (currentlyOpen) {
+          root.classList.remove('is-open');
+          setLumiMood('normal');
+          if (!isDashboard) {
+            triggerDropFromCeilingAndReturn();
+          } else {
+            scheduleBehavior(1200);
+          }
+        }
       }
     }
 
@@ -957,10 +1013,103 @@
     function physicsStep() {
       var sz = getCharSize();
 
-      // Ana sayfada sabit durur, koşmaz veya tırmanmaz
-      if (isHomepage) {
-        posX = Math.max(10, window.innerWidth - sz.w - 28);
-        posY = Math.max(10, window.innerHeight - sz.h - 28);
+      // Dashboard dışındaki sayfalarda özel köşe ve geri dönüş fiziği
+      if (!isDashboard) {
+        if (isDragging) {
+          requestAnimationFrame(physicsStep);
+          return;
+        }
+
+        var homeX = Math.max(10, window.innerWidth - sz.w - 28);
+        var homeY = Math.max(10, window.innerHeight - sz.h - 28);
+
+        // 1. Tavandan rastgele noktaya düşüş modu
+        if (behavior === 'falling_to_return') {
+          velocityY += 0.58;
+          posY += velocityY;
+          posX += velocityX;
+
+          var maxW = Math.max(10, window.innerWidth - sz.w - 10);
+          posX = Math.max(10, Math.min(posX, maxW));
+
+          if (posY >= homeY) {
+            posY = homeY;
+            velocityY = 0;
+            velocityX = 0;
+            shimeji.classList.remove('is-falling');
+            shimeji.classList.add('is-landing');
+            setLumiMood('heyecanli', 500);
+            behavior = 'returning_pause';
+            setTimeout(function () {
+              if (behavior !== 'returning_pause') return;
+              shimeji.classList.remove('is-landing');
+              behavior = 'returning_run';
+            }, 240);
+          }
+          updateTransform();
+          requestAnimationFrame(physicsStep);
+          return;
+        }
+
+        // 2. Havada bırakıldıktan sonra yere düşüş modu
+        if (behavior === 'returning_fall') {
+          velocityY += 0.58;
+          posY += velocityY;
+
+          if (posY >= homeY) {
+            posY = homeY;
+            velocityY = 0;
+            shimeji.classList.remove('is-falling');
+            shimeji.classList.add('is-landing');
+            setLumiMood('heyecanli', 500);
+            behavior = 'returning_pause';
+            setTimeout(function () {
+              if (behavior !== 'returning_pause') return;
+              shimeji.classList.remove('is-landing');
+              behavior = 'returning_run';
+            }, 220);
+          }
+          updateTransform();
+          requestAnimationFrame(physicsStep);
+          return;
+        }
+
+        // 3. İniş squash molası
+        if (behavior === 'returning_pause') {
+          posY = homeY;
+          updateTransform();
+          requestAnimationFrame(physicsStep);
+          return;
+        }
+
+        // 4. Sağ alt köşeye koşarak dönme modu
+        if (behavior === 'returning_run') {
+          posY = homeY;
+          var diffX = homeX - posX;
+          if (Math.abs(diffX) <= 6) {
+            posX = homeX;
+            posY = homeY;
+            behavior = 'home_idle';
+            shimeji.classList.remove('is-running');
+            shimeji.classList.add('is-home-fixed');
+            setFacing(-1);
+            setLumiMood('normal');
+            scheduleBehavior(3500);
+          } else {
+            shimeji.classList.add('is-running');
+            facingDir = diffX > 0 ? 1 : -1;
+            setFacing(facingDir);
+            var step = Math.min(Math.abs(diffX), 5.2);
+            posX += facingDir * step;
+          }
+          updateTransform();
+          requestAnimationFrame(physicsStep);
+          return;
+        }
+
+        // 5. home_idle: Sağ alt köşede uslu durur
+        posX = homeX;
+        posY = homeY;
         facingDir = -1;
         updateTransform();
         requestAnimationFrame(physicsStep);
@@ -1229,13 +1378,13 @@
 
     // Otonom Dengeli Keşif Planlayıcı (Line Hanging & Relaxed Exploration)
     function scheduleBehavior(delay) {
-      if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang') return;
+      if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang' || behavior === 'falling_to_return' || behavior === 'returning_fall' || behavior === 'returning_pause' || behavior === 'returning_run') return;
       clearTimeout(behaviorTimer);
       behaviorTimer = setTimeout(function () {
-        if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang') return;
+        if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang' || behavior === 'falling_to_return' || behavior === 'returning_fall' || behavior === 'returning_pause' || behavior === 'returning_run') return;
 
-        // Ana sayfada Lumi uslu durur: minik zıplama ve dostça el sallama
-        if (isHomepage) {
+        // Dashboard dışındaki sayfalarda Lumi uslu durur: minik zıplama ve dostça el sallama
+        if (!isDashboard) {
           shimeji.classList.add('is-home-fixed', 'is-home-hop');
           setFacing(-1);
           shimeji.classList.add('is-waving');
@@ -1416,15 +1565,35 @@
         // TIKLAMA / DOKUNMA -> PANELİ AÇ/KAPAT
         togglePanel();
         scheduleBehavior(2000);
-      } else if (isHomepage) {
-        // Ana sayfada sürüklense dahi sağ alt köşeye geri döner
+      } else if (!isDashboard) {
+        // Dashboard dışındaki tüm sayfalarda nereye bırakılırsa bırakılsın sağ alt köşeye geri döner
         var sz = getCharSize();
-        posX = Math.max(10, window.innerWidth - sz.w - 28);
-        posY = Math.max(10, window.innerHeight - sz.h - 28);
-        facingDir = -1;
-        updateTransform();
-        shimeji.classList.add('is-home-fixed', 'is-home-hop');
-        scheduleBehavior(3000);
+        var homeX = Math.max(10, window.innerWidth - sz.w - 28);
+        var homeY = Math.max(10, window.innerHeight - sz.h - 28);
+
+        if (Math.abs(posX - homeX) <= 8 && Math.abs(posY - homeY) <= 14) {
+          posX = homeX;
+          posY = homeY;
+          behavior = 'home_idle';
+          shimeji.classList.add('is-home-fixed');
+          setFacing(-1);
+          setLumiMood('normal');
+          updateTransform();
+          scheduleBehavior(3000);
+        } else if (posY < homeY - 12) {
+          // Havada bırakıldıysa önce yere süzülsün/düşsün, sonra sağ alt köşeye koşsun
+          behavior = 'returning_fall';
+          shimeji.classList.add('is-falling');
+          velocityY = 1.0;
+          velocityX = 0;
+          setLumiMood('saskin');
+        } else {
+          // Yerdeyse doğrudan sağ alt köşeye koşsun
+          posY = homeY;
+          behavior = 'returning_run';
+          shimeji.classList.add('is-running');
+          setLumiMood('heyecanli');
+        }
       } else {
         var sz = getCharSize();
         var footX = posX + sz.w / 2;
@@ -1528,7 +1697,13 @@
 
     // Ekran Boyutu Değiştiğinde Güvenli Sınır
     window.addEventListener('resize', function () {
-      clampPos();
+      if (!isDashboard && behavior === 'home_idle') {
+        var sz = getCharSize();
+        posX = Math.max(10, window.innerWidth - sz.w - 28);
+        posY = Math.max(10, window.innerHeight - sz.h - 28);
+      } else {
+        clampPos();
+      }
       updateTransform();
     });
 
