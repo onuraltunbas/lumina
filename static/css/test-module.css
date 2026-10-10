@@ -1,0 +1,1031 @@
+/* =====================================================================
+   LUMINA - BİLİŞSEL ÖĞRENME STİLİ TESTİ (CARTOON / COMIC MODÜLÜ)
+   egtim_hackathon motoru ile %100 uyumlu, Lumina Neo-Brutalist tasarım
+   ===================================================================== */
+
+/* Test Kapsayıcısı */
+.lumina-test-container {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.test-hidden {
+  display: none !important;
+}
+
+/* Comic Panel */
+.comic-test-panel {
+  background: #FFFFFF;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 5px 5px 0px #1D1D1D;
+  border-radius: 18px;
+  padding: 35px 30px;
+  margin-bottom: 25px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+html.dark-theme .comic-test-panel {
+  background: #181622;
+  border-color: #383452;
+  box-shadow: 5px 5px 0px #08070F;
+  color: #E4E4E7;
+}
+
+/* Üst Adım Göstergesi (Stepper) */
+.test-stepper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stepper-dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #1D1D1D;
+  box-shadow: 2.5px 2.5px 0px #1D1D1D;
+  background: #F3F4F6;
+  color: #1D1D1D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+html.dark-theme .stepper-dot {
+  background: #252238;
+  border-color: #383452;
+  box-shadow: 2.5px 2.5px 0px #08070F;
+  color: #E4E4E7;
+}
+
+.stepper-dot.active {
+  background: #7934ED;
+  color: #FFFFFF;
+  transform: scale(1.1);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+}
+
+html.dark-theme .stepper-dot.active {
+  background: #8B5CF6;
+  box-shadow: 3.5px 3.5px 0px #08070F;
+}
+
+.stepper-dot.completed {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+/* Comic Butonlar */
+.comic-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FDE047;
+  color: #1D1D1D;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  padding: 12px 26px;
+  border: 2px solid #1D1D1D;
+  border-radius: 12px;
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.comic-btn-primary:hover:not(:disabled) {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 5px 5px 0px #1D1D1D;
+  background: #FACC15;
+}
+
+.comic-btn-primary:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1.5px 1.5px 0px #1D1D1D;
+}
+
+.comic-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.comic-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #E0E7FF;
+  color: #1D1D1D;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 10px 20px;
+  border: 2px solid #1D1D1D;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.comic-btn-secondary:hover {
+  background: #C7D2FE;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #1D1D1D;
+}
+
+/* Comic Uyarı Kutuları */
+.comic-alert-box {
+  background: #FEF3C7;
+  border: 2px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 20px auto;
+  max-width: 580px;
+  text-align: left;
+}
+
+html.dark-theme .comic-alert-box {
+  background: #2D2310;
+  border-color: #F59E0B;
+  box-shadow: 3px 3px 0px #08070F;
+  color: #FDE68A;
+}
+
+.comic-alert-box.cooldown-alert {
+  background: #FEE2E2;
+}
+
+html.dark-theme .comic-alert-box.cooldown-alert {
+  background: #2D1418;
+  border-color: #EF4444;
+  color: #FECACA;
+}
+
+/* Zamanlayıcı Barı */
+.comic-timer-wrap {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.comic-timer-bar-bg {
+  flex: 1;
+  height: 14px;
+  background: #F3F4F6;
+  border: 2px solid #1D1D1D;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0px #1D1D1D;
+  overflow: hidden;
+  position: relative;
+}
+
+html.dark-theme .comic-timer-bar-bg {
+  background: #252238;
+  border-color: #383452;
+}
+
+.comic-timer-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: #F59E0B;
+  transition: width 0.3s linear;
+}
+
+.comic-timer-text {
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: #1D1D1D;
+  min-width: 40px;
+}
+
+html.dark-theme .comic-timer-text {
+  color: #E4E4E7;
+}
+
+/* Feedback Kutusu */
+.comic-feedback {
+  margin-top: 18px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  display: none;
+  border: 2px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+}
+
+.comic-feedback.show {
+  display: block;
+}
+
+.comic-feedback.success {
+  background: #DCFCE7;
+  color: #14532D;
+}
+
+.comic-feedback.error {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* =====================================================================
+   SORU 1: MOLEKÜL LABORATUVARI STİLLERİ
+   ===================================================================== */
+.lab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  align-items: center;
+}
+
+.molecules-palette {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(243, 244, 246, 0.7);
+  border-radius: 16px;
+  border: 2px dashed #1D1D1D;
+  width: 100%;
+}
+
+html.dark-theme .molecules-palette {
+  background: rgba(15, 14, 23, 0.6);
+  border-color: #4C4C50;
+}
+
+.molecule {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s;
+  animation: floatMol 3s ease-in-out infinite;
+}
+
+.molecule:nth-child(even) { animation-delay: 0.5s; }
+.molecule:nth-child(3n) { animation-delay: 1s; }
+
+@keyframes floatMol {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+  100% { transform: translateY(0px); }
+}
+
+.molecule:active {
+  cursor: grabbing;
+  transform: scale(0.95);
+}
+
+.molecule.dragged {
+  opacity: 0.5;
+}
+
+.atom {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #818cf8, #4f46e5);
+  box-shadow: 0 4px 8px -2px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+  border: 1.5px solid #1D1D1D;
+}
+
+.lbl {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: 800;
+  font-size: 1.15rem;
+  z-index: 10;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+}
+
+.mol-type-1 .atom-1 { width: 48px; height: 48px; top: 5px; left: 5px; }
+.mol-type-1 .atom-2 { width: 24px; height: 24px; top: -4px; right: -4px; background: radial-gradient(circle, #f472b6, #db2777); }
+
+.mol-type-2 .atom-1 { width: 44px; height: 44px; top: 7px; left: 7px; background: radial-gradient(circle, #34d399, #059669); }
+.mol-type-2 .atom-2 { width: 22px; height: 22px; top: -3px; left: -3px; background: radial-gradient(circle, #fbbf24, #d97706); }
+.mol-type-2 .atom-3 { width: 22px; height: 22px; bottom: -3px; right: -3px; background: radial-gradient(circle, #fbbf24, #d97706); }
+
+.mol-type-3 .atom-1 { width: 42px; height: 42px; top: 8px; left: 8px; background: radial-gradient(circle, #60a5fa, #2563eb); }
+.mol-type-3 .atom-2 { width: 20px; height: 20px; top: -2px; left: 19px; background: radial-gradient(circle, #a78bfa, #7c3aed); }
+.mol-type-3 .atom-3 { width: 20px; height: 20px; bottom: -2px; left: 19px; background: radial-gradient(circle, #a78bfa, #7c3aed); }
+.mol-type-3 .atom-4 { width: 20px; height: 20px; top: 19px; right: -2px; background: radial-gradient(circle, #f87171, #dc2626); }
+
+.beaker-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.reaction-zone {
+  position: relative;
+  width: 240px;
+  height: 250px;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 4px 4px 0px #1D1D1D;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+html.dark-theme .reaction-zone {
+  background: rgba(15, 14, 23, 0.4);
+  border-color: #383452;
+  box-shadow: 4px 4px 0px #08070F;
+}
+
+.reaction-zone.drag-over {
+  background: rgba(121, 52, 237, 0.15);
+  border-style: dashed;
+}
+
+.beaker {
+  position: absolute;
+  bottom: 12px;
+  width: 140px;
+  height: 180px;
+  border-left: 3px solid #1D1D1D;
+  border-right: 3px solid #1D1D1D;
+  border-bottom: 3.5px solid #1D1D1D;
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.2);
+}
+
+.beaker-glass {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.2) 100%);
+  pointer-events: none;
+}
+
+.measure-lines {
+  position: absolute;
+  right: 6px;
+  top: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.measure-lines span {
+  width: 14px;
+  height: 2px;
+  background: #1D1D1D;
+  opacity: 0.5;
+}
+
+.beaker-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 0%;
+  transition: height 1s ease, background 0.5s ease;
+}
+
+.fill-water { height: 65% !important; background: linear-gradient(to top, #0284c7, #38bdf8); }
+.fill-fire  { height: 65% !important; background: linear-gradient(to top, #dc2626, #f97316); }
+.fill-gas   { height: 65% !important; background: linear-gradient(to top, #15803d, #4ade80); }
+
+.zone-text {
+  position: absolute;
+  bottom: 25px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #4B5563;
+  pointer-events: none;
+}
+
+html.dark-theme .zone-text {
+  color: #9CA3AF;
+}
+
+.dropped-molecules {
+  display: flex;
+  gap: 15px;
+  z-index: 5;
+}
+
+.reaction-result {
+  margin-top: 15px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 2px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+}
+
+.reaction-result.bg-water { background: #E0F2FE; color: #0369A1; }
+.reaction-result.bg-fire  { background: #FFEDD5; color: #C2410C; }
+.reaction-result.bg-gas   { background: #DCFCE7; color: #15803D; }
+.reaction-result.bg-dark  { background: #F3F4F6; color: #374151; }
+
+.comic-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+@media (max-width: 580px) {
+  .comic-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.comic-option-btn {
+  background: #FFFFFF;
+  border: 2px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: #1D1D1D;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+html.dark-theme .comic-option-btn {
+  background: #252238;
+  border-color: #383452;
+  box-shadow: 3px 3px 0px #08070F;
+  color: #E4E4E7;
+}
+
+.comic-option-btn:hover:not(:disabled) {
+  background: #F3E8FF;
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4.5px 4.5px 0px #1D1D1D;
+}
+
+.comic-option-btn.correct {
+  background: #DCFCE7 !important;
+  color: #14532D !important;
+  border-color: #15803D !important;
+}
+
+.comic-option-btn.wrong {
+  background: #FEE2E2 !important;
+  color: #991B1B !important;
+  border-color: #B91C1C !important;
+}
+
+/* =====================================================================
+   SORU 2: KIM'S GAME (AHŞAP TEPSİ VE HAFIZA)
+   ===================================================================== */
+.tray-container {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  height: 380px;
+  margin: 1.5rem auto;
+  border-radius: 20px;
+  border: 3px solid #1D1D1D;
+  box-shadow: 5px 5px 0px #1D1D1D;
+  background: #85583b;
+  box-sizing: border-box;
+}
+
+.tray-surface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #b5835a;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.tray-item {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #1D1D1D;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  border-radius: 50%;
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.4s ease;
+}
+
+.flash-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #FFFFFF;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+}
+
+.flash-overlay.active {
+  opacity: 0.95;
+}
+
+.comic-input-group {
+  display: flex;
+  max-width: 440px;
+  margin: 15px auto;
+}
+
+.comic-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #1D1D1D;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  background: #FFFFFF;
+  color: #1D1D1D;
+}
+
+html.dark-theme .comic-input {
+  background: #252238;
+  border-color: #383452;
+  color: #E4E4E7;
+}
+
+.comic-input:focus {
+  border-color: #7934ED;
+}
+
+/* =====================================================================
+   SORU 3: METİN İNCELEME (KRONOLOJİK SIRALAMA)
+   ===================================================================== */
+.reading-card {
+  background: #F8FAFC;
+  border: 2px solid #1D1D1D;
+  border-radius: 14px;
+  padding: 22px;
+  margin: 18px auto;
+  max-width: 620px;
+  text-align: left;
+}
+
+html.dark-theme .reading-card {
+  background: #1E1B2E;
+  border-color: #383452;
+}
+
+.reading-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reading-list li {
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.15);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+html.dark-theme .reading-list li {
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+
+.reading-list li:last-child {
+  border-bottom: none;
+}
+
+.step-letter {
+  display: inline-block;
+  background: #E0E7FF;
+  border: 1.5px solid #1D1D1D;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-weight: 800;
+  margin-right: 8px;
+  color: #1D1D1D;
+}
+
+.sort-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 22px 0;
+  flex-wrap: wrap;
+}
+
+.sort-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.slot-num {
+  font-size: 13px;
+  font-weight: 800;
+  color: #4B5563;
+}
+
+html.dark-theme .slot-num {
+  color: #9CA3AF;
+}
+
+.sort-input {
+  width: 54px;
+  height: 54px;
+  border: 2.5px solid #1D1D1D;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  text-align: center;
+  font-size: 24px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  outline: none;
+  background: #FFFFFF;
+  color: #1D1D1D;
+}
+
+html.dark-theme .sort-input {
+  background: #252238;
+  border-color: #383452;
+  box-shadow: 3px 3px 0px #08070F;
+  color: #E4E4E7;
+}
+
+/* =====================================================================
+   SORU 4: YAZARAK ÖĞRENME (ZETA-4)
+   ===================================================================== */
+.method-cards {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 22px 0;
+  flex-wrap: wrap;
+}
+
+.method-card {
+  flex: 1;
+  min-width: 140px;
+  max-width: 190px;
+  background: #FFFFFF;
+  border: 2.5px solid #1D1D1D;
+  border-radius: 14px;
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+html.dark-theme .method-card {
+  background: #252238;
+  border-color: #383452;
+  box-shadow: 3.5px 3.5px 0px #08070F;
+  color: #E4E4E7;
+}
+
+.method-card:hover {
+  background: #FEF3C7;
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 5px 5px 0px #1D1D1D;
+}
+
+.method-card i {
+  font-size: 26px;
+  color: #7934ED;
+}
+
+.method-title {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.method-time {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.scrolling-text-container {
+  background: #F8FAFC;
+  border: 2px solid #1D1D1D;
+  border-radius: 14px;
+  padding: 22px;
+  max-width: 580px;
+  margin: 15px auto;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+html.dark-theme .scrolling-text-container {
+  background: #1E1B2E;
+  border-color: #383452;
+}
+
+.scrolling-text-item {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1D1D1D;
+  display: block;
+  margin: 6px 0;
+}
+
+html.dark-theme .scrolling-text-item {
+  color: #E4E4E7;
+}
+
+.comic-textarea {
+  width: 100%;
+  max-width: 580px;
+  padding: 12px 16px;
+  border: 2px solid #1D1D1D;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14.5px;
+  outline: none;
+  resize: vertical;
+  background: #FFFFFF;
+  color: #1D1D1D;
+  margin-top: 10px;
+}
+
+html.dark-theme .comic-textarea {
+  background: #252238;
+  border-color: #383452;
+  color: #E4E4E7;
+}
+
+/* =====================================================================
+   SORU 5: İŞİTSEL ÖĞRENME (SES & DİNLEME)
+   ===================================================================== */
+.audio-intro-card,
+.audio-playing-card {
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.audio-icon-pulse {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #EDE9FE;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #7934ED;
+  margin-bottom: 18px;
+  animation: pulseAudio 1.8s infinite;
+}
+
+@keyframes pulseAudio {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.sound-wave {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 7px;
+  height: 60px;
+  margin: 20px 0;
+}
+
+.sound-wave .bar {
+  width: 7px;
+  height: 15px;
+  background: #7934ED;
+  border-radius: 4px;
+  animation: waveBar 1.2s infinite ease-in-out;
+}
+
+.sound-wave .bar:nth-child(1) { animation-delay: 0.1s; height: 25px; }
+.sound-wave .bar:nth-child(2) { animation-delay: 0.3s; height: 45px; }
+.sound-wave .bar:nth-child(3) { animation-delay: 0.2s; height: 35px; }
+.sound-wave .bar:nth-child(4) { animation-delay: 0.4s; height: 55px; }
+.sound-wave .bar:nth-child(5) { animation-delay: 0.15s; height: 40px; }
+.sound-wave .bar:nth-child(6) { animation-delay: 0.35s; height: 50px; }
+.sound-wave .bar:nth-child(7) { animation-delay: 0.25s; height: 30px; }
+.sound-wave .bar:nth-child(8) { animation-delay: 0.45s; height: 20px; }
+
+@keyframes waveBar {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+.dynamic-inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 440px;
+  margin: 15px auto;
+}
+
+.action-buttons-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+/* =====================================================================
+   DASHBOARD TEST MODAL
+   ===================================================================== */
+.dashboard-test-modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 14, 23, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.dashboard-test-modal-content {
+  width: 100%;
+  max-width: 900px;
+  max-height: 94vh;
+  overflow-y: auto;
+  position: relative;
+  border-radius: 20px;
+}
+
+.dashboard-test-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  background: #FEE2E2;
+  border: 2px solid #1D1D1D;
+  box-shadow: 2.5px 2.5px 0px #1D1D1D;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.15s ease;
+}
+
+.dashboard-test-modal-close:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px #1D1D1D;
+  background: #FECACA;
+}
+
+/* =====================================================================
+   TEST SONUÇ PANELİ VE SKOR BARLARI
+   ===================================================================== */
+.test-results-container {
+  margin-top: 15px;
+}
+
+.test-dominant-badge {
+  display: inline-block;
+  background: #FEF08A;
+  color: #1D1D1D;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  border-radius: 30px;
+  padding: 8px 22px;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+html.dark-theme .test-dominant-badge {
+  background: #FEF08A;
+  color: #1D1D1D;
+  border-color: #383452;
+  box-shadow: 3px 3px 0px #08070F;
+}
+
+.test-scores-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.test-score-row {
+  background: #F9FAFB;
+  border: 2px solid #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: all 0.15s ease;
+}
+
+html.dark-theme .test-score-row {
+  background: #201D30;
+  border-color: #383452;
+  box-shadow: 3px 3px 0px #08070F;
+}
+
+.test-score-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.test-score-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: #E5E7EB;
+  border: 1.5px solid #1D1D1D;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+html.dark-theme .test-score-bar-bg {
+  background: #2D2A42;
+  border-color: #383452;
+}
+
+.test-score-bar-fill {
+  height: 100%;
+  border-radius: 20px;
+  width: 0%;
+  transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bar-fill-gorsel     { background: #A855F7; }
+.bar-fill-isitsel    { background: #10B981; }
+.bar-fill-yazarak    { background: #EC4899; }
+.bar-fill-okuyarak   { background: #0284C7; }
+.bar-fill-deneyimsel { background: #F59E0B; }
+
+.guest-callout-card {
+  background: #EFF6FF;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 4px 4px 0px #1D1D1D;
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 25px;
+  text-align: center;
+}
+
+html.dark-theme .guest-callout-card {
+  background: #1E293B;
+  border-color: #383452;
+  box-shadow: 4px 4px 0px #08070F;
+}
+

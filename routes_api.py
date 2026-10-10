@@ -253,13 +253,17 @@ async def logout_user(
     }
 
 
+COOLDOWN_HOURS = 48
+COOLDOWN_SECONDS = COOLDOWN_HOURS * 3600
+
+
 @router.get("/auth/me")
 async def get_current_user_info(
     request: Request,
     db: Session = Depends(get_db)
 ):
     """
-    Aktif oturumdaki kullanıcının bilgilerini ve son test sonucunu döner.
+    Aktif oturumdaki kullanıcının bilgilerini, son test sonucunu ve 48 saatlik test bekleme durumunu döner.
     """
     token = request.cookies.get(COOKIE_NAME)
     user = get_session_user(db, token)
@@ -268,7 +272,10 @@ async def get_current_user_info(
         return {
             "authenticated": False,
             "user": None,
-            "latest_result": None
+            "latest_result": None,
+            "can_take_test": True,
+            "cooldown_remaining_seconds": 0,
+            "next_test_at": None
         }
 
     # Son test sonucunu çek
@@ -276,10 +283,25 @@ async def get_current_user_info(
         TestResult.user_id == user.id
     ).order_by(TestResult.created_at.desc()).first()
 
+    can_take_test = True
+    cooldown_remaining_seconds = 0
+    next_test_at = None
+
+    if latest_result and latest_result.created_at:
+        now_utc = datetime.datetime.utcnow()
+        elapsed = (now_utc - latest_result.created_at).total_seconds()
+        if elapsed < COOLDOWN_SECONDS:
+            can_take_test = False
+            cooldown_remaining_seconds = max(0, int(COOLDOWN_SECONDS - elapsed))
+            next_test_at = (latest_result.created_at + datetime.timedelta(hours=COOLDOWN_HOURS)).strftime("%d.%m.%Y %H:%M")
+
     return {
         "authenticated": True,
         "user": user.to_dict(),
-        "latest_result": latest_result.to_dict() if latest_result else None
+        "latest_result": latest_result.to_dict() if latest_result else None,
+        "can_take_test": can_take_test,
+        "cooldown_remaining_seconds": cooldown_remaining_seconds,
+        "next_test_at": next_test_at
     }
 
 
@@ -292,6 +314,7 @@ async def save_test_result(
     """
     Giriş yapmış kullanıcının test sonucunu kaydeder.
     Her öğrenme stili skoru 0-100 arasında bağımsız bir yüzdedir.
+    Kullanıcılar iki test arasında en az 48 saat beklemelidir.
     """
     token = request.cookies.get(COOKIE_NAME)
     user = get_session_user(db, token)
@@ -301,6 +324,23 @@ async def save_test_result(
             status_code=401,
             detail="Test sonucunu kaydetmek için lütfen giriş yapınız."
         )
+
+    # 48 Saatlik Bekleme Süresi (Cooldown) Kontrolü
+    latest_result = db.query(TestResult).filter(
+        TestResult.user_id == user.id
+    ).order_by(TestResult.created_at.desc()).first()
+
+    if latest_result and latest_result.created_at:
+        now_utc = datetime.datetime.utcnow()
+        elapsed = (now_utc - latest_result.created_at).total_seconds()
+        if elapsed < COOLDOWN_SECONDS:
+            remaining = int(COOLDOWN_SECONDS - elapsed)
+            hours = remaining // 3600
+            mins = (remaining % 3600) // 60
+            raise HTTPException(
+                status_code=400,
+                detail=f"Bilişsel verilerinizin tutarlılığı için iki test arasında en az 48 saat bulunmalıdır. Kalan süre: {hours} saat {mins} dakika."
+            )
 
     # Baskın stili belirle (en yüksek puanlı model)
     scores = {
@@ -330,7 +370,10 @@ async def save_test_result(
     return {
         "success": True,
         "message": "Test sonucu başarıyla profilinize kaydedildi.",
-        "result": result.to_dict()
+        "result": result.to_dict(),
+        "can_take_test": False,
+        "cooldown_remaining_seconds": COOLDOWN_SECONDS,
+        "next_test_at": (result.created_at + datetime.timedelta(hours=COOLDOWN_HOURS)).strftime("%d.%m.%Y %H:%M")
     }
 
 

@@ -5,7 +5,9 @@
   <title>Lumina | Kullanıcı Kontrol Paneli</title>
   <meta content="Lumina Studio - Öğrenme stilleri test sonuçların, nöral zihin haritan ve kişisel gelişim panelin." name="description"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="/static/css/main.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/css/test-module.css" rel="stylesheet" type="text/css"/>
   <link href="/static/images/64427d8f1fc82a6fb0791e81_favicon.png" rel="shortcut icon" type="image/x-icon"/>
   <link href="/static/images/64427d923fb922a5adafc5ba_webclip.png" rel="apple-touch-icon"/>
   <script>
@@ -393,12 +395,12 @@
       <div class="dashboard-col-left">
 
         <!-- 1. DURUM: TEST SORULARI BEKLENİYOR (VARSAYILAN DURUM) -->
+        <!-- 1. DURUM: TESTİ HENÜZ ÇÖZMEMİŞ KULLANICI -->
         <div id="section-waiting-questions" class="dashboard-waiting-box">
-          <div style="font-size: 52px; margin-bottom: 15px;">⏳</div>
-          <h2 class="display-3" style="margin-bottom: 12px;">Test Soruları Hazırlanıyor!</h2>
+          <div style="font-size: 52px; margin-bottom: 15px;">🧠</div>
+          <h2 class="display-3" style="margin-bottom: 12px;">Öğrenme Stili Testi</h2>
           <p style="color: #555; max-width: 580px; margin: 0 auto 20px auto; font-size: 15.5px; line-height: 1.5;">
-            Öğrenme stilleri değerlendirme sorularımız sisteme eklendiğinde test burada aktif olacaktır.
-            Sorular tamamlandığında her öğrenme stili <strong>%0 ile %100 arasında bağımsız</strong> olarak hesaplanacak (diğer stillerin puanını düşürmeden) ve gerekçeleriyle listelenecektir.
+            5 temel bilişsel öğrenme alanındaki (Görsel, İşitsel, Yazarak, Okuyarak, Deneyimsel) beceri potansiyelini ölçmek ve nöral lob haritanı oluşturmak için testi hemen başlatabilirsin.
           </p>
 
           <div style="background: #F9FAFB; border: 2px solid #1D1D1D; border-radius: 12px; padding: 18px 20px; max-width: 560px; margin: 0 auto 20px auto; text-align: left;">
@@ -411,13 +413,8 @@
           </div>
 
           <div class="dashboard-preview-toggle-bar">
-            <button type="button" class="button w-inline-block" id="btn-run-simulation">
-              <div class="button-front background-yellow" style="padding: 10px 22px;">
-                <div class="button-text" style="font-size: 17px;">
-                  <span>🧪</span> Örnek Test Simülasyonunu Gör
-                </div>
-              </div>
-              <div class="button-edge"></div>
+            <button type="button" class="comic-btn-primary" id="btn-start-test-direct" style="font-size: 17px; padding: 12px 28px;">
+              <span>🚀</span> Testi Başlat
             </button>
           </div>
 
@@ -425,7 +422,7 @@
           <div class="test-pedagogical-disclaimer" style="max-width: 560px; margin: 25px auto 0 auto;">
             <div class="disclaimer-badge">ℹ️ Bilgilendirme &amp; Kullanım Amacı</div>
             <p class="disclaimer-text">
-              Bu platformdaki test ve değerlendirmeler klinik veya psikolojik bir teşhis niteliği taşımamakta olup yalnızca bireysel farkındalık ve eğitsel rehberlik amaçlıdır. Öğrenme stilleri dinamiktir; uzun süreli kullanım ve süreç içi gözlemlerle genel eğilimleriniz hakkında fikir edinmenizi sağlar.
+              Bu platformdaki test ve değerlendirmeler klinik veya psikolojik bir teşhis niteliği taşımamakta olup yalnızca bireysel farkındalık ve eğitsel rehberlik amaçlıdır.
             </p>
           </div>
         </div>
@@ -433,18 +430,30 @@
         <!-- 2. DURUM: TEST SONUÇLARI GÖRÜNÜMÜ -->
         <div id="section-test-results" style="display: none;">
           
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
             <div>
               <div class="badge" style="background: #DCFCE7; border-color: #1D1D1D;">
-                <div class="badge-text" style="color: #14532D;" id="badge-dominant-title">🏆 Baskın Model: İşitsel Öğrenme (%95)</div>
+                <div class="badge-text" style="color: #14532D;" id="badge-dominant-title">🏆 Baskın Model: Yükleniyor...</div>
               </div>
             </div>
-            <button type="button" class="button w-inline-block" id="btn-reset-simulation">
-              <div class="button-front background-white" style="padding: 6px 14px; font-size: 14px;">
-                <div class="button-text">🔄 Testi Yeniden Değerlendir</div>
-              </div>
-              <div class="button-edge"></div>
+            <button type="button" class="comic-btn-secondary" id="btn-retake-test" style="font-size: 14px; padding: 8px 18px;">
+              <span>🔄</span> Testi Yeniden Değerlendir
             </button>
+          </div>
+
+          <!-- 48 Saatlik Bekleme ve Yenileme Bilgilendirme Kutusu -->
+          <div id="cooldown-banner-wrap" style="display: none; margin-bottom: 20px;">
+            <div class="comic-alert-box cooldown-alert" style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 20px;">⏱️</span>
+              <div>
+                <strong>Sonraki test için kalan süre:</strong>
+                <span id="cooldown-clock-text" style="font-weight: 800; color: #9A3412;">48 saat 00 dk</span>
+              </div>
+            </div>
+            <div style="background: #FFFBEB; border: 1.5px dashed #D97706; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #92400E; display: flex; align-items: center; gap: 8px;">
+              <span>💡</span>
+              <span>Testlerin ortalama 2-3 günde bir yenilenmesi, bilişsel gelişim takibinin ve öğrenme stili analizinin doğruluk oranını artırır.</span>
+            </div>
           </div>
 
           <!-- 5 Bağımsız Skor Kartı -->
@@ -566,6 +575,286 @@
     </div>
   </main>
 
+  <!-- TAM EKRAN TEST MODALI -->
+  <div id="dashboard-test-modal" class="dashboard-test-modal-backdrop test-hidden">
+    <div class="dashboard-test-modal-content">
+      <button type="button" class="dashboard-test-modal-close" id="btn-close-test-modal" title="Pencereyi Kapat">✕</button>
+      
+      <div class="card background-white" style="padding: 30px 24px; border: 3px solid #1D1D1D; box-shadow: 6px 6px 0px #1D1D1D; border-radius: 18px;">
+        <div class="lumina-test-container">
+          <!-- 5 Adımlı İlerleme Çubuğu -->
+          <div class="test-stepper test-hidden" id="test-stepper-bar">
+            <div class="stepper-dot active" data-step="1">1</div>
+            <div class="stepper-dot" data-step="2">2</div>
+            <div class="stepper-dot" data-step="3">3</div>
+            <div class="stepper-dot" data-step="4">4</div>
+            <div class="stepper-dot" data-step="5">5</div>
+          </div>
+
+          <!-- GİRİŞ EKRANI -->
+          <div id="test-giris" class="comic-test-panel" style="text-align: center; padding: 35px 20px;">
+            <div style="font-size: 48px; margin-bottom: 12px;">🧠</div>
+            <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 10px; font-family: 'Cabinet Grotesk', sans-serif;">
+              Bilişsel Öğrenme Stili Testi
+            </h2>
+            <p style="color: #666; max-width: 540px; margin: 0 auto 20px auto; font-size: 15px; line-height: 1.5;">
+              5 alandaki bilişsel performansını ölçmek ve nöral lob haritanı güncellemek için teste başla!
+            </p>
+            <div class="comic-alert-box margin-bottom-30" style="max-width: 500px; margin-left: auto; margin-right: auto;">
+              <div style="font-size: 22px;">⚠️</div>
+              <div style="font-weight: 700; font-size: 15px; color: #92400E;">
+                Soruları cevaplama hızınız test sonucunu etkileyecektir.
+              </div>
+            </div>
+            <button type="button" class="comic-btn-primary" id="btn-teste-basla" style="font-size: 17px; padding: 12px 32px;">
+              <span>▶️</span> Teste Başla
+            </button>
+          </div>
+
+          <!-- 1. SORU: MOLEKÜL LABORATUVARI -->
+          <div id="soru-1" class="comic-test-panel test-hidden">
+            <div id="molekul-oyunu-ekrani">
+              <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Molekül Laboratuvarı</h2>
+              <p style="color: #666; margin-bottom: 18px;">Molekülleri laboratuvar alanına sürükleyerek eşleştir ve ne olduğunu gözlemle!</p>
+              <div class="lab-container">
+                <div class="molecules-palette" id="palette">
+                  <div class="molecule mol-type-1" draggable="true" data-type="A"><div class="atom atom-1"></div><div class="atom atom-2"></div><span class="lbl">A</span></div>
+                  <div class="molecule mol-type-2" draggable="true" data-type="B"><div class="atom atom-1"></div><div class="atom atom-2"></div><div class="atom atom-3"></div><span class="lbl">B</span></div>
+                  <div class="molecule mol-type-1" draggable="true" data-type="C"><div class="atom atom-1"></div><div class="atom atom-2"></div><span class="lbl">C</span></div>
+                  <div class="molecule mol-type-3" draggable="true" data-type="D"><div class="atom atom-1"></div><div class="atom atom-2"></div><div class="atom atom-3"></div><div class="atom atom-4"></div><span class="lbl">D</span></div>
+                  <div class="molecule mol-type-1" draggable="true" data-type="E"><div class="atom atom-1"></div><div class="atom atom-2"></div><span class="lbl">E</span></div>
+                  <div class="molecule mol-type-2" draggable="true" data-type="F"><div class="atom atom-1"></div><div class="atom atom-2"></div><div class="atom atom-3"></div><span class="lbl">F</span></div>
+                </div>
+                <div class="beaker-container">
+                  <div class="reaction-zone" id="reaction-zone">
+                    <div class="beaker">
+                      <div class="beaker-fill" id="beaker-fill"></div>
+                      <div class="beaker-glass"></div>
+                      <div class="measure-lines">
+                        <span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
+                    <p class="zone-text" id="zone-text">Molekülleri Beherglasa Bırak</p>
+                    <div class="dropped-molecules" id="dropped-molecules"></div>
+                    <div class="reaction-effect" id="reaction-effect"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="reaction-result" class="reaction-result test-hidden"></div>
+              <button id="btn-finish-experiment" class="comic-btn-primary" disabled style="margin-top: 15px;">Deneyi Tamamla ve Soruya Geç</button>
+            </div>
+            <div class="test-hidden" id="soru-kismi">
+              <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Ölçme ve Değerlendirme</h2>
+              <p style="color: #666; margin-bottom: 10px;">Biraz önce yaptığın deneye göre:</p>
+              <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 18px;">Hangi molekülleri birleştirince <strong>su</strong> çıktığını hatırlıyor musun?</h3>
+              <div class="comic-options-grid">
+                <button class="comic-option-btn option-btn" data-correct="false">A ve B</button>
+                <button class="comic-option-btn option-btn" data-correct="true">A ve C</button>
+                <button class="comic-option-btn option-btn" data-correct="false">B ve F</button>
+                <button class="comic-option-btn option-btn" data-correct="false">E ve D</button>
+              </div>
+              <div id="feedback-soru1" class="comic-feedback"></div>
+            </div>
+          </div>
+
+          <!-- 2. SORU: HAFIZA OYUNU -->
+          <div id="soru-2" class="comic-test-panel test-hidden">
+            <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Kim's Game - Görsel Hafıza</h2>
+            <div id="hafiza-intro">
+              <p style="color: #666; margin-bottom: 8px;">Aşağıdaki "Süreyi Başlat" butonuna tıkladığınızda ahşap bir tepsi ve 9 farklı eşya ortaya çıkacak.</p>
+              <p style="color: #666; margin-bottom: 18px;">Eşyaların yerlerini ezberlemek için tam <strong>10 saniyeniz</strong> olacak. Süre bittiğinde eşyalar karışacak ve biri kaybolacak!</p>
+              <button id="btn-baslat-soru2" class="comic-btn-primary">Hazırım, Süreyi Başlat!</button>
+            </div>
+            <div id="hafiza-game-area" class="test-hidden">
+              <div class="comic-timer-wrap">
+                <div class="comic-timer-bar-bg"><div class="comic-timer-bar-fill" id="timer-bar-soru2"></div></div>
+                <span class="comic-timer-text" id="timer-text-soru2">10</span>
+              </div>
+              <div class="tray-container">
+                <div class="tray-surface" id="tray-surface">
+                  <div class="flash-overlay" id="flash-overlay"></div>
+                </div>
+              </div>
+            </div>
+            <div id="soru2-cevap-alani" class="test-hidden" style="margin-top: 20px;">
+              <h3 style="font-size: 19px; font-weight: 800; margin-bottom: 8px;">Hangi nesne kayboldu?</h3>
+              <p style="color: #666; margin-bottom: 12px;">Eksik olan eşyanın adını aşağıya yazın:</p>
+              <div class="comic-input-group">
+                <input type="text" id="eksik-nesne-input" class="comic-input" placeholder="Eksik nesnenin adını yazın..." autocomplete="off"/>
+                <button id="btn-cevapla-soru2" class="comic-btn-primary" style="border-radius: 0 10px 10px 0;">Kontrol Et</button>
+              </div>
+              <div id="feedback-soru2" class="comic-feedback"></div>
+            </div>
+          </div>
+
+          <!-- 3. SORU: METİN İNCELEME -->
+          <div id="soru-3" class="comic-test-panel test-hidden">
+            <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Metin İnceleme (Okuyarak Öğrenme)</h2>
+            <div id="soru3-okuma">
+              <div class="comic-timer-wrap">
+                <div class="comic-timer-bar-bg"><div class="comic-timer-bar-fill" id="soru3-timer-bar"></div></div>
+                <span class="comic-timer-text" id="soru3-sayac">20</span>
+              </div>
+              <div class="reading-card">
+                <p style="font-weight: 700; margin-bottom: 10px; color: #7934ED;">⏱️ Aşağıdaki eylemleri dikkatlice okuyunuz (Okuma Süresi: 20 sn):</p>
+                <ol class="reading-list">
+                  <li><span class="step-letter">(A)</span> Masaya geçip montunu sandalyeye asar ve yemeğini yemeye başlar.</li>
+                  <li><span class="step-letter">(B)</span> Turnikeden öğrenci kartını okutarak yemekhane binasına giriş yapar.</li>
+                  <li><span class="step-letter">(C)</span> Boş tepsisini alıp tezgâhtan günün sıcak yemeklerini seçer.</li>
+                  <li><span class="step-letter">(D)</span> Elindeki yemek tepsisiyle etrafına bakınarak salonda boş bir masa bulur.</li>
+                </ol>
+              </div>
+            </div>
+            <div id="soru3-siralama" class="test-hidden">
+              <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Az önce okuduğunuz eylemleri kronolojik sıraya göre harflerle dizin:</h3>
+              <div class="sort-inputs">
+                <div class="sort-slot"><span class="slot-num">1. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                <div class="sort-slot"><span class="slot-num">2. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                <div class="sort-slot"><span class="slot-num">3. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+                <div class="sort-slot"><span class="slot-num">4. Eylem</span><input type="text" class="sort-input" maxlength="1" placeholder="?" autocomplete="off"></div>
+              </div>
+              <button type="button" class="comic-btn-primary" id="soru3-kontrol-btn" style="margin-top: 15px;">Sıralamayı Kontrol Et</button>
+              <div id="soru3-sonuc" class="test-hidden" style="margin-top: 20px; padding: 16px; background: #F8F9FA; border: 2px solid #1D1D1D; border-radius: 12px; text-align: left;">
+                <p style="font-weight: 700; margin-bottom: 4px;">Doğru Sıralama: <strong>B → C → D → A</strong></p>
+                <p style="font-size: 13.5px; color: #666; margin-bottom: 8px;">Metin içi bağlaçları ve olay örgüsünü analiz ederek doğru akışı kurgulayınız.</p>
+                <p id="soru3-puan-text" style="font-weight: 800; color: #10B981; margin-bottom: 12px;"></p>
+                <button type="button" class="comic-btn-primary" id="soru3-devam-btn">Sonraki Soruya Geç</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. SORU: YAZARAK ÖĞRENME -->
+          <div id="soru-4" class="comic-test-panel test-hidden">
+            <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Yazarak Öğrenme</h2>
+            <div id="soru4-giris">
+              <p style="font-weight: 700; font-size: 16px; margin-bottom: 14px;">Bu soruda not alma yöntemini seçiniz (Kağıt kullanılması önerilir):</p>
+              <div class="method-cards">
+                <button type="button" class="method-card" data-mod="telefon">
+                  <i class="fa-solid fa-mobile-screen"></i>
+                  <span class="method-title">Telefon Klavyesi</span>
+                  <span class="method-time">50 Saniye</span>
+                </button>
+                <button type="button" class="method-card" data-mod="bilgisayar">
+                  <i class="fa-solid fa-laptop"></i>
+                  <span class="method-title">Bilgisayar Klavyesi</span>
+                  <span class="method-time">65 Saniye</span>
+                </button>
+                <button type="button" class="method-card" data-mod="kagit">
+                  <i class="fa-solid fa-note-sticky"></i>
+                  <span class="method-title">Kağıt &amp; Kalem</span>
+                  <span class="method-time">90 Saniye</span>
+                </button>
+              </div>
+              <div class="comic-alert-box" style="margin-top: 15px;">
+                <div style="font-size: 18px;">💡</div>
+                <div style="font-size: 13px; color: #92400E;">Not: Metnin tamamını birebir yazmak zorunda değilsiniz, kritik parametreleri not alabilirsiniz.</div>
+              </div>
+            </div>
+            <div id="soru4-okuma" class="test-hidden">
+              <div class="comic-timer-wrap">
+                <div class="comic-timer-bar-bg"><div class="comic-timer-bar-fill" id="soru4-timer-bar-okuma"></div></div>
+                <span class="comic-timer-text" id="soru4-sayac-okuma">90</span>
+              </div>
+              <div class="scrolling-text-container">
+                <div id="soru4-metin" class="scrolling-text-box"></div>
+              </div>
+              <div id="soru4-yazma-alani" style="margin-top: 14px;">
+                <label for="soru4-yazma-input" style="font-weight: 700; font-size: 13.5px; display: block; margin-bottom: 6px;">✍️ Not Alma Alanınız:</label>
+                <textarea id="soru4-yazma-input" class="comic-textarea" rows="4" placeholder="Okurken not almak istediğiniz kısımları buraya yazabilirsiniz..."></textarea>
+              </div>
+            </div>
+            <div id="soru4-kagit-uyari" class="test-hidden" style="text-align: center; padding: 20px 10px;">
+              <div style="font-size: 42px; margin-bottom: 10px;">⚠️</div>
+              <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Metni yazdığınız kağıtlarınızı kapatınız</h3>
+              <p style="color: #666; max-width: 480px; margin: 0 auto 18px auto; font-size: 14px;">Cevaplama aşamasına geçmeden önce lütfen not aldığınız kağıdı kapatın veya kaldırın.</p>
+              <button type="button" class="comic-btn-primary" id="soru4-kagit-uyari-btn">Sorulara Geç</button>
+            </div>
+            <div id="soru4-sorular" class="test-hidden" style="text-align: left;">
+              <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Az önce incelediğiniz rapordaki teknik parametreleri tamamlayınız:</h3>
+              <div style="margin-bottom: 14px;">
+                <label for="soru4-cevap1" style="font-weight: 700; font-size: 13.5px; display: block; margin-bottom: 5px;">1. Malzemenin esnek forma geçmeye başladığı eşik sıcaklık değeri:</label>
+                <input type="text" id="soru4-cevap1" class="comic-input" placeholder="Sıcaklık değerini giriniz..." autocomplete="off">
+              </div>
+              <div style="margin-bottom: 18px;">
+                <label for="soru4-cevap2" style="font-weight: 700; font-size: 13.5px; display: block; margin-bottom: 5px;">2. Eşik sıcaklığına ulaşıldığında gevşeyerek bu değişime yol açan iç yapı unsuru:</label>
+                <input type="text" id="soru4-cevap2" class="comic-input" placeholder="İç yapı unsurunun adı..." autocomplete="off">
+              </div>
+              <button type="button" class="comic-btn-primary" id="soru4-cevapla-btn">Cevapları Gönder</button>
+            </div>
+            <div id="soru4-sonuc" class="test-hidden" style="margin-top: 18px; padding: 16px; background: #F8F9FA; border: 2px solid #1D1D1D; border-radius: 12px; text-align: left;">
+              <h4 style="font-weight: 800; margin-bottom: 6px;">Doğru Cevaplar:</h4>
+              <p style="margin-bottom: 4px; font-size: 14px;">Eşik sıcaklık değeri: <strong>140°C</strong></p>
+              <p style="margin-bottom: 8px; font-size: 14px;">Gevşeyen iç yapı unsuru: <strong>Kristal bağlar</strong></p>
+              <p id="soru4-puan-text" style="font-weight: 800; color: #10B981; margin-bottom: 12px;"></p>
+              <button type="button" class="comic-btn-primary" id="soru4-devam-btn">Sonraki Soruya Geç</button>
+            </div>
+          </div>
+
+          <!-- 5. SORU: İŞİTSEL ÖĞRENME -->
+          <div id="soru-5" class="comic-test-panel test-hidden">
+            <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Seçici Dinleme (İşitsel Öğrenme)</h2>
+            <div id="soru5-giris">
+              <div class="audio-intro-card">
+                <div class="audio-icon-pulse"><i class="fa-solid fa-volume-high"></i></div>
+                <p style="font-size: 15px; margin-bottom: 18px; line-height: 1.5;">Şimdi bir kafede geçen ses kaydını dinleyeceksiniz. Kulaklığınızın veya hoparlörünüzün sesini açın ve dikkatle dinleyin.</p>
+                <button type="button" class="comic-btn-primary" id="soru5-basla-btn"><i class="fa-solid fa-play"></i> Dinlemeye Başla</button>
+              </div>
+            </div>
+            <div id="soru5-dinleme" class="test-hidden">
+              <div class="audio-playing-card">
+                <div class="sound-wave">
+                  <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                  <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                  <span class="bar"></span><span class="bar"></span>
+                </div>
+                <p style="font-weight: 700; margin-top: 14px; color: #4B5563;">Ses kaydı dinleniyor, lütfen odaklanın...</p>
+                <audio id="soru5-ses" src="/static/audio/soru3.mp3" preload="auto"></audio>
+              </div>
+            </div>
+            <div id="soru5-sorular" class="test-hidden" style="text-align: left;">
+              <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Konuşmacının oturmak istediği masanın üstünde dağınık olduğu belirtilen nesneler nelerdi?</h3>
+              <p style="color: #666; font-size: 13.5px; margin-bottom: 14px;">Aklınıza geldikçe yeni kutu ekleyip hatırladığınız nesneleri yazabilirsiniz:</p>
+              <div id="soru5-kutular" class="dynamic-inputs-container">
+                <div><input type="text" class="soru5-kutu comic-input" placeholder="Nesne 1" autocomplete="off"></div>
+              </div>
+              <div class="action-buttons-row">
+                <button type="button" class="comic-btn-secondary" id="soru5-ekle-btn"><i class="fa-solid fa-plus"></i> Kutu Ekle</button>
+                <button type="button" class="comic-btn-primary" id="soru5-tamam-btn"><i class="fa-solid fa-check"></i> Tamamla ve Değerlendir</button>
+              </div>
+            </div>
+            <div id="soru5-sonuc" class="test-hidden" style="margin-top: 18px; padding: 16px; background: #F8F9FA; border: 2px solid #1D1D1D; border-radius: 12px; text-align: left;">
+              <h4 style="font-weight: 800; margin-bottom: 6px;">Doğru Cevaplar:</h4>
+              <p style="font-size: 14px; margin-bottom: 8px;">Masanın üstündeki hedef nesneler: <strong>şemsiye, elma, fotoğraf makinesi, çorap, vida, kalem</strong></p>
+              <p id="soru5-puan-text" style="font-weight: 800; color: #10B981; margin-bottom: 12px;"></p>
+              <button type="button" class="comic-btn-primary" id="soru5-devam-btn">Test Sonuçlarını Gör</button>
+            </div>
+          </div>
+
+          <!-- TEST BİTİŞ & ANALİZ EKRANI (MODAL İÇİ) -->
+          <div id="sonuc-ekrani" class="comic-test-panel test-hidden">
+            <div id="analiz-bekleme-ekrani" style="text-align: center; padding: 35px 15px;">
+              <div style="font-size: 48px; margin-bottom: 12px;">🧠</div>
+              <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 10px;">Test Tamamlandı!</h2>
+              <p style="color: #666; max-width: 480px; margin: 0 auto 18px auto;">Bilişsel cevaplarınız ve performans metrikleriniz analiz ediliyor...</p>
+              <button type="button" class="comic-btn-primary" id="btn-analiz-durum" disabled style="opacity: 0.85;">
+                <i class="fa-solid fa-spinner fa-spin" id="analiz-icon"></i>
+                <span id="analiz-btn-yazi">Bilgileriniz Analiz Ediliyor...</span>
+              </button>
+            </div>
+            <div id="test-sonuc-icerik" class="test-hidden" style="text-align: center; padding: 20px 10px;">
+              <div style="font-size: 42px; margin-bottom: 10px;">🎉</div>
+              <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Analiz Başarıyla Tamamlandı!</h2>
+              <p style="color: #666; font-size: 15px; margin-bottom: 20px;">Sonuçların profilinize işlendi ve nöral haritanız güncellendi.</p>
+              <button type="button" class="comic-btn-primary" id="btn-finish-modal-close" style="font-size: 16px; padding: 12px 28px;">
+                Dashboard'a Dön ve Sonuçları İncele
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="wrapper background-purple border-top" style="padding: 25px 0;">
@@ -592,6 +881,10 @@
   </script>
   <script type="module" src="/static/js/brain-3d.js"></script>
 
+  <!-- Confetti & Test Motoru -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="/static/js/lumina-test.js"></script>
+
   <!-- Dashboard Yönetim Betiği -->
   <script>
     (function() {
@@ -604,11 +897,111 @@
 
       const sectionWaiting = document.getElementById('section-waiting-questions');
       const sectionResults = document.getElementById('section-test-results');
-      const btnRunSimulation = document.getElementById('btn-run-simulation');
-      const btnResetSimulation = document.getElementById('btn-reset-simulation');
+      const btnStartTestDirect = document.getElementById('btn-start-test-direct');
+      const btnRetakeTest = document.getElementById('btn-retake-test');
+
+      const cooldownBannerWrap = document.getElementById('cooldown-banner-wrap');
+      const cooldownClockText = document.getElementById('cooldown-clock-text');
+
+      const testModal = document.getElementById('dashboard-test-modal');
+      const btnCloseTestModal = document.getElementById('btn-close-test-modal');
+      const btnFinishModalClose = document.getElementById('btn-finish-modal-close');
 
       let currentUser = null;
       let currentResult = null;
+      let canTakeTest = true;
+      let cooldownTimerInterval = null;
+
+      // Modal Yönetimi
+      function openTestModal() {
+        if (!testModal) return;
+        testModal.classList.remove('test-hidden');
+
+        // Testi giriş görünümüne sıfırla
+        const testGiris = document.getElementById('test-giris');
+        const stepper = document.getElementById('test-stepper-bar');
+        const sonucEkrani = document.getElementById('sonuc-ekrani');
+        if (testGiris) testGiris.classList.remove('test-hidden');
+        if (stepper) stepper.classList.add('test-hidden');
+        if (sonucEkrani) sonucEkrani.classList.add('test-hidden');
+        for (let i = 1; i <= 5; i++) {
+          const s = document.getElementById('soru-' + i);
+          if (s) s.classList.add('test-hidden');
+        }
+      }
+
+      function closeTestModal() {
+        if (!testModal) return;
+        testModal.classList.add('test-hidden');
+      }
+
+      if (btnStartTestDirect) {
+        btnStartTestDirect.addEventListener('click', openTestModal);
+      }
+
+      if (btnRetakeTest) {
+        btnRetakeTest.addEventListener('click', () => {
+          if (canTakeTest) {
+            openTestModal();
+          }
+        });
+      }
+
+      if (btnCloseTestModal) {
+        btnCloseTestModal.addEventListener('click', closeTestModal);
+      }
+
+      if (btnFinishModalClose) {
+        btnFinishModalClose.addEventListener('click', () => {
+          closeTestModal();
+          fetchUserInfo();
+        });
+      }
+
+      window.refreshDashboardAfterTest = function(result) {
+        closeTestModal();
+        fetchUserInfo();
+      };
+
+      // 48 Saatlik Bekleme Sayacı (Cooldown)
+      function startCooldownCountdown(remainingSec) {
+        if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+
+        let currentSec = remainingSec;
+        function updateClock() {
+          if (currentSec <= 0) {
+            clearInterval(cooldownTimerInterval);
+            canTakeTest = true;
+            if (cooldownBannerWrap) cooldownBannerWrap.style.display = 'none';
+            if (btnRetakeTest) {
+              btnRetakeTest.disabled = false;
+              btnRetakeTest.style.opacity = '1';
+              btnRetakeTest.style.cursor = 'pointer';
+              btnRetakeTest.innerHTML = '<span>🔄</span> Testi Yeniden Değerlendir';
+            }
+            return;
+          }
+
+          const hours = Math.floor(currentSec / 3600);
+          const mins = Math.floor((currentSec % 3600) / 60);
+          const secs = currentSec % 60;
+          const formatted = `${hours} saat ${mins} dk ${secs} sn`;
+
+          if (cooldownClockText) {
+            cooldownClockText.textContent = formatted;
+          }
+          if (btnRetakeTest) {
+            btnRetakeTest.disabled = true;
+            btnRetakeTest.style.opacity = '0.65';
+            btnRetakeTest.style.cursor = 'not-allowed';
+            btnRetakeTest.innerHTML = `<span>⏳</span> Kalan: ${hours} sa ${mins} dk`;
+          }
+          currentSec--;
+        }
+
+        updateClock();
+        cooldownTimerInterval = setInterval(updateClock, 1000);
+      }
 
       // Kullanıcı Verilerini Çek
       async function fetchUserInfo() {
@@ -626,6 +1019,7 @@
 
           currentUser = data.user;
           currentResult = data.latest_result;
+          canTakeTest = Boolean(data.can_take_test);
 
           // Bilgileri ekrana yaz
           dashUsername.textContent = currentUser.username;
@@ -634,7 +1028,7 @@
           dashLastLogin.textContent = currentUser.last_login || 'Şimdi';
 
           if (currentResult) {
-            renderResults(currentResult);
+            renderResults(currentResult, data);
           } else {
             showWaitingState();
           }
@@ -646,7 +1040,7 @@
       function showWaitingState() {
         sectionWaiting.style.display = 'block';
         sectionResults.style.display = 'none';
-        dashTestStatusTag.innerHTML = '⏳ Test: <strong>Hazırlanıyor</strong>';
+        dashTestStatusTag.innerHTML = '⏳ Test: <strong>Çözülmedi</strong>';
         dashTestStatusTag.style.background = '#FEF08A';
 
         // 3D Beyin varsayılan modda
@@ -655,11 +1049,26 @@
         }
       }
 
-      function renderResults(result) {
+      function renderResults(result, meta) {
         sectionWaiting.style.display = 'none';
         sectionResults.style.display = 'block';
         dashTestStatusTag.innerHTML = '✅ Test: <strong>Tamamlandı</strong>';
         dashTestStatusTag.style.background = '#DCFCE7';
+
+        // 48 Saatlik Bekleme Durumu
+        if (meta && meta.can_take_test === false && meta.cooldown_remaining_seconds > 0) {
+          if (cooldownBannerWrap) cooldownBannerWrap.style.display = 'block';
+          startCooldownCountdown(meta.cooldown_remaining_seconds);
+        } else {
+          if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+          if (cooldownBannerWrap) cooldownBannerWrap.style.display = 'none';
+          if (btnRetakeTest) {
+            btnRetakeTest.disabled = false;
+            btnRetakeTest.style.opacity = '1';
+            btnRetakeTest.style.cursor = 'pointer';
+            btnRetakeTest.innerHTML = '<span>🔄</span> Testi Yeniden Değerlendir';
+          }
+        }
 
         // Yüzdeleri ve barları güncelle
         setScore('gorsel', result.score_gorsel);
@@ -710,38 +1119,6 @@
 
         if (pctElem) pctElem.textContent = '%' + roundVal;
         if (fillElem) fillElem.style.width = roundVal + '%';
-      }
-
-      // Örnek Test Simülasyonu (Kullanıcı sorular gelene kadar deneyimleyebilsin)
-      if (btnRunSimulation) {
-        btnRunSimulation.addEventListener('click', async () => {
-          const sampleResult = {
-            score_gorsel: 70.0,
-            score_isitsel: 95.0,
-            score_yazarak: 50.0,
-            score_okuyarak: 60.0,
-            score_deneyimsel: 80.0,
-            dominant_style: 'isitsel',
-            details_json: JSON.stringify({ note: "Örnek Test Değerlendirmesi" })
-          };
-
-          // Sunucuya da kaydet
-          try {
-            await fetch('/api/auth/results', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(sampleResult)
-            });
-          } catch(e) {}
-
-          renderResults(sampleResult);
-        });
-      }
-
-      if (btnResetSimulation) {
-        btnResetSimulation.addEventListener('click', () => {
-          showWaitingState();
-        });
       }
 
       // Çıkış Yap
