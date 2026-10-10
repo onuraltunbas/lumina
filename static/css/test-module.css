@@ -15,6 +15,10 @@
   display: none !important;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Comic Panel */
 .comic-test-panel {
   background: #FFFFFF;
@@ -25,6 +29,15 @@
   margin-bottom: 25px;
   transition: all 0.25s ease;
   position: relative;
+  scroll-margin-top: 95px;
+}
+
+.dashboard-test-modal-content {
+  scroll-behavior: smooth;
+}
+
+.dashboard-test-modal-content .comic-test-panel {
+  scroll-margin-top: 25px;
 }
 
 html.dark-theme .comic-test-panel {
@@ -559,6 +572,16 @@ html.dark-theme .soru1-opt-btn {
   pointer-events: none;
   transition: transform 0.4s ease;
 }
+
+.tray-item[data-id="kitap"], .tray-item-kitap   { background-color: #EDE9FE; color: #6D28D9; }
+.tray-item[data-id="kure"], .tray-item-kure     { background-color: #E0F2FE; color: #0284C7; }
+.tray-item[data-id="cetvel"], .tray-item-cetvel { background-color: #FEF9C3; color: #A16207; }
+.tray-item[data-id="buyutec"], .tray-item-buyutec { background-color: #D1FAE5; color: #059669; }
+.tray-item[data-id="makas"], .tray-item-makas   { background-color: #FFEDD5; color: #C2410C; }
+.tray-item[data-id="pusula"], .tray-item-pusula { background-color: #E0E7FF; color: #4338CA; }
+.tray-item[data-id="elma"], .tray-item-elma     { background-color: #FFE4E6; color: #E11D48; }
+.tray-item[data-id="kalem"], .tray-item-kalem   { background-color: #ECFCCB; color: #4D7C0F; }
+.tray-item[data-id="silgi"], .tray-item-silgi   { background-color: #FCE7F3; color: #DB2777; }
 
 .flash-overlay {
   position: absolute;

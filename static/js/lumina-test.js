@@ -121,8 +121,40 @@
   }
 
   // =====================================================================
-  // ADIM GEÇİŞLERİ VE GÖSTERGE YÖNETİMİ
+  // ADIM GEÇİŞLERİ VE GÖSTERGE YÖNETİMİ (OTOMATİK AKICI KAYDIRMA)
   // =====================================================================
+  function otomatikSoruyaKaydir(hedefElement, offset) {
+    if (!hedefElement) return;
+    const scrollOffset = (typeof offset === 'number') ? offset : 90;
+
+    setTimeout(() => {
+      // 1. Dashboard Modal Kontrolü (Modal içi kaydırma)
+      const modalScroll = hedefElement.closest('.dashboard-test-modal-content');
+      if (modalScroll) {
+        const modalRect = modalScroll.getBoundingClientRect();
+        const elemRect = hedefElement.getBoundingClientRect();
+        const relativeTop = elemRect.top - modalRect.top + modalScroll.scrollTop - 20;
+
+        modalScroll.scrollTo({
+          top: Math.max(0, relativeTop),
+          behavior: 'smooth'
+        });
+        return;
+      }
+
+      // 2. Sayfa Geneli (test.html / window) Kaydırma
+      const elemRect = hedefElement.getBoundingClientRect();
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const targetY = elemRect.top + currentScrollY - scrollOffset;
+
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
+      });
+    }, 120);
+  }
+  window.otomatikSoruyaKaydir = otomatikSoruyaKaydir;
+
   window.luminaSonrakiSoruyaGec = function(sonrakiSoruNo) {
     const panels = document.querySelectorAll('.lumina-soru-paneli');
     panels.forEach(p => p.classList.add('test-hidden'));
@@ -156,6 +188,7 @@
     const aktifPanel = document.getElementById(`soru-${sonrakiSoruNo}`);
     if (aktifPanel) {
       aktifPanel.classList.remove('test-hidden');
+      otomatikSoruyaKaydir(aktifPanel);
       
       // 3. Soru için okuma sayacını başlat
       if (sonrakiSoruNo === 3 && typeof window.soru3OkumaBaslat === 'function') {
@@ -299,7 +332,10 @@
     if (btnFinishExperiment) {
       btnFinishExperiment.addEventListener('click', () => {
         if (molekulOyunuEkrani) molekulOyunuEkrani.classList.add('test-hidden');
-        if (soruKismi) soruKismi.classList.remove('test-hidden');
+        if (soruKismi) {
+          soruKismi.classList.remove('test-hidden');
+          otomatikSoruyaKaydir(soruKismi);
+        }
         soru1BaslangicZamani = Date.now();
       });
     }
@@ -368,15 +404,15 @@
     let soru2Cevaplandi = false;
 
     const itemsData = [
-      { id: 'kitap', name: 'Kitap', icon: 'fa-solid fa-book', baseScale: 1.38 },
-      { id: 'kure', name: 'Küre', icon: 'fa-solid fa-globe', baseScale: 1.28 },
-      { id: 'cetvel', name: 'Cetvel', icon: 'fa-solid fa-ruler', baseScale: 1.18 },
-      { id: 'buyutec', name: 'Büyüteç', icon: 'fa-solid fa-magnifying-glass', baseScale: 1.10 },
-      { id: 'makas', name: 'Makas', icon: 'fa-solid fa-scissors', baseScale: 1.00 },
-      { id: 'pusula', name: 'Pusula', icon: 'fa-regular fa-compass', baseScale: 0.90 },
-      { id: 'elma', name: 'Elma', icon: 'fa-solid fa-apple-whole', baseScale: 0.82 },
-      { id: 'kalem', name: 'Kalem', icon: 'fa-solid fa-pencil', baseScale: 0.72 },
-      { id: 'silgi', name: 'Silgi', icon: 'fa-solid fa-eraser', baseScale: 0.64 }
+      { id: 'kitap', name: 'Kitap', icon: 'fa-solid fa-book', baseScale: 1.38, bg: '#EDE9FE', color: '#6D28D9' },
+      { id: 'kure', name: 'Küre', icon: 'fa-solid fa-globe', baseScale: 1.28, bg: '#E0F2FE', color: '#0284C7' },
+      { id: 'cetvel', name: 'Cetvel', icon: 'fa-solid fa-ruler', baseScale: 1.18, bg: '#FEF9C3', color: '#A16207' },
+      { id: 'buyutec', name: 'Büyüteç', icon: 'fa-solid fa-magnifying-glass', baseScale: 1.10, bg: '#D1FAE5', color: '#059669' },
+      { id: 'makas', name: 'Makas', icon: 'fa-solid fa-scissors', baseScale: 1.00, bg: '#FFEDD5', color: '#C2410C' },
+      { id: 'pusula', name: 'Pusula', icon: 'fa-regular fa-compass', baseScale: 0.90, bg: '#E0E7FF', color: '#4338CA' },
+      { id: 'elma', name: 'Elma', icon: 'fa-solid fa-apple-whole', baseScale: 0.82, bg: '#FFE4E6', color: '#E11D48' },
+      { id: 'kalem', name: 'Kalem', icon: 'fa-solid fa-pencil', baseScale: 0.72, bg: '#ECFCCB', color: '#4D7C0F' },
+      { id: 'silgi', name: 'Silgi', icon: 'fa-solid fa-eraser', baseScale: 0.64, bg: '#FCE7F3', color: '#DB2777' }
     ];
 
     function renderItemsToTray(hideOne) {
@@ -427,9 +463,11 @@
 
       placed.forEach(({ item, x, y, scale, rotation }) => {
         const el = document.createElement('div');
-        el.className = 'tray-item';
+        el.className = `tray-item tray-item-${item.id}`;
         el.dataset.id = item.id;
         el.dataset.name = item.name;
+        if (item.bg) el.style.backgroundColor = item.bg;
+        if (item.color) el.style.color = item.color;
         el.style.left = `${((x / surfaceWidth) * 100).toFixed(2)}%`;
         el.style.top = `${((y / surfaceHeight) * 100).toFixed(2)}%`;
         el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale})`;
@@ -445,7 +483,10 @@
         if (oyunBasladi) return;
         oyunBasladi = true;
         if (hafizaIntro) hafizaIntro.classList.add('test-hidden');
-        if (hafizaGameArea) hafizaGameArea.classList.remove('test-hidden');
+        if (hafizaGameArea) {
+          hafizaGameArea.classList.remove('test-hidden');
+          otomatikSoruyaKaydir(hafizaGameArea);
+        }
         renderItemsToTray(false);
 
         let timeLeft = 10;
@@ -463,7 +504,10 @@
             setTimeout(() => {
               renderItemsToTray(true);
               if (flashOverlay) flashOverlay.classList.remove('active');
-              if (cevapAlani) cevapAlani.classList.remove('test-hidden');
+              if (cevapAlani) {
+                cevapAlani.classList.remove('test-hidden');
+                otomatikSoruyaKaydir(cevapAlani);
+              }
               if (inputCevap) inputCevap.focus();
             }, 500);
           }
@@ -560,7 +604,10 @@
           const okumaAlani = document.getElementById('soru3-okuma');
           const siralamaAlani = document.getElementById('soru3-siralama');
           if (okumaAlani) okumaAlani.classList.add('test-hidden');
-          if (siralamaAlani) siralamaAlani.classList.remove('test-hidden');
+          if (siralamaAlani) {
+            siralamaAlani.classList.remove('test-hidden');
+            otomatikSoruyaKaydir(siralamaAlani);
+          }
           soru3BaslangicZamani = Date.now();
           const ilkKutu = document.querySelector('#soru3-siralama .sort-input');
           if (ilkKutu) ilkKutu.focus();
@@ -627,7 +674,10 @@
         }
 
         const sonuc = document.getElementById('soru3-sonuc');
-        if (sonuc) sonuc.classList.remove('test-hidden');
+        if (sonuc) {
+          sonuc.classList.remove('test-hidden');
+          otomatikSoruyaKaydir(sonuc);
+        }
 
         if (tamDogruMu && typeof confetti === 'function') {
           confetti({ particleCount: 100, spread: 70 });
@@ -679,7 +729,10 @@
       }
 
       const okuma = document.getElementById('soru4-okuma');
-      if (okuma) okuma.classList.remove('test-hidden');
+      if (okuma) {
+        okuma.classList.remove('test-hidden');
+        otomatikSoruyaKaydir(okuma);
+      }
 
       // Metin akışı
       const kap = document.getElementById('soru4-metin');
@@ -721,8 +774,12 @@
 
           if (soru4SecilenMod === 'kagit') {
             const kagitUyari = document.getElementById('soru4-kagit-uyari');
-            if (kagitUyari) kagitUyari.classList.remove('test-hidden');
-            else soru4SorulariGoster();
+            if (kagitUyari) {
+              kagitUyari.classList.remove('test-hidden');
+              otomatikSoruyaKaydir(kagitUyari);
+            } else {
+              soru4SorulariGoster();
+            }
           } else {
             soru4SorulariGoster();
           }
@@ -736,7 +793,10 @@
       const sorular = document.getElementById('soru4-sorular');
       if (okuma) okuma.classList.add('test-hidden');
       if (kagitUyari) kagitUyari.classList.add('test-hidden');
-      if (sorular) sorular.classList.remove('test-hidden');
+      if (sorular) {
+        sorular.classList.remove('test-hidden');
+        otomatikSoruyaKaydir(sorular);
+      }
       soru4BaslangicZamani = Date.now();
       const ilkKutu = document.getElementById('soru4-cevap1');
       if (ilkKutu) ilkKutu.focus();
@@ -780,7 +840,10 @@
         if (puanText) puanText.innerHTML = `✅ Doğru sayısı: <strong>${dogruSayisi} / 2</strong>`;
 
         const sonuc = document.getElementById('soru4-sonuc');
-        if (sonuc) sonuc.classList.remove('test-hidden');
+        if (sonuc) {
+          sonuc.classList.remove('test-hidden');
+          otomatikSoruyaKaydir(sonuc);
+        }
 
         if (dogruSayisi === 2 && typeof confetti === 'function') {
           confetti({ particleCount: 100, spread: 70 });
@@ -820,7 +883,10 @@
           ses.play().catch(e => console.warn(e));
           ses.onended = () => {
             if (dinleme) dinleme.classList.add('test-hidden');
-            if (sorular) sorular.classList.remove('test-hidden');
+            if (sorular) {
+              sorular.classList.remove('test-hidden');
+              otomatikSoruyaKaydir(sorular);
+            }
             const ilkKutu = document.querySelector('#soru5-kutular .comic-input');
             if (ilkKutu) ilkKutu.focus();
           };
@@ -904,7 +970,10 @@
         }
 
         const sonuc = document.getElementById('soru5-sonuc');
-        if (sonuc) sonuc.classList.remove('test-hidden');
+        if (sonuc) {
+          sonuc.classList.remove('test-hidden');
+          otomatikSoruyaKaydir(sonuc);
+        }
 
         if (dogruAdet >= 4 && typeof confetti === 'function') {
           confetti({ particleCount: 120, spread: 80 });
@@ -926,6 +995,7 @@
     const sonucKart = document.getElementById('sonuc-ekrani');
     if (!sonucKart) return;
     sonucKart.classList.remove('test-hidden');
+    otomatikSoruyaKaydir(sonucKart);
 
     const btnAnaliz = document.getElementById('btn-analiz-durum');
     const yaziEl = document.getElementById('analiz-btn-yazi');
@@ -1030,7 +1100,10 @@
     const analizBekleme = document.getElementById('analiz-bekleme-ekrani');
     const sonucIcerik = document.getElementById('test-sonuc-icerik');
     if (analizBekleme) analizBekleme.classList.add('test-hidden');
-    if (sonucIcerik) sonucIcerik.classList.remove('test-hidden');
+    if (sonucIcerik) {
+      sonucIcerik.classList.remove('test-hidden');
+      otomatikSoruyaKaydir(sonucIcerik);
+    }
 
     const styleNames = {
       'gorsel': 'Görsel Öğrenme (Visual)',
