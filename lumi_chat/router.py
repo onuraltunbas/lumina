@@ -58,12 +58,20 @@ class ChatIn(BaseModel):
 # ---------------------------------------------------------------------
 @router.get("/widget.js", include_in_schema=False)
 def widget_js():
-    return FileResponse(PKG_DIR / "static" / "lumi-chat.js", media_type="application/javascript")
+    return FileResponse(
+        PKG_DIR / "static" / "lumi-chat.js",
+        media_type="application/javascript",
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
 
 
 @router.get("/widget.css", include_in_schema=False)
 def widget_css():
-    return FileResponse(PKG_DIR / "static" / "lumi-chat.css", media_type="text/css")
+    return FileResponse(
+        PKG_DIR / "static" / "lumi-chat.css",
+        media_type="text/css",
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
 
 
 # ---------------------------------------------------------------------

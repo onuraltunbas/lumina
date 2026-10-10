@@ -7,7 +7,7 @@
   // CSS Enjeksiyonu
   var link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = '/api/chat/widget.css';
+  link.href = '/api/chat/widget.css?v=' + Date.now();
   document.head.appendChild(link);
 
   var isDashboard = window.location.pathname.indexOf('/dashboard') !== -1;
@@ -95,10 +95,10 @@
       '      <circle cx="0" cy="0" rx="6" ry="6" fill="#FFEAA7"/>' +
       '    </g>' +
       '  </g>' +
-      '  <!-- İki Ele Doğru İnen Bağlantı İpleri (Zero Gap Precision) -->' +
+      '  <!-- İki Yana Açılan Kollara Doğru İnen Bağlantı İpleri (Zero Gap Precision) -->' +
       '  <g class="comic-outline lumi-balloon-handles" stroke="#111111" stroke-width="5" stroke-linecap="round" fill="none">' +
-      '    <path d="M 395 210 Q 350 225 320 245 L 312 268"/>' +
-      '    <path d="M 405 210 Q 450 225 480 245 L 488 268"/>' +
+      '    <path d="M 395 210 Q 290 220 210 280 L 198 305"/>' +
+      '    <path d="M 405 210 Q 510 220 590 280 L 602 305"/>' +
       '  </g>' +
       '</g>'
     );
@@ -283,24 +283,24 @@
       '        </g>' +
       '      </g>' +
       '      <g id="lumi-arms-falling" class="lumi-arms-falling">' +
-      '        <!-- Sol Kol: Omuzdan Sol Ele Kesintisiz Bağlantı -->' +
-      '        <path d="M 270,490 C 255,390 285,300 320,245 C 336,245 350,270 335,325 C 320,380 305,480 305,510 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
-      '        <!-- Sol Pati: İpi sımsıkı saran el (320, 245) - Sıfır Boşluk Garantisi -->' +
-      '        <ellipse cx="320" cy="245" rx="28" ry="24" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
-      '        <circle cx="320" cy="245" r="9" fill="#FFA9BD"/>' +
-      '        <circle cx="310" cy="237" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="320" cy="233" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="330" cy="237" r="5" fill="#FFA9BD"/>' +
-      '        <path d="M 308,245 Q 320,250 332,245" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
-      '        <!-- Sağ Kol: Omuzdan Sağ Ele Kesintisiz Bağlantı -->' +
-      '        <path d="M 530,490 C 545,390 515,300 480,245 C 464,245 450,270 465,325 C 480,380 495,480 495,510 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
-      '        <!-- Sağ Pati: İpi sımsıkı saran el (480, 245) - Sıfır Boşluk Garantisi -->' +
-      '        <ellipse cx="480" cy="245" rx="28" ry="24" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
-      '        <circle cx="480" cy="245" r="9" fill="#FFA9BD"/>' +
-      '        <circle cx="470" cy="237" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="480" cy="233" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="490" cy="237" r="5" fill="#FFA9BD"/>' +
-      '        <path d="M 468,245 Q 480,250 492,245" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sol Kol: Omuzdan Sola Doğru Genişçe Açılan Kol -->' +
+      '        <path d="M 280,490 C 220,460 160,380 210,280 C 225,275 245,295 235,340 C 220,395 285,450 305,480 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <!-- Sol Pati: İpi sımsıkı saran el (210, 280) - Sıfır Boşluk Garantisi -->' +
+      '        <ellipse cx="210" cy="280" rx="28" ry="24" transform="rotate(22 210 280)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="210" cy="280" r="9" fill="#FFA9BD"/>' +
+      '        <circle cx="200" cy="272" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="210" cy="268" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="220" cy="272" r="5" fill="#FFA9BD"/>' +
+      '        <path d="M 198,280 Q 210,285 222,280" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sağ Kol: Omuzdan Sağa Doğru Genişçe Açılan Kol -->' +
+      '        <path d="M 520,490 C 580,460 640,380 590,280 C 575,275 555,295 565,340 C 580,395 515,450 495,480 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <!-- Sağ Pati: İpi sımsıkı saran el (590, 280) - Sıfır Boşluk Garantisi -->' +
+      '        <ellipse cx="590" cy="280" rx="28" ry="24" transform="rotate(-22 590 280)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="590" cy="280" r="9" fill="#FFA9BD"/>' +
+      '        <circle cx="580" cy="272" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="590" cy="268" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="600" cy="272" r="5" fill="#FFA9BD"/>' +
+      '        <path d="M 578,280 Q 590,285 602,280" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
       '      </g>' +
       '    </g>' +
       '  </g>' +
@@ -791,9 +791,10 @@
 
           for (var s = 0; s < surfaces.length; s++) {
             var surfaceY = surfaces[s];
-            if (surfaceY >= currentPosY - 45 && surfaceY <= defaultFloor) {
+            // Yüzey kesinlikle Lumi'nin mevcut ayağı hizasında veya aşağısında olmalı (yukarıdaki yüzeylere takılmasın!)
+            if (surfaceY >= currentPosY - 4 && surfaceY <= defaultFloor) {
               var dist = surfaceY - currentPosY;
-              if (dist >= -45 && dist < minDistance) {
+              if (dist >= -4 && dist < minDistance) {
                 minDistance = dist;
                 bestFloor = surfaceY;
                 bestPlatform = {
@@ -1748,9 +1749,9 @@
         return;
       }
 
-      // Bırakılan noktanın altındaki elemanı doğrudan sorgula (Tüm sayfalarda çizgi tespiti)
-      var probeY = posY + sz.h;
+      // Bırakılan noktanın altındaki elemanı ve çizgiyi doğrudan sorgula
       var probedPlatform = null;
+      var snapTargetY = null;
       try {
         shimeji.style.display = 'none';
         var underEls = document.elementsFromPoint(footX, probeY);
@@ -1761,20 +1762,18 @@
             if (root.contains(uEl) || uEl === document.body || uEl === document.documentElement) continue;
             var uR = uEl.getBoundingClientRect();
             if (uR.width >= 20 && uR.bottom > 15) {
-              var chosenY = uR.top;
-              if (uR.height >= 24 && Math.abs(probeY - uR.bottom) < Math.abs(probeY - uR.top)) {
-                chosenY = uR.bottom;
+              var topY = uR.top - sz.h + 8;
+              var botY = uR.bottom - sz.h + 8;
+              // Bırakılan nokta üst çizgiye veya alt çizgiye yakın mı? (24px snapping menzili)
+              if (Math.abs(posY - topY) <= 24) {
+                snapTargetY = topY;
+                probedPlatform = { el: uEl, top: topY, bottom: uR.bottom, left: uR.left, right: uR.right, width: uR.width, height: uR.height };
+                break;
+              } else if (uR.height >= 24 && Math.abs(posY - botY) <= 24) {
+                snapTargetY = botY;
+                probedPlatform = { el: uEl, top: botY, bottom: uR.bottom, left: uR.left, right: uR.right, width: uR.width, height: uR.height };
+                break;
               }
-              probedPlatform = {
-                el: uEl,
-                top: chosenY,
-                bottom: uR.bottom,
-                left: uR.left,
-                right: uR.right,
-                width: uR.width,
-                height: uR.height
-              };
-              break;
             }
           }
         }
@@ -1782,22 +1781,10 @@
         shimeji.style.display = '';
       }
 
-      var floorInfo = findFloorUnder(footX, posY);
-
-      // Eğer doğrudan bir elemanın/çizginin üzerine bırakıldıysa onu önceliklendir
-      if (probedPlatform) {
-        var probedFloorY = probedPlatform.top - sz.h + 8;
-        if (Math.abs(posY - probedFloorY) <= 50 || (posY < probedFloorY && probedFloorY < floorInfo.floorY)) {
-          floorInfo = { floorY: probedFloorY, platform: probedPlatform };
-        }
-      }
-
-      var isNearPlatform = floorInfo.platform && (Math.abs(posY - floorInfo.floorY) <= 48 || (posY < floorInfo.floorY && floorInfo.floorY < getFloorY() - 20));
-
-      // 1. Çizgi / platform üzerine bırakıldıysa: TÜM SAYFALARDA ÇİZGİDE DURUR!
-      if (isNearPlatform) {
-        posY = floorInfo.floorY;
-        currentPlatform = floorInfo.platform;
+      // 1. Çizgi / platform üzerine doğrudan bırakıldıysa (24px snap menzilinde):
+      if (probedPlatform && snapTargetY !== null) {
+        posY = snapTargetY;
+        currentPlatform = probedPlatform;
         updateTransform();
         shimeji.classList.remove('is-home-fixed', 'is-running', 'is-falling');
         shimeji.classList.add('is-landing');
@@ -1805,7 +1792,7 @@
         setLumiMood('mutlu');
 
         if (!isDashboard) {
-          // Dashboard harici sayfalarda çizgide durur, ardından sağ alt köşeye döner
+          // Dashboard dışı: 14 saniye çizgide durur, ardından balonla süzülüp sağ alt köşeye döner
           behavior = 'on_platform';
           clearTimeout(platformReturnTimer);
           platformReturnTimer = setTimeout(function () {
@@ -1814,8 +1801,8 @@
               shimeji.classList.remove('is-sitting', 'is-waving');
               shimeji.classList.add('is-hop');
               behavior = 'returning_fall';
-              velocityY = -2.2;
-              velocityX = (homeX > posX ? 1 : -1) * 1.2;
+              velocityY = 0.8;
+              velocityX = (homeX > posX ? 1 : -1) * 0.8;
               shimeji.classList.add('is-falling');
               setLumiMood('heyecanli', 1000);
             }
@@ -1828,19 +1815,21 @@
         return;
       }
 
-      // 2. Çizgi dışına / boşluğa bırakıldıysa:
+      // 2. Çizgi üzerine bırakılmadıysa (BOŞLUĞA / HAVAYA BIRAKILDIYSA):
+      // TÜM SAYFALARDA BALONLA SALLANA SALLANA SÜZÜLEREK İNİŞ!
+      currentPlatform = null;
+
       if (!isDashboard) {
-        // Dashboard dışındaki sayfalarda boşluğa bırakılırsa sağ alt köşeye döner
-        currentPlatform = null;
-        if (posY < homeY - 12) {
-          // Havada bırakıldıysa önce yere süzülsün/düşsün, sonra sağ alt köşeye koşsun
+        // Dashboard dışı: Havada bırakıldıysa yere kadar balonla süzülür, sonra sağ alt köşeye koşar
+        if (posY < homeY - 15) {
           behavior = 'returning_fall';
+          shimeji.classList.remove('is-walking', 'is-running', 'is-sitting', 'is-hop', 'is-landing', 'is-home-fixed');
           shimeji.classList.add('is-falling');
-          velocityY = 1.0;
+          velocityY = 0.8;
           velocityX = 0;
           setLumiMood('saskin');
         } else {
-          // Yerdeyse doğrudan sağ alt köşeye koşsun
+          // Zaten yerdeyse doğrudan sağ alt köşeye koşsun
           posY = homeY;
           behavior = 'returning_run';
           shimeji.classList.add('is-running');
@@ -1849,20 +1838,15 @@
         return;
       }
 
-      // 3. Dashboard için duvara tutunma ve serbest düşüş mantığı
-      var maxW = Math.max(10, window.innerWidth - sz.w - 10);
-      if ((posX <= 18 || posX >= maxW - 8) && posY < getFloorY() - 90 && Math.random() < 0.6) {
-        behavior = 'climb';
-        climbWall = posX <= 18 ? 'left' : 'right';
-        shimeji.classList.add('is-climbing', 'climb-' + climbWall);
-        setFacing(climbWall === 'left' ? 1 : -1);
-        setLumiMood('merakli');
-        showBubble('Duvara tutundum! 🧗', 2000);
-      } else if (posY < floorInfo.floorY - 40) {
+      // 3. Dashboard: Havada bırakıldıysa BALONLA SÜZÜLEREK DÜŞÜŞ!
+      var floorInfo = findFloorUnder(footX, posY);
+      if (posY < floorInfo.floorY - 15) {
         behavior = 'falling';
+        shimeji.classList.remove('is-walking', 'is-running', 'is-sitting', 'is-hop', 'is-landing', 'is-climbing');
         shimeji.classList.add('is-falling');
-        velocityY = 0;
+        velocityY = 0.8;
         velocityX = 0;
+        setLumiMood('saskin');
       } else {
         posY = floorInfo.floorY;
         currentPlatform = floorInfo.platform;
