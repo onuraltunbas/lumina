@@ -466,7 +466,9 @@ html.dark-theme .zone-text {
   }
 }
 
-.comic-option-btn {
+.comic-option-btn,
+.option-btn,
+.soru1-opt-btn {
   background: #FFFFFF;
   border: 2px solid #1D1D1D;
   box-shadow: 3px 3px 0px #1D1D1D;
@@ -478,28 +480,38 @@ html.dark-theme .zone-text {
   color: #1D1D1D;
   cursor: pointer;
   transition: all 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-html.dark-theme .comic-option-btn {
+html.dark-theme .comic-option-btn,
+html.dark-theme .option-btn,
+html.dark-theme .soru1-opt-btn {
   background: #252238;
   border-color: #383452;
   box-shadow: 3px 3px 0px #08070F;
   color: #E4E4E7;
 }
 
-.comic-option-btn:hover:not(:disabled) {
+.comic-option-btn:hover:not(:disabled),
+.option-btn:hover:not(:disabled),
+.soru1-opt-btn:hover:not(:disabled) {
   background: #F3E8FF;
   transform: translate(-1.5px, -1.5px);
   box-shadow: 4.5px 4.5px 0px #1D1D1D;
 }
 
-.comic-option-btn.correct {
+.comic-option-btn.correct,
+.option-btn.correct,
+.soru1-opt-btn.correct {
   background: #DCFCE7 !important;
   color: #14532D !important;
   border-color: #15803D !important;
 }
 
-.comic-option-btn.wrong {
+.comic-option-btn.wrong,
+.option-btn.wrong,
+.soru1-opt-btn.wrong {
   background: #FEE2E2 !important;
   color: #991B1B !important;
   border-color: #B91C1C !important;

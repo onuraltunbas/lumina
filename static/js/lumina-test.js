@@ -304,7 +304,7 @@
       });
     }
 
-    const optionBtns = document.querySelectorAll('.soru1-opt-btn');
+    const optionBtns = document.querySelectorAll('.soru1-opt-btn, #soru-1 .comic-option-btn, #soru-1 .option-btn, .option-btn');
     const feedbackEl = document.getElementById('feedback-soru1');
     let answered = false;
 
@@ -326,7 +326,7 @@
           if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
         } else {
           btn.classList.add('wrong');
-          const correctBtn = document.querySelector('.soru1-opt-btn[data-correct="true"]');
+          const correctBtn = document.querySelector('.soru1-opt-btn[data-correct="true"], #soru-1 .comic-option-btn[data-correct="true"], #soru-1 .option-btn[data-correct="true"], .option-btn[data-correct="true"]');
           if (correctBtn) correctBtn.classList.add('correct');
           if (feedbackEl) {
             feedbackEl.innerHTML = "❌ Yanlış Cevap. (0 / 1) Doğru kombinasyon A ve C (Su) olmalıydı.";
