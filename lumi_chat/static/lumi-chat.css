@@ -1027,7 +1027,14 @@ html.dark-theme #lumi-root {
   }
 }
 
-/* --- ANA SAYFA SABİT ZIPLAMA & EL SALLAMA --- */
+/* --- SOHBET AÇIKKEN SHIMEJI GİZLEME --- */
+.lumi-shimeji.is-panel-hidden {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* --- SABİT KÖŞE ZIPLAMA & EL SALLAMA --- */
 .lumi-shimeji.is-home-fixed {
   position: fixed !important;
   z-index: 99998;
