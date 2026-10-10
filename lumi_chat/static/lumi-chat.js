@@ -399,6 +399,9 @@
         usageEl = $('.lumi-usage'),
         moodPill = $('#lumi-mood-pill'),
         headerHero = $('#lumi-header-hero');
+    // Balonlar SVG sınırında kırpılmasın: tuvali genişlet (Lumi'nin boyutu aynı kalır, CSS ile hizalanır)
+    var shimejiSvg = shimeji && shimeji.querySelector('.lumi-character-svg');
+    if (shimejiSvg) shimejiSvg.setAttribute('viewBox', '-200 -100 1200 900');
 
     // Canlı Duygu / Mimik Güncelleyici (Tüm sahneleri senkronize eder)
     function setLumiMood(mood, tempDuration) {

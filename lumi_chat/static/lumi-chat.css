@@ -1187,3 +1187,11 @@ html.dark-theme #lumi-root {
   0%   { transform: rotate(-6deg); }
   100% { transform: rotate(6deg); }
 }
+
+/* Genişletilmiş shimeji tuvali: 1200x900 birim -> Lumi aynı ölçekte, balonlar tam görünür */
+#lumi-shimeji .lumi-character-svg {
+  width: 150% !important;
+  height: 112.5% !important;
+  margin-left: -25%;
+  margin-top: -12.5%;
+}
