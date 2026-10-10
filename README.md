@@ -8,7 +8,7 @@ Platform; ogrencilerin bilgi isleme reflekslerini, calisma bellegi kapasitelerin
 
 ## 1. Proje Mimarisi ve Temel Prensipler
 
-Platformun tasarim felsefesi ve teknik altyapisi uc ana sutun uzerine kurulmustur:
+Platformun tasarim felsefesi ve teknik altyapisi dort ana sutun uzerine kurulmustur:
 
 ### 1.1. Bagimsiz Yetkinlik Puanlama Modeli
 Geleneksel ogrenme stili testleri kullaniciyi yalnizca tek bir kategoriye indirger ve toplam puani yuzde 100 uzerinden paylastirir. Lumina ise coklu zeka ve bilissel esneklik teorilerini temel alir:
@@ -24,8 +24,14 @@ Bilissel performans testlerinde kisa araliklarla ayni olcumlerin yapilmasi ezber
 ### 1.3. Etkilesimli 3D Noral Ag Simulasyonu
 Three.js tabanli ozel render motoru, 2400 noron dugumu ve dinamik akson baglantilarindan olusan spiral bir beyin geometrisi uretir:
 * Test tamamlandiginda kullanicinin baskin modeli tespit edilir.
-* Baskin modele karsilik gelen anatomik loblar (Oksipital Lob, Isitsel Korteks, Motor Korteks, Temporal Bolge vb.) gercek zamanli isik ve nabiz (pulsing) animasyonuyla aydinlatilir.
+* Baskin modele karsilik gelen anatomik loblar (Oksipital Lob, Isitsel Korteks, Motor Korteks, Temporal Bolge vb.) gercek zamanli isik ve nabiz animasyonuyla aydinlatilir.
 * Arayuz uzerindeki skor kartlarina temas edildiginde ilgili lob bolgeleri etkilesimli olarak odaklanir.
+
+### 1.4. Misafir Oturum Aktarimi ve Dikey Sutun Grafigi Dagitimi
+Kullanici deneyimini kesintisiz kilmak ve veri kaybini onlemek amaciyla:
+* Oturum acmadan test cozen misafir kullanicilarin sonuclari yerel tarayici deposunda guvenle muhafaza edilir.
+* Kayit olma veya giris yapma islemi gerceklestigi anda misafir verisi otomatik olarak kullanici hesabina senkronize edilir.
+* Kullanici panelinde 3D beyin modelinin hemen altinda bes temel ogrenme boyutunun yuzdelik dagilimini gosteren ozel dikey sutun grafigi calisir.
 
 ---
 
@@ -57,7 +63,7 @@ Test modulu, klasik coktan secmeli anket yapisinin otesinde, kullanicinin dogrud
 
 ## 3. Matematiksel Puanlama Algoritmalari ve Formuller
 
-Her bir sorunun puanlamasi mutlak dogru-yanlis mantiginin otesinde sure, goreli bag analizi ve durtu kontrolu faktorerini icerir:
+Her bir sorunun puanlamasi mutlak dogru-yanlis mantiginin otesinde sure, goreli bag analizi ve durtu kontrolu faktorlerini icerir:
 
 ### 3.1. 1. Soru (Deneyimsel) Formulu
 * Yanlis cevap verilmesi durumunda puan 0'dir.
@@ -95,48 +101,40 @@ Kullanicinin girdigi serbest metinler turkce karakter duyarsizligi ve yazim tole
 
 ---
 
-## 4. Sistem Mimarisi ve Teknoloji Yigini
+## 4. Sistem Mimarisi ve Altyapi Bilesenleri
 
-Platform modern, yuksek performansli ve asenkron standartlar gozetilerek insa edilmistir:
+Platform modern, yuksek performansli ve asenkron standartlar gozetilerek insa edilmistir.
+
+### 4.1. Teknoloji Yigini
 
 | Katman | Teknoloji | Aciklama |
 | :--- | :--- | :--- |
 | Backend | FastAPI (Python 3.10+) | Asenkron RESTful mimari, Pydantic sema dogrulama |
-| Veritabani | SQLite & SQLAlchemy | ORM tabanli iliskisel veri yonetimi, migration destegi |
+| Veritabani | SQLite & SQLAlchemy | ORM tabanli iliskisel veri yonetimi |
 | Guvenlik & Auth | Passlib (Bcrypt) & HTTPOnly Cookies | Guvenli oturum yonetimi, brute-force korumasi |
 | Frontend | HTML5, CSS3, ES6+ JavaScript | Neo-Brutalist Comic tasarim sistemi, ozel animasyonlar |
 | 3D Motoru | Three.js & WebGL | 2400 noron dugumlu dinamik beyin modeli |
-| Yapay Zeka Asistani | Google Gemini (GenAI SDK) | Lumi sohbet asistani, kisilik yonetimi ve rehberlik |
-| Sunucu & SSL | Nginx & Let's Encrypt / DuckDNS | Ters vekil sunucu, guvenli HTTPS terminasyonu |
+| Yapay Zeka Asistani | Google Gemini (GenAI SDK) | Lumi rehberlik asistani, Sokratik kisisellestirme |
+| Web Sunucusu | Nginx | Asenkron yuk dengeleme ve statik varlik sunumu |
+
+### 4.2. Sunucu Altyapisi ve Donanim Ozellikleri
+
+Platform, uretim ortaminda yuksek erisilebilirlik ve dusuk gecikme sureleri saglamak amaciyla asagidaki genel donanim ve sistem ozelliklerine sahip sanal sunucu (VDS) uzerinde barindirilmaktadir:
+
+* **Isletim Sistemi:** Linux / Ubuntu LTS
+* **Islemci Kapasitesi:** 4 vCPU Cekirdek
+* **Sistem Bellegi:** 6 GB RAM
+* **Web Servis Yonetimi:** Nginx Ters Vekil (Reverse Proxy) mimarisi
+* **Uygulama Calistiricisi:** Asenkron Uvicorn ASGI sunucusu
+* **Surec Denetimi:** Linux systemd servis yonetimi
 
 ---
 
-## 5. Git Dallari ve Ekip Calisma Mimarisi
-
-Proje deposundaki branch yapisi ve moduler gorev dagilimi asagidaki sekildedir:
-
-### 5.1. main
-Uretim ortamina dagitilan ana daldir. Tum bilissel test motoru, 48 saatlik bekleme sistemi, responsive comic arayuz, 3D beyin entegrasyonu ve guvenlik testlerini eksiksiz olarak barindirir.
-
-### 5.2. gokce
-Bilisel test senaryolarinin, refleks sure esiklerinin (5s ve 15s kistaslari), Kim's Game hafiza tepsisinin ve molekul laboratuvari oyun mekaniklerinin ilk kurgulandigi daldan meydana gelir.
-
-### 5.3. zeynep
-Goreli siralama mantigi, hile engelleme kontrolleri, semantik metin analizi, isitsel celdirici filtreleme ve matematiksel puanlama formullerinin olusturuldugu daldan meydana gelir.
-
-### 5.4. onur
-Sunucu barindirma, Nginx reverse proxy yapilandirmasi, `teamlumina.duckdns.org` uzerindeki SSL sertifikasyonlari, systemd servis yonetimi ve veritabani semasinin tasarlandigi daldan meydana gelir.
-
-### 5.5. lumi
-Sitenin etkilesimli yapay zeka maskotu olan Lumi'nin (shimeji mekanikleri, cizgilerde yurume, balonla inis, karanlik modda boynuz aydinlatmasi) gelistirildigi daldan meydana gelir.
-
----
-
-## 6. Kurulum ve Yerel Calistirma
+## 5. Kurulum ve Yerel Calistirma
 
 Yerel gelistirme ortaminda calistirmak icin asagidaki adimlari izleyiniz:
 
-### 6.1. Bagimliliklarin Kurulmasi
+### 5.1. Bagimliliklarin Kurulmasi
 ```bash
 git clone https://github.com/onuraltunbas/lumina.git
 cd lumina
@@ -145,26 +143,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 6.2. Uygulamanin Baslatilmasi
+### 5.2. Uygulamanin Baslatilmasi
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
-Uygulama baslatildiginda `http://localhost:8000` adresinden arayuze, `http://localhost:8000/test` adresinden bilissel test modülune erisilebilir.
+Uygulama baslatildiginda `http://localhost:8000` adresinden ana sayfaya, `http://localhost:8000/test` adresinden bilissel test modulune erisilebilir.
 
-### 6.3. Dogrulama ve Test Kosumu
+### 5.3. Dogrulama ve Test Kosumu
 Platformun guvenlik, oturum, KVKK ve API entegrasyonlarini dogrulamak icin:
 ```bash
 python3 test_api.py
 ```
-
----
-
-## 7. Uretim Ortami ve Dagitim Bilgileri
-
-Canli ortamdaki sunucu guncellemeleri icin standart dagitim proseduru:
-```bash
-git pull origin main
-systemctl restart lumina
-```
-
-Nginx ve SSL yonetimi `teamlumina.duckdns.org` alan adi uzerinden 8000 portuna yonlendirilecek sekilde ters vekil ile yapilandirilmistir.
