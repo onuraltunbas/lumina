@@ -1,10 +1,44 @@
-# lumina
-Lumina projesindeki test modülünü hazırlarken asıl amacımız, kullanıcının hangi öğrenme stiline daha yatkın olduğuna dair ortalama bir istatistik elde etmek ve bilişsel eğilimleri hakkında genel bir fikir sunmaktı. Klasik bir sınav yapmak yerine bilgiyi işleme hızını ve karar mekanizmasını arka planda gözlemlemek istedik. Sistemimizin kullanıcı profiline dair ortalama bir veri çıkarabilmesi için 2 günde bir rutin olarak test yapılması gerekiyor. İşin püf noktası ise şu: Her test 5 farklı sorudan oluşuyor ve kullanıcı 2 günde bir teste girdiğinde karşısına tamamen farklı bir 5 soru seti çıkıyor. Böylece soruların ezberlenmesinin önüne geçiyoruz ve zamanla biriken bu istatistikler sayesinde yapay zekanın kullanıcının öğrenme stiline dair yapacağı çıkarımların daha tutarlı olmasını hedefliyoruz.
+# Lumina Bilisel Test Modulu ve Psikometrik Olcum Metodolojisi
 
-Her ne kadar sorular 2 günde bir değişse de testlerin mantıksal temelini bilişsel psikolojiye göre kademeli olarak tasarladık. Mesela testlerin ilk aşamasındaki soruları öğrencinin temel reflekslerine ve algı hızına dair bir ön izlenim edinmek için kurguladık. Burada 5 saniyelik bir referans sınırımız var çünkü bir görseli algılayıp aksiyona geçmek bu süreyi aşıyorsa, bunun anlık bir dikkat dalgalanması olabileceğini varsayıyoruz. İkinci ve üçüncü aşamadaki sorularda süreci biraz daha zorlaştırdık. Öğrenciden karmaşık hedefleri belli bir sıraya göre bulmasını istiyoruz ama puanlamayı yaparken dizilimin tamamen doğru olmasına değil, kurduğu bağların mantığına bakıyoruz. Yani bilgiyi aşama aşama nasıl işlediğine dair genel bir tablo çizmeye çalışıyoruz. Dördüncü soru tiplerinde ise ekrana aynı anda bulması gereken farklı hedefler yerleştirerek, öğrencinin dikkatini bölme ve farklı uyaranlar arasında geçiş yapabilme yeteneğini gözlemlemeyi denedik. Bu aşamalarda 15 saniyelik referans noktaları belirledik ki zaman baskısı altında genel olarak nasıl eğilimler gösterdiklerine dair fikir sahibi olabilelim.
+Bu dokuman, Lumina platformundaki interaktif bilissel test modullerinin pedagojik temellerini, olcum hedeflerini, tepki suresi referans esiklerini ve dinamik veri akisi mimarisini aciklamaktadir.
 
-Değişen soru setlerinin her zaman sonuncusu olan beşinci soru ise daha çok stres yönetimi ve dürtü kontrolü üzerine bize ipuçları vermeyi hedefliyor. Bu aşamada süreyi devreden çıkardık ve öğrenciden cevapları kutucuklara yazarak girmesini istedik. Amacımız, öğrencinin cevabı bilmediği veya zorlandığı anlarda kutulara rastgele kelimeler mi yazdığını yoksa panikleyip gereğinden fazla mı metin girdiğini analiz edebilmekti. Sisteme girilen gereksiz ve hatalı cevap sayısına göre artan bir ceza sistemi kurduk ki, sınav kaygısıyla dürtüsel hareket etme ihtimallerini ortalama olarak ölçebilelim.
+---
 
-Tüm bu test senaryolarını koda döküp hesaplama formüllerini sisteme entegre ederken arayüz ile yapay zeka arasında canlı bir veri akışı kurduk. Öğrenci platformda 2 günde bir farklı bir teste girdiği an arka planda kronometreler çalışmaya başlıyor. Öğrencinin tepki süresi, aradaki duraksamaları ve kutucuklara girdiği metinler algoritmamıza ulaşıyor. Sistem bu verileri mutlak bir doğru-yanlış testinden ziyade, her sorunun o anki zorluk derecesine göre esnek ve dinamik hesaplamalarla değerlendiriyor.
+## 1. Psikometrik Temeller ve Olcum Hedefleri
 
-Örneğin arayüzden gelen çözüm süresi 5 veya 15 saniyelik o referans eşikleri aşıyorsa hesaplama kodumuz devreye giriyor ve gecikilen her saniye için doğrusal ya da katlanarak artan zaman cezaları uyguluyor. Sürenin olmadığı son soruda ise kodumuz öğrencinin kutucuklara yazdığı kelimeleri dinliyor. Belirli bir kelime girişini geçtikten sonra öğrencinin boşlukları doldurmak için büyük ihtimalle rastgele yazılar yazdığını varsayan algoritma, ceza katsayısını yükselterek puanı esnetiyor. Düzenli aralıklarla yapılan ve sürekli değişen bu 5 soruluk testler sonucunda elde edilen tüm zaman cezaları, hatalı kelime girişleri ve istatistikler yapay zeka koçumuza iletiliyor. Yapay zeka, zamanla biriken bu verileri harmanlayarak öğrencinin yatkınlıklarını ve hangi öğrenme stiline yakın olduğunu ortalama bir profil olarak ortaya çıkarıyor ve buna uygun bir eğitim rotası öneriyor.
+Klasik sinav ve tek boyutlu anket modelleri, bireyin anlik bilgi duzeyini olcmeye calisirken bilgiyi isleme hizini, calisma bellegini ve karar mekanizmasini goz ardi eder. Lumina test modulu; bireyin hangi ogrenme stiline daha yatkin olduguna dair ampirik bir istatistik elde etmek ve bilissel egilimleri hakkinda kisisellestirilmis bir veri seti sunmak amaciyla gelistirilmistir.
+
+* **Dinamik Periyot:** Ogrencinin bilissel profilinin tutarli sekilde modellenmesi amaciyla testler asgari 48 saatlik araliklarla tekrarlanir.
+* **Ezberlemenin Onlenmesi:** Iki gunde bir tekrarlanan oturumlarda soru kalibi ayni kalsa da soru icerikleri ve parametreleri dinamik olarak degistirilir. Bu sayede ezberleme etkisi (practice effect) ortadan kaldirilir.
+
+---
+
+## 2. Kademeli Bilisel Test Kurgusu ve Zaman Esikleri
+
+Test yapisi bilissel psikoloji prensiplerine gore 5 kademeli olarak yapilandirilmistir:
+
+### 2.1. Temel Refleks ve Algisal Tepki (5 Saniye Esigi)
+Ilk asamada ogrencinin gorsel ve kinestetik uyarani algilayip aksiyona gecme refleksi test edilir.
+* Bilisel surecte uyarani algilama ve dogru aksiyona gecme suresi 5 saniyeyi astigi takdirde, bu durum anlik dikkat dalgalanmasi veya duraksama olarak degerlendirilir ve saniye basina ceza katsayisi uygulanir.
+
+### 2.2. Goreli Bag Kurma ve Calisma Bellegi (15 Saniye Esigi)
+Ikinci ve ucuncu asamada ogrencinin sirali bilgiyi zihinde tutma ve baglantilari cozumleme kapasitesi olculur.
+* Puanlama, ogrencinin yalnizca mutlak dogru dizilimine gore degil, ogeler arasinda kurdugu mantiksal ve goreli baglantilarin dogruluguna gore yapilir.
+* Karmasik uyaranlar arasinda gecis yapabilme ve dikkat dagilimi test edilirken 15 saniyelik zaman baskisi parametresi baz alinir.
+
+### 2.3. Durtu Kontrolu ve Sinav Kaygisi Analizi
+Test oturumunun son asamasi stres yonetimi ve durtu kontrolu uzerine odaklanir.
+* Bu asamada zamanlayici devreden cikarilarak ogrencinin serbest metin girisi yapmasi istenir.
+* Hedef, ogrencinin cevabi bilmedigi veya emin olmadigi anlarda rastgele tahminlerde bulunma (impulsive guessing) egilimini olcmektir.
+* Belirli bir hata sayisini asan girislerde artan ceza katsayisi isletilerek sinav kaygisi ve durtusel davranis orani modellenir.
+
+---
+
+## 3. Matematiksel Hesaplama ve Veri Akisi
+
+Test surecinde arayuz ile hesaplama motoru arasinda suregelen canli veri akisi su adimlarla islenir:
+
+1. **Sure Olcumu:** Soru basladigi anda milisaniye hassasiyetinde kronometre devreye girer.
+2. **Kademeli Zaman Cezasi:** 5 ve 15 saniyelik referans esikleri asildiginda gecikilen sure oraninda dinamik puan kesintisi hesaplanir.
+3. **Metin Normalizasyonu:** Turkce karakter toleransi ve yazim kurallari gozetilerek kullanici cevaplari temizlenir.
+4. **Yapay Zeka Profili:** Elde edilen zaman verileri, hatali girisler ve baglanti basarilari yapay zeka asistani Lumi'ye aktarilarak kisisellestirilmis calisma stratejisi olusturulur.
