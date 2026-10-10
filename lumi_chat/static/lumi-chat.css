@@ -1176,3 +1176,14 @@ html.dark-theme #lumi-root {
   box-shadow: 3.5px 3.5px 0px #1D1D1D;
 }
 
+
+/* Balonlar ellerine yapışık: her demet kendi elinin etrafında ufak ufak sallanır */
+.lumi-bsway { transform-box: view-box; }
+.lumi-bsway-l { transform-origin: 112px 482px; }
+.lumi-bsway-r { transform-origin: 688px 482px; }
+.lumi-shimeji.is-falling .lumi-bsway-l { animation: lumi-bsway 2.2s ease-in-out infinite alternate; }
+.lumi-shimeji.is-falling .lumi-bsway-r { animation: lumi-bsway 2.2s ease-in-out -1.1s infinite alternate; }
+@keyframes lumi-bsway {
+  0%   { transform: rotate(-6deg); }
+  100% { transform: rotate(6deg); }
+}

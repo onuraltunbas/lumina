@@ -106,8 +106,8 @@
   // Her elinde bir üçlü balon demeti (sol el: 112,482 / sağ el: 688,482)
   function getBalloonsSvg(sid) {
     return '<g id="lumi-balloons-wrap" class="lumi-balloon-wrap">' +
-      getBalloonBunch(sid, 'translate(112, 476) scale(0.6) translate(-250, -450)') +
-      getBalloonBunch(sid, 'translate(688, 476) scale(0.6) translate(-250, -450)') +
+      '<g class="lumi-bsway lumi-bsway-l">' + getBalloonBunch(sid, 'translate(112, 476) scale(0.6) translate(-250, -450)') + '</g>' +
+      '<g class="lumi-bsway lumi-bsway-r">' + getBalloonBunch(sid, 'translate(688, 476) scale(0.6) translate(-250, -450)') + '</g>' +
       '</g>';
   }
 
