@@ -190,8 +190,8 @@
       '      <feMerge><feMergeNode in="rt"/><feMergeNode in="SourceGraphic"/></feMerge>' +
       '    </filter>' +
       '  </defs>' +
-      getBalloonsSvg(sid) +
       '  <g id="lumi-master" class="smooth-part">' +
+      getBalloonsSvg(sid) +
       '    <g id="lumi-legs">' +
       '      <g id="lumi-leg-l" class="anim-part">' +
       '        <path d="M 310,650 C 270,650 280,710 320,715 C 360,720 370,660 350,650 Z" fill="url(#bg_' + sid + ')"/>' +
