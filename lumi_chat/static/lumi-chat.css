@@ -1195,3 +1195,18 @@ html.dark-theme #lumi-root {
   margin-left: -25%;
   margin-top: -12.5%;
 }
+
+/* Karanlık tema: Lumi'nin boynuz ucundaki küre etrafa ışık saçar */
+html.dark-theme .lumi-character-svg .orb-wrap {
+  filter: drop-shadow(0 0 18px rgba(255, 228, 154, 0.95))
+          drop-shadow(0 0 45px rgba(255, 211, 107, 0.75))
+          drop-shadow(0 0 90px rgba(255, 196, 80, 0.5));
+  animation: lumi-orb-shine 2.4s ease-in-out infinite alternate;
+}
+html.dark-theme .lumi-character-svg #orb-core {
+  fill: #FFF1B8;
+}
+@keyframes lumi-orb-shine {
+  0%   { filter: drop-shadow(0 0 14px rgba(255,228,154,0.85)) drop-shadow(0 0 35px rgba(255,211,107,0.6)) drop-shadow(0 0 70px rgba(255,196,80,0.35)); }
+  100% { filter: drop-shadow(0 0 24px rgba(255,240,190,1))   drop-shadow(0 0 60px rgba(255,211,107,0.85)) drop-shadow(0 0 120px rgba(255,196,80,0.6)); }
+}
