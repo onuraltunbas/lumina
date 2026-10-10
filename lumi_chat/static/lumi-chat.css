@@ -1196,17 +1196,106 @@ html.dark-theme #lumi-root {
   margin-top: -12.5%;
 }
 
-/* Karanlık tema: Lumi'nin boynuz ucundaki küre etrafa ışık saçar */
-html.dark-theme .lumi-character-svg .orb-wrap {
-  filter: drop-shadow(0 0 18px rgba(255, 228, 154, 0.95))
-          drop-shadow(0 0 45px rgba(255, 211, 107, 0.75))
-          drop-shadow(0 0 90px rgba(255, 196, 80, 0.5));
-  animation: lumi-orb-shine 2.4s ease-in-out infinite alternate;
+/* =========================================================
+   KARANLIK TEMA: LUMİ'NİN BOYNUZ UCUNDAN ETRAFA IŞIK SAÇILMASI
+   ========================================================= */
+
+/* 1. HTML Katmanında Etrafı Aydınlatan Geniş Işık Halesi */
+.lumi-horn-glow {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle, rgba(255, 240, 160, 0.72) 0%, rgba(255, 210, 70, 0.42) 22%, rgba(255, 180, 20, 0.18) 50%, rgba(255, 160, 0, 0.05) 70%, transparent 80%);
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: screen;
 }
-html.dark-theme .lumi-character-svg #orb-core {
-  fill: #FFF1B8;
+
+html.dark-theme .lumi-horn-glow,
+.dark-theme .lumi-horn-glow,
+.is-dark-theme .lumi-horn-glow,
+#lumi-shimeji.is-dark-theme .lumi-horn-glow,
+#lumi-root.is-dark-theme .lumi-horn-glow {
+  display: block !important;
+  opacity: 1 !important;
+  animation: lumiHornGlowPulse 2.8s ease-in-out infinite alternate !important;
 }
-@keyframes lumi-orb-shine {
-  0%   { filter: drop-shadow(0 0 14px rgba(255,228,154,0.85)) drop-shadow(0 0 35px rgba(255,211,107,0.6)) drop-shadow(0 0 70px rgba(255,196,80,0.35)); }
-  100% { filter: drop-shadow(0 0 24px rgba(255,240,190,1))   drop-shadow(0 0 60px rgba(255,211,107,0.85)) drop-shadow(0 0 120px rgba(255,196,80,0.6)); }
+
+@keyframes lumiHornGlowPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0.75;
+    filter: drop-shadow(0 0 25px rgba(255, 220, 80, 0.6));
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+    filter: drop-shadow(0 0 55px rgba(255, 220, 80, 0.95)) drop-shadow(0 0 110px rgba(255, 180, 40, 0.6));
+  }
+}
+
+/* 2. SVG İçinde Boynuzdan Saçılan Işık (Hale, 360° Dönen Işınlar, Parıltılar) */
+.lumi-dark-horn-light {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+html.dark-theme .lumi-dark-horn-light,
+.dark-theme .lumi-dark-horn-light,
+.is-dark-theme .lumi-dark-horn-light,
+#lumi-shimeji.is-dark-theme .lumi-dark-horn-light,
+#lumi-root.is-dark-theme .lumi-dark-horn-light {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* 360 Derece Dönen Işık Huzmeleri */
+.lumi-horn-rays {
+  transform-origin: 400px 55px;
+  animation: lumiHornRaySpin 14s linear infinite;
+}
+
+@keyframes lumiHornRaySpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Nefes Alan Dış Işık Halesi */
+.lumi-horn-halo-outer {
+  transform-origin: 400px 55px;
+  animation: lumiHornHaloBreath 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes lumiHornHaloBreath {
+  0% { transform: scale(0.88); opacity: 0.7; }
+  100% { transform: scale(1.18); opacity: 1; }
+}
+
+/* Yanıp Sönen Işık Kıvılcımları */
+.lumi-horn-sparkles {
+  transform-origin: 400px 55px;
+  animation: lumiHornSparkleTwinkle 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes lumiHornSparkleTwinkle {
+  0% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0.45; transform: scale(0.9); }
+}
+
+/* Karanlık Modda Boynuz Çekirdeği: Süper Parlak Sarı-Beyaz */
+html.dark-theme .lumi-character-svg #orb-core,
+.dark-theme .lumi-character-svg #orb-core,
+.is-dark-theme #orb-core {
+  fill: #FFFDF0 !important;
+  filter: drop-shadow(0 0 16px #FFE082) drop-shadow(0 0 35px #FFB300) !important;
 }

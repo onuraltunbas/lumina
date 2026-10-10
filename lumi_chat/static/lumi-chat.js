@@ -189,6 +189,18 @@
       '      <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.2 0 0 0  0 0.2 0 0 0  0 0 0 1 0" in="b1" result="rt"/>' +
       '      <feMerge><feMergeNode in="rt"/><feMergeNode in="SourceGraphic"/></feMerge>' +
       '    </filter>' +
+      '    <radialGradient id="hglow_' + sid + '" cx="50%" cy="50%" r="50%">' +
+      '      <stop offset="0%" stop-color="#FFFBE6" stop-opacity="1"/>' +
+      '      <stop offset="25%" stop-color="#FFE082" stop-opacity="0.8"/>' +
+      '      <stop offset="55%" stop-color="#FFB300" stop-opacity="0.38"/>' +
+      '      <stop offset="80%" stop-color="#FF8F00" stop-opacity="0.12"/>' +
+      '      <stop offset="100%" stop-color="#FF8F00" stop-opacity="0"/>' +
+      '    </radialGradient>' +
+      '    <radialGradient id="hray_' + sid + '" cx="50%" cy="50%" r="50%">' +
+      '      <stop offset="0%" stop-color="#FFFDF0" stop-opacity="0.95"/>' +
+      '      <stop offset="50%" stop-color="#FFD54F" stop-opacity="0.5"/>' +
+      '      <stop offset="100%" stop-color="#FFA000" stop-opacity="0"/>' +
+      '    </radialGradient>' +
       '  </defs>' +
       '  <g id="lumi-master" class="smooth-part">' +
       getBalloonsSvg(sid) +
@@ -263,8 +275,28 @@
       '      <g id="lumi-antenna" class="anim-part">' +
       '        <path d="M 400,175 Q 390,110 400,70" fill="none" stroke="#FFFAF5" stroke-width="10" stroke-linecap="round"/>' +
       '        <g class="orb-wrap smooth-part">' +
+      '          <g class="lumi-dark-horn-light">' +
+      '            <circle class="lumi-horn-halo-outer" cx="400" cy="55" r="160" fill="url(#hglow_' + sid + ')"/>' +
+      '            <circle class="lumi-horn-halo-inner" cx="400" cy="55" r="85" fill="url(#hglow_' + sid + ')"/>' +
+      '            <g class="lumi-horn-rays">' +
+      '              <polygon points="400,55 394,-90 406,-90" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 394,200 406,200" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 255,49 255,61" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 545,49 545,61" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 297,-48 306,-57" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 503,-48 494,-57" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 297,158 306,167" fill="url(#hray_' + sid + ')"/>' +
+      '              <polygon points="400,55 503,158 494,167" fill="url(#hray_' + sid + ')"/>' +
+      '            </g>' +
+      '            <g class="lumi-horn-sparkles">' +
+      '              <path d="M 335,20 L 340,30 L 350,35 L 340,40 L 335,50 L 330,40 L 320,35 L 330,30 Z" fill="#FFFBE6"/>' +
+      '              <path d="M 465,15 L 470,23 L 478,27 L 470,31 L 465,39 L 460,31 L 452,27 L 460,23 Z" fill="#FFFBE6"/>' +
+      '              <path d="M 390,-35 L 394,-27 L 402,-23 L 394,-19 L 390,-11 L 386,-19 L 378,-23 L 386,-27 Z" fill="#FFFBE6"/>' +
+      '              <path d="M 425,-25 L 428,-19 L 434,-16 L 428,-13 L 425,-7 L 422,-13 L 416,-16 L 422,-19 Z" fill="#FFE082"/>' +
+      '            </g>' +
+      '          </g>' +
       '          <circle id="orb-core" class="smooth-part" cx="400" cy="55" r="30" fill="#FFE49A" filter="url(#go_' + sid + ')"/>' +
-      '          <circle cx="400" cy="55" r="14" fill="#FFFFFF" opacity="0.9"/>' +
+      '          <circle cx="400" cy="55" r="14" fill="#FFFFFF" opacity="0.95"/>' +
       '        </g>' +
       '      </g>' +
       '      <g id="efx-zzz" class="emotion-effect">' +
@@ -373,6 +405,7 @@
     '  <div class="lumi-footer"><span class="lumi-count">0/500</span><span class="lumi-usage"></span></div>' +
     '</div>' +
     '<div id="lumi-shimeji" class="lumi-shimeji" role="button" tabindex="0" aria-label="Lumi ile konuş veya gezdir" title="Lumi\'ye tıkla veya sürükle!">' +
+    '  <div class="lumi-horn-glow" id="lumi-horn-glow"></div>' +
     '  <div class="lumi-shimeji-bubble" id="lumi-shimeji-bubble" style="display:none;"></div>' +
     '  <div class="lumi-shimeji-body-wrap" id="lumi-shimeji-body-wrap">' +
     '    ' + getLumiSvg('stage-shimeji', 'normal') +
@@ -1954,6 +1987,34 @@
         setLumiMood('saskin', 1200);
       }
     });
+
+
+    // Karanlık tema senkronizasyonu: Boynuz ışığını canlı tut
+    function syncLumiTheme() {
+      var isDark = document.documentElement.classList.contains('dark-theme') ||
+                   document.body.classList.contains('dark-theme') ||
+                   localStorage.getItem('lumina_theme') === 'dark' ||
+                   (!localStorage.getItem('lumina_theme') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) {
+        root.classList.add('is-dark-theme');
+        if (shimeji) shimeji.classList.add('is-dark-theme');
+      } else {
+        root.classList.remove('is-dark-theme');
+        if (shimeji) shimeji.classList.remove('is-dark-theme');
+      }
+    }
+    syncLumiTheme();
+    window.addEventListener('luminathemechange', syncLumiTheme);
+    if (window.matchMedia) {
+      try {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncLumiTheme);
+      } catch (_) {}
+    }
+    if (window.MutationObserver) {
+      var tObs = new MutationObserver(syncLumiTheme);
+      tObs.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+      tObs.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+    }
 
     ta.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
