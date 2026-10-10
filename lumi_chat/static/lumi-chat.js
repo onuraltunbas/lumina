@@ -982,7 +982,7 @@
           shimeji.classList.add('is-falling');
           setLumiMood('heyecanli', 1000);
         }
-      }, 14000);
+      }, 3000);
       scheduleBehavior(3000);
     }
 
