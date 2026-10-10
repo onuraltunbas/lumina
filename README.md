@@ -154,3 +154,14 @@ Platformun guvenlik, oturum, KVKK ve API entegrasyonlarini dogrulamak icin:
 ```bash
 python3 test_api.py
 ```
+
+---
+
+## 6. Proje Ekibi ve Gelistiriciler
+
+Bu proje Remzican Onur Altunbas, Gokce Polat ve Zeynep Cemile Kiran tarafindan ortak calisma ve is birligiyle gelistirilmistir.
+
+* Remzican Onur Altunbas ([@onuraltunbas](https://github.com/onuraltunbas))
+* Gokce Polat ([@gokce-polat](https://github.com/gokce-polat))
+* Zeynep Cemile Kiran ([@zeyneppkiran](https://github.com/zeyneppkiran))
+
