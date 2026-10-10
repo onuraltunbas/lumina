@@ -40,6 +40,70 @@
     'uykulu': '💤 Dinleniyor...'
   };
 
+  // Pastel Karikatür Balonlar (Düşüş Animasyonu İçin)
+  function getBalloonsSvg(sid) {
+    return (
+      '<g id="lumi-balloons-wrap" class="lumi-balloon-wrap">' +
+      '  <g class="pop-art-group lumi-balloon-group" transform="translate(400, 210) scale(0.88) translate(-250, -450)">' +
+      '    <g class="comic-outline" stroke-width="5">' +
+      '      <path d="M 150 270 Q 180 380 250 450"/>' +
+      '      <path d="M 250 185 Q 240 320 250 450"/>' +
+      '      <path d="M 350 270 Q 320 380 250 450"/>' +
+      '    </g>' +
+      '    <g transform="translate(150, 220) rotate(-15)">' +
+      '      <path d="M -12 50 L 12 50 L 16 68 L -16 68 Z" fill="#FF8DA1"/>' +
+      '      <path d="M 0 50 L 16 68 L -16 68 Z" fill="rgba(0,0,0,0.2)"/>' +
+      '      <path d="M -12 50 L 12 50 L 16 68 L -16 68 Z" class="comic-outline"/>' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z" fill="#FF8DA1"/>' +
+      '      <g clip-path="url(#bclip_' + sid + ')">' +
+      '        <ellipse cx="15" cy="25" rx="45" ry="60" fill="rgba(0,0,0,0.15)" transform="rotate(-10)"/>' +
+      '      </g>' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z" class="comic-outline"/>' +
+      '      <path d="M -24 -45 C -40 -30, -42 0, -32 20" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/>' +
+      '      <circle cx="-16" cy="-52" r="4.5" fill="#FFFFFF"/>' +
+      '    </g>' +
+      '    <g transform="translate(350, 220) rotate(15)">' +
+      '      <path d="M -12 50 L 12 50 L 16 68 L -16 68 Z" fill="#55E6C1"/>' +
+      '      <path d="M 0 50 L 16 68 L -16 68 Z" fill="rgba(0,0,0,0.2)"/>' +
+      '      <path d="M -12 50 L 12 50 L 16 68 L -16 68 Z" class="comic-outline"/>' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z" fill="#55E6C1"/>' +
+      '      <g clip-path="url(#bclip_' + sid + ')">' +
+      '        <ellipse cx="15" cy="25" rx="45" ry="60" fill="rgba(0,0,0,0.15)" transform="rotate(-10)"/>' +
+      '      </g>' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z" class="comic-outline"/>' +
+      '      <path d="M -24 -45 C -40 -30, -42 0, -32 20" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/>' +
+      '      <circle cx="-16" cy="-52" r="4.5" fill="#FFFFFF"/>' +
+      '    </g>' +
+      '    <g transform="translate(250, 130)">' +
+      '      <path d="M -12 50 L 12 50 L 16 68 L -16 68 Z" fill="#74B9FF"/>' +
+      '      <path d="M 0 50 L 16 68 L -16 68 Z" fill="rgba(0,0,0,0.2)"/>' +
+      '      <path d="M -12 50 L 12 50 L 16 68 L -16 68 Z" class="comic-outline"/>' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z" fill="#74B9FF"/>' +
+      '      <g clip-path="url(#bclip_' + sid + ')">' +
+      '        <ellipse cx="15" cy="25" rx="45" ry="60" fill="rgba(0,0,0,0.15)" transform="rotate(-10)"/>' +
+      '      </g>' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z" class="comic-outline"/>' +
+      '      <path d="M -24 -45 C -40 -30, -42 0, -32 20" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/>' +
+      '      <circle cx="-16" cy="-52" r="4.5" fill="#FFFFFF"/>' +
+      '    </g>' +
+      '    <g transform="translate(250, 450)">' +
+      '      <ellipse cx="0" cy="0" rx="14" ry="10" fill="#FDCB6E" class="comic-outline"/>' +
+      '      <ellipse cx="0" cy="0" rx="14" ry="10" fill="#FDCB6E"/>' +
+      '      <ellipse cx="0" cy="0" rx="14" ry="10" class="comic-outline"/>' +
+      '      <path d="M -8 -4 C -25 -25, -45 -10, -25 10 C -15 15, -5 5, 0 0" fill="#FDCB6E" class="comic-outline"/>' +
+      '      <path d="M 8 -4 C 25 -25, 45 -10, 25 10 C 15 15, 5 5, 0 0" fill="#FDCB6E" class="comic-outline"/>' +
+      '      <circle cx="0" cy="0" rx="6" ry="6" fill="#FFEAA7"/>' +
+      '    </g>' +
+      '  </g>' +
+      '  <!-- İki Ele Doğru İnen Bağlantı İpleri (Zero Gap Precision) -->' +
+      '  <g class="comic-outline lumi-balloon-handles" stroke="#111111" stroke-width="5" stroke-linecap="round" fill="none">' +
+      '    <path d="M 395 210 Q 350 225 320 245 L 312 268"/>' +
+      '    <path d="M 405 210 Q 450 225 480 245 L 488 268"/>' +
+      '  </g>' +
+      '</g>'
+    );
+  }
+
   // Vektörel Karakter SVG Şablonu (Her parçaya izole stageId)
   function getLumiSvg(stageId, initialMood) {
     initialMood = initialMood || 'normal';
@@ -89,6 +153,9 @@
       '    </radialGradient>' +
       '    <clipPath id="cl_' + sid + '"><ellipse cx="300" cy="360" rx="46" ry="66"/></clipPath>' +
       '    <clipPath id="cr_' + sid + '"><ellipse cx="500" cy="360" rx="46" ry="66"/></clipPath>' +
+      '    <clipPath id="bclip_' + sid + '">' +
+      '      <path d="M 0 55 C 35 55, 52 22, 52 -18 C 52 -55, 28 -72, 0 -72 C -28 -72, -52 -55, -52 -18 C -52 22, -35 55, 0 55 Z"/>' +
+      '    </clipPath>' +
       '    <filter id="go_' + sid + '" x="-150%" y="-150%" width="400%" height="400%">' +
       '      <feGaussianBlur stdDeviation="14" result="b1"/>' +
       '      <feGaussianBlur stdDeviation="24" result="b2"/>' +
@@ -116,6 +183,7 @@
       '      <feMerge><feMergeNode in="rt"/><feMergeNode in="SourceGraphic"/></feMerge>' +
       '    </filter>' +
       '  </defs>' +
+      getBalloonsSvg(sid) +
       '  <g id="lumi-master" class="smooth-part">' +
       '    <g id="lumi-legs">' +
       '      <g id="lumi-leg-l" class="anim-part">' +
@@ -206,11 +274,33 @@
       '      </g>' +
       '    </g>' +
       '    <g id="lumi-arms">' +
-      '      <g id="lumi-arm-l" class="anim-part">' +
-      '        <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#ag_' + sid + ')"/>' +
+      '      <g id="lumi-arms-normal" class="lumi-arms-normal">' +
+      '        <g id="lumi-arm-l" class="anim-part">' +
+      '          <path d="M 290,500 C 190,520 160,600 190,630 C 230,650 260,570 300,540 Z" fill="url(#ag_' + sid + ')"/>' +
+      '        </g>' +
+      '        <g id="lumi-arm-r" class="anim-part">' +
+      '          <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#ag_' + sid + ')"/>' +
+      '        </g>' +
       '      </g>' +
-      '      <g id="lumi-arm-r" class="anim-part">' +
-      '        <path d="M 510,500 C 610,520 640,600 610,630 C 570,650 540,570 500,540 Z" fill="url(#ag_' + sid + ')"/>' +
+      '      <g id="lumi-arms-falling" class="lumi-arms-falling">' +
+      '        <!-- Sol Kol: Omuzdan Sol Ele Kesintisiz Bağlantı -->' +
+      '        <path d="M 270,490 C 255,390 285,300 320,245 C 336,245 350,270 335,325 C 320,380 305,480 305,510 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <!-- Sol Pati: İpi sımsıkı saran el (320, 245) - Sıfır Boşluk Garantisi -->' +
+      '        <ellipse cx="320" cy="245" rx="28" ry="24" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="320" cy="245" r="9" fill="#FFA9BD"/>' +
+      '        <circle cx="310" cy="237" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="320" cy="233" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="330" cy="237" r="5" fill="#FFA9BD"/>' +
+      '        <path d="M 308,245 Q 320,250 332,245" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sağ Kol: Omuzdan Sağ Ele Kesintisiz Bağlantı -->' +
+      '        <path d="M 530,490 C 545,390 515,300 480,245 C 464,245 450,270 465,325 C 480,380 495,480 495,510 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <!-- Sağ Pati: İpi sımsıkı saran el (480, 245) - Sıfır Boşluk Garantisi -->' +
+      '        <ellipse cx="480" cy="245" rx="28" ry="24" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="480" cy="245" r="9" fill="#FFA9BD"/>' +
+      '        <circle cx="470" cy="237" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="480" cy="233" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="490" cy="237" r="5" fill="#FFA9BD"/>' +
+      '        <path d="M 468,245 Q 480,250 492,245" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
       '      </g>' +
       '    </g>' +
       '  </g>' +
@@ -619,27 +709,33 @@
       return Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
     }
 
-    // Sayfadaki tüm platform yüzeylerini (çizgiler, ayırıcılar, progress barlar, kartlar, tablolar, butonlar) bulur
+    // Sayfadaki tüm platform yüzeylerini (çizgiler, ayırıcılar, progress barlar, kartlar, görseller, navbar, footer) bulur
     function getCandidatePlatforms() {
       var sel = [
-        // Sitedeki tüm çizgiler ve ayırıcılar
+        // Sitedeki tüm çizgiler, ayırıcılar ve kenarlıklar
         'hr', '[class*="line"]', '[class*="divider"]', '[class*="separator"]', '[class*="border"]',
-        '.border-top', '.border-bottom', '[style*="border"]',
+        '.border-top', '.border-bottom', '[class*="border-t"]', '[class*="border-b"]', '[style*="border"]',
         // Progress barlar ve göstergeler
         '[class*="progress"]', '.progress-bar', '[class*="bar"]',
-        // Kartlar, kutular ve paneller
+        // Kartlar, kutular, çerçeveler ve paneller
         '.card', '[class*="card"]', '.box', '[class*="box"]', '.panel', '[class*="panel"]',
         '.widget', '[class*="widget"]', '.container', '[class*="wrapper"]', 'fieldset',
-        // Dashboard özel bileşenleri
-        '.dashboard-hero-card', '.dashboard-score-card', '.dashboard-waiting-box', '.dashboard-stat-tag', '.badge',
+        'section', 'article', 'aside', 'main', '[class*="section"]',
+        // Görsel kutuları, resimler ve medya çerçeveleri
+        'img', 'picture', 'figure', '[class*="image"]', '[class*="img"]', '[class*="visual"]',
+        '[class*="photo"]', '[class*="banner"]', '[class*="hero"]', '[class*="media"]',
+        '[class*="thumbnail"]', '[class*="avatar"]',
+        // Menüler, başlıklar, navbar ve footer çizgileri
+        'header', 'nav', '.navbar', '[class*="nav"]', '[class*="header"]', '[id*="nav"]', '[id*="header"]',
+        'footer', '[class*="footer"]', '[id*="footer"]',
+        'h1', 'h2', 'h3', 'h4',
+        // Butonlar, piller, çipler ve sekmeler
+        'button', '.btn', '[class*="btn"]', '.chip', '[class*="pill"]', '[class*="tag"]',
+        '.tab-nav', '.tabs', 'input', 'select', 'textarea',
         // Tablolar ve veri listeleri
         'table', 'thead', 'tr', 'th', 'ul', 'ol',
-        // Menüler, başlıklar ve barlar
-        'header', 'nav', '.navbar', '[class*="nav"]', 'footer',
-        'h1', 'h2', 'h3', 'h4',
-        // Butonlar, piller ve çipler
-        'button', '.btn', '[class*="btn"]', '.chip', '[class*="pill"]', '[class*="tag"]',
-        '.tab-nav', '.tabs', 'input', 'select',
+        // Dashboard özel bileşenleri
+        '.dashboard-hero-card', '.dashboard-score-card', '.dashboard-waiting-box', '.dashboard-stat-tag', '.badge',
         // Özel platformlar
         '[data-platform="true"]'
       ].join(',');
@@ -673,7 +769,7 @@
       return platforms;
     }
 
-    // Ayağın altındaki en yakın zemini (platform veya ekran altı) hesaplar (Lumi posY koordinat uzayı)
+    // Ayağın altındaki en yakın zemini/çizgiyi hesaplar (Hem üst kenar hem alt kenar desteği)
     function findFloorUnder(footX, currentPosY) {
       var sz = getCharSize();
       var defaultFloor = Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
@@ -684,16 +780,32 @@
 
       for (var i = 0; i < platforms.length; i++) {
         var p = platforms[i];
-        // Ayak platformun yatay sınırları içinde mi? (25px tolerans ile)
-        if (footX >= p.left - 25 && footX <= p.right + 25) {
-          var surfaceY = p.top - sz.h + 8; // Çizgi veya kartın tam üstüne oturt
-          // Platform ayağın altında veya hemen hizasında olmalı (-40px snapping toleransı)
-          if (surfaceY >= currentPosY - 40 && surfaceY <= defaultFloor) {
-            var dist = surfaceY - currentPosY;
-            if (dist >= -40 && dist < minDistance) {
-              minDistance = dist;
-              bestFloor = surfaceY;
-              bestPlatform = p;
+        // Ayak platformun yatay sınırları içinde mi? (30px tolerans ile)
+        if (footX >= p.left - 30 && footX <= p.right + 30) {
+          // 1. Üst kenar / çizgi
+          var surfaces = [p.top - sz.h + 8];
+          // 2. Yeterince yüksekse (örn. navbar, kart, görsel kutusu) alt kenar çizgisini de yüzey yap
+          if (p.height >= 24 && p.bottom < window.innerHeight - 35) {
+            surfaces.push(p.bottom - sz.h + 8);
+          }
+
+          for (var s = 0; s < surfaces.length; s++) {
+            var surfaceY = surfaces[s];
+            if (surfaceY >= currentPosY - 45 && surfaceY <= defaultFloor) {
+              var dist = surfaceY - currentPosY;
+              if (dist >= -45 && dist < minDistance) {
+                minDistance = dist;
+                bestFloor = surfaceY;
+                bestPlatform = {
+                  el: p.el,
+                  top: surfaceY + sz.h - 8,
+                  bottom: p.bottom,
+                  left: p.left,
+                  right: p.right,
+                  width: p.width,
+                  height: p.height
+                };
+              }
             }
           }
         }
@@ -818,9 +930,9 @@
       var targetLandX = Math.floor(minX + Math.random() * (maxX - minX));
 
       var deltaY = Math.max(100, homeY - posY);
-      var dropFrames = Math.max(20, Math.round((-1 + Math.sqrt(1 + 1.16 * deltaY)) / 0.58));
+      var dropFrames = Math.max(50, Math.round(deltaY / 2.1));
       velocityX = (targetLandX - posX) / dropFrames;
-      velocityY = 1.0;
+      velocityY = 0.8;
       behavior = 'falling_to_return';
 
       shimeji.classList.add('is-falling');
@@ -1058,11 +1170,12 @@
           }
         }
 
-        // 1. Tavandan rastgele noktaya düşüş modu
+        // 1. Tavandan rastgele noktaya düşüş modu (Balonla süzülerek iniş)
         if (behavior === 'falling_to_return') {
-          velocityY += 0.58;
+          velocityY = Math.min(2.3, velocityY + 0.08);
           posY += velocityY;
           posX += velocityX;
+          velocityX *= 0.99;
 
           var maxW = Math.max(10, window.innerWidth - sz.w - 10);
           posX = Math.max(10, Math.min(posX, maxW));
@@ -1086,14 +1199,17 @@
           return;
         }
 
-        // 2. Havada bırakıldıktan sonra yere düşüş modu
+        // 2. Havada bırakıldıktan sonra yere düşüş modu (Balonla süzülerek iniş)
         if (behavior === 'returning_fall') {
-          velocityY += 0.58;
+          velocityY = Math.min(2.3, velocityY + 0.08);
           posY += velocityY;
+          posX += velocityX;
+          velocityX *= 0.98;
 
           if (posY >= homeY) {
             posY = homeY;
             velocityY = 0;
+            velocityX = 0;
             shimeji.classList.remove('is-falling');
             shimeji.classList.add('is-landing');
             setLumiMood('heyecanli', 500);
@@ -1287,12 +1403,12 @@
         updateTransform();
       }
 
-      // 4. DÜŞME / YERÇEKİMİ MODU (Platforma veya Zemine İniş)
+      // 4. DÜŞME / YERÇEKİMİ MODU (Balonla Süzülerek Platforma veya Zemine İniş)
       else if (behavior === 'falling') {
-        velocityY += 0.80; // Yumuşak yerçekimi
+        velocityY = Math.min(2.4, velocityY + 0.08); // Balonla yumuşak ve tatlı süzülüş
         posY += velocityY;
         posX += velocityX;
-        velocityX *= 0.96; // Hava direnci
+        velocityX *= 0.97; // Hava direnci
 
         if (posX < 8) { posX = 8; velocityX *= -0.5; }
         if (posX > maxW) { posX = maxW; velocityX *= -0.5; }
@@ -1645,9 +1761,13 @@
             if (root.contains(uEl) || uEl === document.body || uEl === document.documentElement) continue;
             var uR = uEl.getBoundingClientRect();
             if (uR.width >= 20 && uR.bottom > 15) {
+              var chosenY = uR.top;
+              if (uR.height >= 24 && Math.abs(probeY - uR.bottom) < Math.abs(probeY - uR.top)) {
+                chosenY = uR.bottom;
+              }
               probedPlatform = {
                 el: uEl,
-                top: uR.top,
+                top: chosenY,
                 bottom: uR.bottom,
                 left: uR.left,
                 right: uR.right,
