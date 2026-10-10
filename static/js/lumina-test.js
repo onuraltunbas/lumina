@@ -1000,7 +1000,7 @@
       }
     } catch (e) {}
 
-    // Giriş yapmışsa DB'ye kaydet
+    // Giriş yapmışsa DB'ye kaydet, misafir ise localStorage'a sakla (kayıt olunca aktarılacak)
     if (isAuthenticated) {
       try {
         await fetch('/api/auth/results', {
@@ -1008,8 +1008,17 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        try {
+          localStorage.removeItem('lumina_pending_guest_result');
+        } catch (e) {}
       } catch (e) {
         console.warn('Test sonucu kaydedilirken hata:', e);
+      }
+    } else {
+      try {
+        localStorage.setItem('lumina_pending_guest_result', JSON.stringify(payload));
+      } catch (e) {
+        console.warn('Misafir test sonucu localStorage kaydı başarısız:', e);
       }
     }
 

@@ -564,6 +564,106 @@
           <div class="brain-hint-badge">3D Döndür / Yakınlaştır</div>
         </div>
 
+        <!-- SÜTUN GRAFİĞİ KUTUCUĞU (5 ÖĞRENME STİLİ DAĞILIMI) -->
+        <div class="dashboard-chart-card" id="dashboard-column-chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">
+              <span class="chart-card-icon">📊</span>
+              <span>Öğrenme Stilleri Dağılımı</span>
+            </div>
+            <div class="chart-badge">Sütun Grafiği</div>
+          </div>
+          
+          <div class="comic-column-chart-container">
+            <div class="chart-y-axis">
+              <span>%100</span>
+              <span>%75</span>
+              <span>%50</span>
+              <span>%25</span>
+              <span>%0</span>
+            </div>
+            <div class="chart-columns-stage">
+              <div class="chart-grid-line" style="bottom: 100%;"></div>
+              <div class="chart-grid-line" style="bottom: 75%;"></div>
+              <div class="chart-grid-line" style="bottom: 50%;"></div>
+              <div class="chart-grid-line" style="bottom: 25%;"></div>
+              <div class="chart-grid-line" style="bottom: 0%;"></div>
+
+              <div class="chart-columns-grid">
+                <!-- 1. Görsel (#A855F7) -->
+                <div class="chart-col-item" data-model="gorsel">
+                  <div class="chart-col-track">
+                    <div class="chart-col-bar col-bar-gorsel" id="chart-bar-gorsel" style="height: 0%;">
+                      <span class="chart-col-pct-badge" id="chart-val-gorsel">%0</span>
+                    </div>
+                  </div>
+                  <div class="chart-col-meta">
+                    <span class="chart-col-icon">👁️</span>
+                    <span class="chart-col-name">Görsel</span>
+                  </div>
+                </div>
+
+                <!-- 2. İşitsel (#10B981) -->
+                <div class="chart-col-item" data-model="isitsel">
+                  <div class="chart-col-track">
+                    <div class="chart-col-bar col-bar-isitsel" id="chart-bar-isitsel" style="height: 0%;">
+                      <span class="chart-col-pct-badge" id="chart-val-isitsel">%0</span>
+                    </div>
+                  </div>
+                  <div class="chart-col-meta">
+                    <span class="chart-col-icon">🎧</span>
+                    <span class="chart-col-name">İşitsel</span>
+                  </div>
+                </div>
+
+                <!-- 3. Yazarak (#EC4899) -->
+                <div class="chart-col-item" data-model="yazarak">
+                  <div class="chart-col-track">
+                    <div class="chart-col-bar col-bar-yazarak" id="chart-bar-yazarak" style="height: 0%;">
+                      <span class="chart-col-pct-badge" id="chart-val-yazarak">%0</span>
+                    </div>
+                  </div>
+                  <div class="chart-col-meta">
+                    <span class="chart-col-icon">✍️</span>
+                    <span class="chart-col-name">Yazarak</span>
+                  </div>
+                </div>
+
+                <!-- 4. Okuyarak (#0284C7) -->
+                <div class="chart-col-item" data-model="okuyarak">
+                  <div class="chart-col-track">
+                    <div class="chart-col-bar col-bar-okuyarak" id="chart-bar-okuyarak" style="height: 0%;">
+                      <span class="chart-col-pct-badge" id="chart-val-okuyarak">%0</span>
+                    </div>
+                  </div>
+                  <div class="chart-col-meta">
+                    <span class="chart-col-icon">📖</span>
+                    <span class="chart-col-name">Okuyarak</span>
+                  </div>
+                </div>
+
+                <!-- 5. Deneyimsel (#F59E0B) -->
+                <div class="chart-col-item" data-model="deneyimsel">
+                  <div class="chart-col-track">
+                    <div class="chart-col-bar col-bar-deneyimsel" id="chart-bar-deneyimsel" style="height: 0%;">
+                      <span class="chart-col-pct-badge" id="chart-val-deneyimsel">%0</span>
+                    </div>
+                  </div>
+                  <div class="chart-col-meta">
+                    <span class="chart-col-icon">🛠️</span>
+                    <span class="chart-col-name">Deneyimsel</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card-footer" id="chart-card-footer">
+            <span class="chart-footer-label">💡 Yüzdelik Analiz:</span>
+            <span class="chart-footer-desc" id="chart-footer-text">Test sonuçlarınıza göre 5 öğrenme stilinin bağımsız başarı yüzdeleri.</span>
+          </div>
+        </div>
+
         <div class="brain-pedagogical-disclaimer" style="margin-top: 14px;">
           <div class="disclaimer-badge">ℹ️ Pedagojik &amp; Temsili Simülasyon</div>
           <p class="disclaimer-text">
@@ -1021,6 +1121,33 @@
           currentResult = data.latest_result;
           canTakeTest = Boolean(data.can_take_test);
 
+          // Eğer kullanıcının sonucu yoksa ve misafir testi localStorage'da kayıtlıysa otomatik aktar
+          if (!currentResult) {
+            try {
+              const pendingRaw = localStorage.getItem('lumina_pending_guest_result');
+              if (pendingRaw) {
+                const pendingData = JSON.parse(pendingRaw);
+                const saveRes = await fetch('/api/auth/results', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(pendingData)
+                });
+                if (saveRes.ok) {
+                  localStorage.removeItem('lumina_pending_guest_result');
+                  const refreshRes = await fetch('/api/auth/me');
+                  if (refreshRes.ok) {
+                    const refreshedData = await refreshRes.json();
+                    currentResult = refreshedData.latest_result;
+                    canTakeTest = Boolean(refreshedData.can_take_test);
+                    data = refreshedData;
+                  }
+                }
+              }
+            } catch (err) {
+              console.warn('Misafir test verisi panele aktarılamadı:', err);
+            }
+          }
+
           // Bilgileri ekrana yaz
           dashUsername.textContent = currentUser.username;
           dashGreetingName.textContent = currentUser.username;
@@ -1042,6 +1169,15 @@
         sectionResults.style.display = 'none';
         dashTestStatusTag.innerHTML = '⏳ Test: <strong>Çözülmedi</strong>';
         dashTestStatusTag.style.background = '#FEF08A';
+
+        // Sütun grafiğini sıfırla
+        ['gorsel', 'isitsel', 'yazarak', 'okuyarak', 'deneyimsel'].forEach(key => {
+          setColumnChart(key, 0, false);
+        });
+        const chartFooterDesc = document.getElementById('chart-footer-text');
+        if (chartFooterDesc) {
+          chartFooterDesc.textContent = 'Test henüz tamamlanmadı. Testi çözerek bilişsel dağılım grafiğini görebilirsin.';
+        }
 
         // 3D Beyin varsayılan modda
         if (window.resetBrainModel) {
@@ -1070,7 +1206,7 @@
           }
         }
 
-        // Yüzdeleri ve barları güncelle
+        // Yüzdeleri ve yatay barları güncelle
         setScore('gorsel', result.score_gorsel);
         setScore('isitsel', result.score_isitsel);
         setScore('yazarak', result.score_yazarak);
@@ -1087,6 +1223,16 @@
           deneyimsel: 'Deneyimsel Öğrenme 🛠️'
         };
         const dominantScore = result['score_' + dominant] || 0;
+
+        // Dikey Sütun Grafiğini Güncelle
+        ['gorsel', 'isitsel', 'yazarak', 'okuyarak', 'deneyimsel'].forEach(key => {
+          const val = result['score_' + key] || 0;
+          setColumnChart(key, val, key === dominant);
+        });
+        const chartFooterDesc = document.getElementById('chart-footer-text');
+        if (chartFooterDesc) {
+          chartFooterDesc.innerHTML = `Baskın öğrenme stilin: <strong>${modelNames[dominant] || dominant} (%${Math.round(dominantScore)})</strong>.`;
+        }
 
         const badgeTitle = document.getElementById('badge-dominant-title');
         if (badgeTitle) {
@@ -1119,6 +1265,28 @@
 
         if (pctElem) pctElem.textContent = '%' + roundVal;
         if (fillElem) fillElem.style.width = roundVal + '%';
+      }
+
+      function setColumnChart(modelKey, scoreVal, isDominant) {
+        const barElem = document.getElementById('chart-bar-' + modelKey);
+        const valElem = document.getElementById('chart-val-' + modelKey);
+        const colItem = document.querySelector(`.chart-col-item[data-model="${modelKey}"]`);
+        const roundVal = Math.max(0, Math.min(100, Math.round(scoreVal || 0)));
+
+        if (barElem) {
+          barElem.style.height = roundVal + '%';
+          barElem.style.minHeight = roundVal > 0 ? '6px' : '0px';
+        }
+        if (valElem) {
+          valElem.textContent = '%' + roundVal;
+        }
+        if (colItem) {
+          if (isDominant) {
+            colItem.classList.add('is-dominant');
+          } else {
+            colItem.classList.remove('is-dominant');
+          }
+        }
       }
 
       // Çıkış Yap

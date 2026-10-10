@@ -518,6 +518,25 @@
       switchToLoginBtn.addEventListener('click', () => setTab('login'));
       switchToRegisterBtn.addEventListener('click', () => setTab('register'));
 
+      // Misafir iken çözülen testin sonuçlarını hesaba aktar
+      async function syncPendingGuestResult() {
+        try {
+          const raw = localStorage.getItem('lumina_pending_guest_result');
+          if (!raw) return;
+          const payload = JSON.parse(raw);
+          const res = await fetch('/api/auth/results', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            localStorage.removeItem('lumina_pending_guest_result');
+          }
+        } catch (e) {
+          console.warn('Misafir test sonucu hesaba aktarılamadı:', e);
+        }
+      }
+
       // 1. KAYIT OL İŞLEMİ
       formRegister.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -560,9 +579,11 @@
           }
 
           showAlert('success', data.message || 'Kayıt başarılı! Yönlendiriliyorsunuz...');
+          // Misafir test verisi varsa yeni hesaba kaydet
+          await syncPendingGuestResult();
           setTimeout(() => {
             window.location.href = '/dashboard';
-          }, 800);
+          }, 500);
         } catch (err) {
           showAlert('error', 'Sunucu bağlantı hatası: ' + err.message);
           submitBtn.disabled = false;
@@ -601,9 +622,11 @@
           }
 
           showAlert('success', data.message || 'Giriş başarılı! Yönlendiriliyorsunuz...');
+          // Misafir test verisi varsa hesaba kaydet
+          await syncPendingGuestResult();
           setTimeout(() => {
             window.location.href = '/dashboard';
-          }, 700);
+          }, 500);
         } catch (err) {
           showAlert('error', 'Sunucu bağlantı hatası: ' + err.message);
           submitBtn.disabled = false;

@@ -1041,3 +1041,273 @@ html.dark-theme .guest-callout-card {
   box-shadow: 4px 4px 0px #08070F;
 }
 
+/* =====================================================================
+   DASHBOARD 5'Lİ ÖĞRENME STİLİ DİKEY SÜTUN GRAFİĞİ (CARTOON / COMIC)
+   ===================================================================== */
+.dashboard-chart-card {
+  background: #FFFFFF;
+  border: 2.5px solid #1D1D1D;
+  box-shadow: 6px 6px 0px #1D1D1D;
+  border-radius: 16px;
+  padding: 20px 20px 16px 20px;
+  margin-top: 16px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+html.dark-theme .dashboard-chart-card {
+  background: #181622;
+  border-color: #383452;
+  box-shadow: 6px 6px 0px #08070F;
+  color: #E4E4E7;
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed #E5E7EB;
+}
+
+html.dark-theme .chart-card-header {
+  border-bottom-color: #2D2A42;
+}
+
+.chart-card-title {
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: #1D1D1D;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+html.dark-theme .chart-card-title {
+  color: #F4F4F5;
+}
+
+.chart-badge {
+  background: #FEF08A;
+  color: #1D1D1D;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 3px 10px;
+  border: 1.5px solid #1D1D1D;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0px #1D1D1D;
+}
+
+html.dark-theme .chart-badge {
+  background: #FACC15;
+  border-color: #383452;
+  box-shadow: 2px 2px 0px #08070F;
+}
+
+.comic-column-chart-container {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 14px;
+  position: relative;
+  height: 210px;
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 4px 34px 0;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  color: #6B7280;
+  user-select: none;
+  text-align: right;
+  min-width: 32px;
+}
+
+html.dark-theme .chart-y-axis {
+  color: #9CA3AF;
+}
+
+.chart-columns-stage {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.chart-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px dashed rgba(29, 29, 29, 0.16);
+  pointer-events: none;
+  z-index: 1;
+}
+
+html.dark-theme .chart-grid-line {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.chart-columns-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8px;
+  height: calc(100% - 32px);
+  position: relative;
+  z-index: 2;
+}
+
+.chart-col-item {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.chart-col-track {
+  width: 100%;
+  max-width: 48px;
+  flex: 1;
+  background: #F3F4F6;
+  border: 2px solid #1D1D1D;
+  border-radius: 8px 8px 3px 3px;
+  box-shadow: 2px 2px 0px #1D1D1D;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: visible;
+}
+
+html.dark-theme .chart-col-track {
+  background: #242133;
+  border-color: #383452;
+  box-shadow: 2px 2px 0px #08070F;
+}
+
+.chart-col-bar {
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  border-top: 2px solid #1D1D1D;
+  position: relative;
+  transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.chart-col-pct-badge {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #FFFFFF;
+  border: 1.5px solid #1D1D1D;
+  box-shadow: 1.5px 1.5px 0px #1D1D1D;
+  border-radius: 6px;
+  padding: 1px 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  color: #1D1D1D;
+  white-space: nowrap;
+  user-select: none;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+html.dark-theme .chart-col-pct-badge {
+  background: #181622;
+  border-color: #4C4869;
+  box-shadow: 1.5px 1.5px 0px #08070F;
+  color: #F4F4F5;
+}
+
+.col-bar-gorsel     { background: #A855F7; }
+.col-bar-isitsel    { background: #10B981; }
+.col-bar-yazarak    { background: #EC4899; }
+.col-bar-okuyarak   { background: #0284C7; }
+.col-bar-deneyimsel { background: #F59E0B; }
+
+.chart-col-meta {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+}
+
+.chart-col-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.chart-col-name {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Cabinet Grotesk', -apple-system, sans-serif;
+  color: #4B5563;
+  white-space: nowrap;
+}
+
+html.dark-theme .chart-col-name {
+  color: #A1A1AA;
+}
+
+.chart-col-item.is-dominant .chart-col-track {
+  border-width: 2.5px;
+  border-color: #1D1D1D;
+  box-shadow: 3px 3px 0px #1D1D1D;
+  background: #FFFDF0;
+}
+
+html.dark-theme .chart-col-item.is-dominant .chart-col-track {
+  border-color: #A78BFA;
+  box-shadow: 3px 3px 0px #08070F;
+  background: #2D2345;
+}
+
+.chart-col-item.is-dominant .chart-col-name {
+  color: #7934ED;
+  font-weight: 900;
+}
+
+html.dark-theme .chart-col-item.is-dominant .chart-col-name {
+  color: #C4B5FD;
+}
+
+.chart-card-footer {
+  border-top: 1.5px dashed #E5E7EB;
+  padding-top: 9px;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+html.dark-theme .chart-card-footer {
+  border-top-color: #2D2A42;
+  color: #9CA3AF;
+}
+
+.chart-footer-label {
+  font-weight: 800;
+  color: #1D1D1D;
+}
+
+html.dark-theme .chart-footer-label {
+  color: #E4E4E7;
+}
+
