@@ -41,10 +41,9 @@
   };
 
   // Pastel Karikatür Balonlar (Düşüş Animasyonu İçin)
-  function getBalloonsSvg(sid) {
+  function getBalloonBunch(sid, tr) {
     return (
-      '<g id="lumi-balloons-wrap" class="lumi-balloon-wrap">' +
-      '  <g class="pop-art-group lumi-balloon-group" transform="translate(400, 210) scale(0.88) translate(-250, -450)">' +
+      '  <g class="pop-art-group lumi-balloon-group" transform="' + tr + '">' +
       '    <g class="comic-outline" stroke-width="5">' +
       '      <path d="M 150 270 Q 180 380 250 450"/>' +
       '      <path d="M 250 185 Q 240 320 250 450"/>' +
@@ -100,13 +99,16 @@
       '      <circle cx="0" cy="0" rx="6" ry="6" fill="#FFEAA7"/>' +
       '    </g>' +
       '  </g>' +
-      '  <!-- İki Yana Genişçe Açılan Kollara Doğru İnen Bağlantı İpleri (Zero Gap Precision) -->' +
-      '  <g class="comic-outline lumi-balloon-handles" stroke="#111111" stroke-width="5" stroke-linecap="round" fill="none">' +
-      '    <path d="M 395 210 Q 260 210 180 300 L 170 328"/>' +
-      '    <path d="M 405 210 Q 540 210 620 300 L 630 328"/>' +
-      '  </g>' +
-      '</g>'
+      ''
     );
+  }
+
+  // Her elinde bir üçlü balon demeti (sol el: 112,482 / sağ el: 688,482)
+  function getBalloonsSvg(sid) {
+    return '<g id="lumi-balloons-wrap" class="lumi-balloon-wrap">' +
+      getBalloonBunch(sid, 'translate(112, 476) scale(0.6) translate(-250, -450)') +
+      getBalloonBunch(sid, 'translate(688, 476) scale(0.6) translate(-250, -450)') +
+      '</g>';
   }
 
   // Vektörel Karakter SVG Şablonu (Her parçaya izole stageId)
@@ -288,24 +290,16 @@
       '        </g>' +
       '      </g>' +
       '      <g id="lumi-arms-falling" class="lumi-arms-falling">' +
-      '        <!-- Sol Kol: Omuzdan Sola Doğru İki Yana Genişçe Açılan Kol -->' +
-      '        <path d="M 280,490 C 200,470 120,390 180,300 C 196,295 215,315 205,355 C 190,410 270,460 305,485 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
-      '        <!-- Sol Pati: İpi sımsıkı saran el (180, 300) - Sıfır Boşluk Garantisi -->' +
-      '        <ellipse cx="180" cy="300" rx="30" ry="25" transform="rotate(28 180 300)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
-      '        <circle cx="180" cy="300" r="10" fill="#FFA9BD"/>' +
-      '        <circle cx="170" cy="292" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="180" cy="288" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="190" cy="292" r="5" fill="#FFA9BD"/>' +
-      '        <path d="M 166,300 Q 180,306 194,300" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
-      '        <!-- Sağ Kol: Omuzdan Sağa Doğru İki Yana Genişçe Açılan Kol -->' +
-      '        <path d="M 520,490 C 600,470 680,390 620,300 C 604,295 585,315 595,355 C 610,410 530,460 495,485 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
-      '        <!-- Sağ Pati: İpi sımsıkı saran el (620, 300) - Sıfır Boşluk Garantisi -->' +
-      '        <ellipse cx="620" cy="300" rx="30" ry="25" transform="rotate(-28 620 300)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
-      '        <circle cx="620" cy="300" r="10" fill="#FFA9BD"/>' +
-      '        <circle cx="630" cy="292" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="620" cy="288" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="610" cy="292" r="5" fill="#FFA9BD"/>' +
-      '        <path d="M 606,300 Q 620,306 634,300" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sol Kol: Tam Sola Yatay Açık -->' +
+      '        <path d="M 305,462 C 240,458 170,460 118,464 C 104,472 104,494 118,500 C 170,504 240,506 305,508 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <ellipse cx="112" cy="482" rx="26" ry="24" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="112" cy="484" r="9" fill="#FFA9BD"/>' +
+      '        <path d="M 100,476 L 124,476 M 100,488 L 124,488" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sağ Kol: Tam Sağa Yatay Açık -->' +
+      '        <path d="M 495,462 C 560,458 630,460 682,464 C 696,472 696,494 682,500 C 630,504 560,506 495,508 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <ellipse cx="688" cy="482" rx="26" ry="24" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="688" cy="484" r="9" fill="#FFA9BD"/>' +
+      '        <path d="M 676,476 L 700,476 M 676,488 L 700,488" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
       '      </g>' +
       '    </g>' +
       '  </g>' +
