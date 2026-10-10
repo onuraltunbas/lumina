@@ -609,18 +609,86 @@ html.dark-theme #lumi-root {
   100% { transform: translate(0, 0); }
 }
 
-/* --- DÜŞÜŞ (HAVADAN YERE DOĞRU) --- */
-.lumi-shimeji.is-falling #lumi-arm-l {
-  transform: rotate(62deg) translateY(-24px);
+/* --- DÜŞÜŞ ANİMASYONU (PASTEL KARİKATÜR BALONLARLA SALLANA SALLANA SÜZÜLÜŞ) --- */
+.lumi-character-stage {
+  overflow: visible !important;
 }
-.lumi-shimeji.is-falling #lumi-arm-r {
-  transform: rotate(-62deg) translateY(-24px);
+.lumi-shimeji-body-wrap {
+  overflow: visible !important;
 }
+
+.comic-outline {
+  stroke: #111111;
+  stroke-width: 6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.lumi-balloon-group {
+  filter: drop-shadow(10px 10px 0px #111111);
+  transform-origin: 250px 450px;
+}
+
+.lumi-balloon-wrap {
+  display: none;
+}
+.lumi-arms-falling {
+  display: none;
+}
+.lumi-arms-normal {
+  display: block;
+}
+
+.lumi-shimeji.is-falling {
+  z-index: 2510;
+}
+.lumi-shimeji.is-falling .lumi-balloon-wrap {
+  display: block !important;
+}
+.lumi-shimeji.is-falling .lumi-arms-falling {
+  display: block !important;
+}
+.lumi-shimeji.is-falling .lumi-arms-normal {
+  display: none !important;
+}
+
+/* Balonla Sallana Sallana İniş (Tatlı Sarkaç Salınımı) */
+.lumi-shimeji.is-falling .lumi-shimeji-body-wrap {
+  animation: lumi-balloon-sway 1.8s ease-in-out infinite alternate !important;
+  transform-origin: 50% 12% !important;
+}
+
+@keyframes lumi-balloon-sway {
+  0% {
+    transform: rotate(-7.5deg) translateX(-5px);
+  }
+  100% {
+    transform: rotate(7.5deg) translateX(5px);
+  }
+}
+
+/* Süzülürken Havada Sallanan Sevimli Bacaklar */
 .lumi-shimeji.is-falling #lumi-leg-l {
-  transform: rotate(-16deg);
+  animation: lumi-balloon-leg-l 0.65s ease-in-out infinite alternate !important;
 }
 .lumi-shimeji.is-falling #lumi-leg-r {
-  transform: rotate(16deg);
+  animation: lumi-balloon-leg-r 0.65s ease-in-out infinite alternate !important;
+}
+
+@keyframes lumi-balloon-leg-l {
+  0% { transform: rotate(-16deg) translateY(3px); }
+  100% { transform: rotate(10deg) translateY(-2px); }
+}
+@keyframes lumi-balloon-leg-r {
+  0% { transform: rotate(12deg) translateY(-2px); }
+  100% { transform: rotate(-14deg) translateY(3px); }
+}
+
+.lumi-shimeji.is-falling .lumi-shimeji-shadow {
+  opacity: 0.08;
+  transform: translateX(-50%) scale(0.3);
+  transition: opacity 0.3s, transform 0.3s;
 }
 
 /* --- YERE İNİŞTE ESNE VE YAYLAN (SQUASH & STRETCH) --- */
