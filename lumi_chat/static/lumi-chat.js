@@ -87,18 +87,23 @@
       '      <circle cx="-16" cy="-52" r="4.5" fill="#FFFFFF"/>' +
       '    </g>' +
       '    <g transform="translate(250, 450)">' +
-      '      <ellipse cx="0" cy="0" rx="14" ry="10" fill="#FDCB6E" class="comic-outline"/>' +
+      '      <!-- Fiyonk Düğümü -->' +
       '      <ellipse cx="0" cy="0" rx="14" ry="10" fill="#FDCB6E"/>' +
       '      <ellipse cx="0" cy="0" rx="14" ry="10" class="comic-outline"/>' +
-      '      <path d="M -8 -4 C -25 -25, -45 -10, -25 10 C -15 15, -5 5, 0 0" fill="#FDCB6E" class="comic-outline"/>' +
-      '      <path d="M 8 -4 C 25 -25, 45 -10, 25 10 C 15 15, 5 5, 0 0" fill="#FDCB6E" class="comic-outline"/>' +
+      '      <!-- Fiyonk Sol Kanat -->' +
+      '      <path d="M -8 -4 C -25 -25, -45 -10, -25 10 C -15 15, -5 5, 0 0" fill="#FDCB6E"/>' +
+      '      <path d="M -8 -4 C -25 -25, -45 -10, -25 10 C -15 15, -5 5, 0 0" class="comic-outline"/>' +
+      '      <!-- Fiyonk Sağ Kanat -->' +
+      '      <path d="M 8 -4 C 25 -25, 45 -10, 25 10 C 15 15, 5 5, 0 0" fill="#FDCB6E"/>' +
+      '      <path d="M 8 -4 C 25 -25, 45 -10, 25 10 C 15 15, 5 5, 0 0" class="comic-outline"/>' +
+      '      <!-- Düğüm Detayı -->' +
       '      <circle cx="0" cy="0" rx="6" ry="6" fill="#FFEAA7"/>' +
       '    </g>' +
       '  </g>' +
-      '  <!-- İki Yana Açılan Kollara Doğru İnen Bağlantı İpleri (Zero Gap Precision) -->' +
+      '  <!-- İki Yana Genişçe Açılan Kollara Doğru İnen Bağlantı İpleri (Zero Gap Precision) -->' +
       '  <g class="comic-outline lumi-balloon-handles" stroke="#111111" stroke-width="5" stroke-linecap="round" fill="none">' +
-      '    <path d="M 395 210 Q 290 220 210 280 L 198 305"/>' +
-      '    <path d="M 405 210 Q 510 220 590 280 L 602 305"/>' +
+      '    <path d="M 395 210 Q 260 210 180 300 L 170 328"/>' +
+      '    <path d="M 405 210 Q 540 210 620 300 L 630 328"/>' +
       '  </g>' +
       '</g>'
     );
@@ -283,24 +288,24 @@
       '        </g>' +
       '      </g>' +
       '      <g id="lumi-arms-falling" class="lumi-arms-falling">' +
-      '        <!-- Sol Kol: Omuzdan Sola Doğru Genişçe Açılan Kol -->' +
-      '        <path d="M 280,490 C 220,460 160,380 210,280 C 225,275 245,295 235,340 C 220,395 285,450 305,480 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
-      '        <!-- Sol Pati: İpi sımsıkı saran el (210, 280) - Sıfır Boşluk Garantisi -->' +
-      '        <ellipse cx="210" cy="280" rx="28" ry="24" transform="rotate(22 210 280)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
-      '        <circle cx="210" cy="280" r="9" fill="#FFA9BD"/>' +
-      '        <circle cx="200" cy="272" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="210" cy="268" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="220" cy="272" r="5" fill="#FFA9BD"/>' +
-      '        <path d="M 198,280 Q 210,285 222,280" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
-      '        <!-- Sağ Kol: Omuzdan Sağa Doğru Genişçe Açılan Kol -->' +
-      '        <path d="M 520,490 C 580,460 640,380 590,280 C 575,275 555,295 565,340 C 580,395 515,450 495,480 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
-      '        <!-- Sağ Pati: İpi sımsıkı saran el (590, 280) - Sıfır Boşluk Garantisi -->' +
-      '        <ellipse cx="590" cy="280" rx="28" ry="24" transform="rotate(-22 590 280)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
-      '        <circle cx="590" cy="280" r="9" fill="#FFA9BD"/>' +
-      '        <circle cx="580" cy="272" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="590" cy="268" r="5" fill="#FFA9BD"/>' +
-      '        <circle cx="600" cy="272" r="5" fill="#FFA9BD"/>' +
-      '        <path d="M 578,280 Q 590,285 602,280" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sol Kol: Omuzdan Sola Doğru İki Yana Genişçe Açılan Kol -->' +
+      '        <path d="M 280,490 C 200,470 120,390 180,300 C 196,295 215,315 205,355 C 190,410 270,460 305,485 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <!-- Sol Pati: İpi sımsıkı saran el (180, 300) - Sıfır Boşluk Garantisi -->' +
+      '        <ellipse cx="180" cy="300" rx="30" ry="25" transform="rotate(28 180 300)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="180" cy="300" r="10" fill="#FFA9BD"/>' +
+      '        <circle cx="170" cy="292" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="180" cy="288" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="190" cy="292" r="5" fill="#FFA9BD"/>' +
+      '        <path d="M 166,300 Q 180,306 194,300" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
+      '        <!-- Sağ Kol: Omuzdan Sağa Doğru İki Yana Genişçe Açılan Kol -->' +
+      '        <path d="M 520,490 C 600,470 680,390 620,300 C 604,295 585,315 595,355 C 610,410 530,460 495,485 Z" fill="url(#ag_' + sid + ')" stroke="#D4C8C1" stroke-width="2"/>' +
+      '        <!-- Sağ Pati: İpi sımsıkı saran el (620, 300) - Sıfır Boşluk Garantisi -->' +
+      '        <ellipse cx="620" cy="300" rx="30" ry="25" transform="rotate(-28 620 300)" fill="url(#ag_' + sid + ')" stroke="#18264A" stroke-width="4"/>' +
+      '        <circle cx="620" cy="300" r="10" fill="#FFA9BD"/>' +
+      '        <circle cx="630" cy="292" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="620" cy="288" r="5" fill="#FFA9BD"/>' +
+      '        <circle cx="610" cy="292" r="5" fill="#FFA9BD"/>' +
+      '        <path d="M 606,300 Q 620,306 634,300" fill="none" stroke="#18264A" stroke-width="4" stroke-linecap="round"/>' +
       '      </g>' +
       '    </g>' +
       '  </g>' +
@@ -709,33 +714,23 @@
       return Math.max(10, window.innerHeight - sz.h - FLOOR_PAD);
     }
 
-    // Sayfadaki tüm platform yüzeylerini (çizgiler, ayırıcılar, progress barlar, kartlar, görseller, navbar, footer) bulur
+    // Sayfadaki tüm platform yüzeylerini (kartlar, kutular, görseller, navbar, footer, ayırıcı çizgiler) bulur
     function getCandidatePlatforms() {
       var sel = [
-        // Sitedeki tüm çizgiler, ayırıcılar ve kenarlıklar
-        'hr', '[class*="line"]', '[class*="divider"]', '[class*="separator"]', '[class*="border"]',
-        '.border-top', '.border-bottom', '[class*="border-t"]', '[class*="border-b"]', '[style*="border"]',
-        // Progress barlar ve göstergeler
-        '[class*="progress"]', '.progress-bar', '[class*="bar"]',
-        // Kartlar, kutular, çerçeveler ve paneller
+        // Kartlar, kutular ve paneller
         '.card', '[class*="card"]', '.box', '[class*="box"]', '.panel', '[class*="panel"]',
-        '.widget', '[class*="widget"]', '.container', '[class*="wrapper"]', 'fieldset',
-        'section', 'article', 'aside', 'main', '[class*="section"]',
-        // Görsel kutuları, resimler ve medya çerçeveleri
+        '.widget', '[class*="widget"]', '.dashboard-hero-card', '.dashboard-score-card', '.dashboard-waiting-box',
+        'fieldset',
+        // Çizgiler, ayırıcılar ve kenarlıklar
+        'hr', '[class*="line"]', '[class*="divider"]', '[class*="separator"]',
+        '.border-top', '.border-bottom', '[class*="border-t"]', '[class*="border-b"]',
+        // Görseller ve medya kutuları
         'img', 'picture', 'figure', '[class*="image"]', '[class*="img"]', '[class*="visual"]',
-        '[class*="photo"]', '[class*="banner"]', '[class*="hero"]', '[class*="media"]',
-        '[class*="thumbnail"]', '[class*="avatar"]',
-        // Menüler, başlıklar, navbar ve footer çizgileri
-        'header', 'nav', '.navbar', '[class*="nav"]', '[class*="header"]', '[id*="nav"]', '[id*="header"]',
-        'footer', '[class*="footer"]', '[id*="footer"]',
-        'h1', 'h2', 'h3', 'h4',
-        // Butonlar, piller, çipler ve sekmeler
-        'button', '.btn', '[class*="btn"]', '.chip', '[class*="pill"]', '[class*="tag"]',
-        '.tab-nav', '.tabs', 'input', 'select', 'textarea',
-        // Tablolar ve veri listeleri
-        'table', 'thead', 'tr', 'th', 'ul', 'ol',
-        // Dashboard özel bileşenleri
-        '.dashboard-hero-card', '.dashboard-score-card', '.dashboard-waiting-box', '.dashboard-stat-tag', '.badge',
+        '[class*="photo"]', '[class*="banner"]', '[class*="hero"]',
+        // Navbar ve footer
+        'header', 'nav', '.navbar', '[class*="nav"]', 'footer', '[class*="footer"]',
+        // Progress barlar
+        '[class*="progress"]', '.progress-bar',
         // Özel platformlar
         '[data-platform="true"]'
       ].join(',');
@@ -748,13 +743,22 @@
         var el = elements[i];
         if (root.contains(el)) continue; // Lumi'nin kendi arayüzünü atla
 
+        var tag = el.tagName ? el.tagName.toLowerCase() : '';
+        // Minik buton ve form elemanlarını veya metinleri atla
+        if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4' || tag === 'h5' || tag === 'h6' ||
+            tag === 'p' || tag === 'span' || tag === 'a' || tag === 'button' || tag === 'input' ||
+            tag === 'select' || tag === 'textarea' || tag === 'label' || tag === 'tr' || tag === 'th' || tag === 'td') continue;
+
         // Gizli öğeleri ele
         var style = window.getComputedStyle(el);
         if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
 
         var r = el.getBoundingClientRect();
-        // Ekranda görünür olmalı: genişlik >= 20px, yükseklik >= 1px (hr/çizgileri kapsar), ekranda olmalı
-        if (r.width >= 20 && r.height >= 1 && r.bottom > 15 && r.top < vH - 35) {
+        var isDivider = (tag === 'hr' || (el.className && typeof el.className === 'string' && (el.className.indexOf('line') !== -1 || el.className.indexOf('divider') !== -1)));
+        var minW = isDivider ? 20 : 50;
+
+        // Ekranda görünür olmalı
+        if (r.width >= minW && r.height >= 1 && r.bottom > 15 && r.top < vH - 35) {
           platforms.push({
             el: el,
             top: r.top,
@@ -815,6 +819,26 @@
       return { floorY: bestFloor, platform: bestPlatform };
     }
 
+    // Lumi en fazla navbarın alt çizgisine kadar çıkabilir
+    var _minYCache = 8, _minYTime = 0;
+    function getMinY() {
+      var now = Date.now();
+      if (now - _minYTime < 400) return _minYCache;
+      _minYTime = now;
+      var sz = getCharSize();
+      var top = 8;
+      var navs = document.querySelectorAll('nav, header, .navbar, [class*="navbar"]');
+      for (var i = 0; i < navs.length; i++) {
+        if (root.contains(navs[i])) continue;
+        var r = navs[i].getBoundingClientRect();
+        if (r.height > 0 && r.width > 100 && r.bottom > 0 && r.top < 140) {
+          top = Math.max(top, r.bottom - sz.h + 8);
+        }
+      }
+      _minYCache = top;
+      return top;
+    }
+
     var szInit = getCharSize();
     var posX = !isDashboard ? Math.max(10, window.innerWidth - szInit.w - 28) : Math.max(20, window.innerWidth - 130);
     var posY = !isDashboard ? Math.max(10, window.innerHeight - szInit.h - 28) : getFloorY();
@@ -830,6 +854,8 @@
     var velocityX = 0;
     var behaviorTimer = null;
     var platformReturnTimer = null;
+    var fallPlatformFloorY = 0;
+    var fallPlatformObj = null;
     var speechTimer = null;
     var lastInteract = Date.now();
 
@@ -850,7 +876,7 @@
       var maxW = Math.max(10, window.innerWidth - sz.w - 10);
       var maxH = getFloorY();
       posX = Math.max(8, Math.min(posX, maxW));
-      posY = Math.max(8, Math.min(posY, maxH));
+      posY = Math.max(getMinY(), Math.min(posY, maxH));
     }
 
     // Başlangıç konumu
@@ -922,7 +948,7 @@
 
       // Sağ en üstten başla (tavan hizası)
       posX = Math.max(20, window.innerWidth - sz.w - 30 - Math.floor(Math.random() * 40));
-      posY = -Math.floor(sz.h * 0.7);
+      posY = getMinY();
       updateTransform();
 
       // Ekranın alt hizasında rastgele bir iniş noktası seç
@@ -939,6 +965,25 @@
       shimeji.classList.add('is-falling');
       setLumiMood('saskin');
       setFacing(velocityX >= 0 ? 1 : -1);
+    }
+
+    // Dashboard dışı: Çizgiye bırakılınca 14 saniye durur, sonra balonla yere süzülüp köşeye koşar
+    function startPlatformTimer() {
+      clearTimeout(platformReturnTimer);
+      platformReturnTimer = setTimeout(function () {
+        if (behavior === 'on_platform' && !isDashboard && !isDragging) {
+          currentPlatform = null;
+          shimeji.classList.remove('is-sitting', 'is-waving');
+          behavior = 'returning_fall';
+          velocityY = 0.8;
+          var sz = getCharSize();
+          var homeX = Math.max(10, window.innerWidth - sz.w - 28);
+          velocityX = (homeX > posX ? 1 : -1) * 0.7;
+          shimeji.classList.add('is-falling');
+          setLumiMood('heyecanli', 1000);
+        }
+      }, 14000);
+      scheduleBehavior(3000);
     }
 
     // Panel Açma / Kapatma Fonksiyonu
@@ -1020,7 +1065,7 @@
         if (isDragging || behavior === 'climb') return;
         shimeji.classList.remove('is-crouch');
 
-        targetHangY = hangLineY;
+        targetHangY = Math.max(getMinY(), hangLineY);
         var deltaY = posY - hangLineY;
         var vy, vx;
 
@@ -1052,7 +1097,7 @@
       // Lumi'nin mevcut posY'sinden yukarıda olan (top - sz.h + 8 < posY - 30) ve makul yükseklikteki platformlar
       var higherPlatforms = platforms.filter(function (p) {
         var pSurfY = p.top - sz.h + 8;
-        return pSurfY < posY - 30 && pSurfY > 35;
+        return pSurfY < posY - 30 && pSurfY >= getMinY();
       });
 
       // %65 ihtimalle ekrandaki herhangi bir çizgiye/kata çıksın, %35 tavana çıksın
@@ -1062,7 +1107,7 @@
         climbTargetY = chosen.top - sz.h + 8;
       } else {
         climbTargetPlatform = null;
-        climbTargetY = 18; // En üst tavan
+        climbTargetY = getMinY(); // En üst sınır: navbar alt çizgisi
       }
     }
 
@@ -1077,7 +1122,7 @@
 
       if (specificTargetPlatform) {
         climbTargetPlatform = specificTargetPlatform;
-        climbTargetY = specificTargetPlatform.top - sz.h + 8;
+        climbTargetY = Math.max(getMinY(), specificTargetPlatform.top - sz.h + 8);
       } else {
         selectClimbTarget();
       }
@@ -1144,7 +1189,7 @@
           if (currentPlatform && currentPlatform.el) {
             var r = currentPlatform.el.getBoundingClientRect();
             if (r.bottom > 15 && r.top < window.innerHeight - 30) {
-              posY = r.top - sz.h + 8;
+              posY = (currentPlatform.useBottom ? r.bottom : r.top) - sz.h + 8;
               var minPlatformX = Math.max(10, r.left - 10);
               var maxPlatformX = Math.min(window.innerWidth - sz.w - 10, r.right - sz.w + 10);
               posX = Math.max(minPlatformX, Math.min(posX, maxPlatformX));
@@ -1169,6 +1214,31 @@
             velocityX = 0;
             shimeji.classList.add('is-falling');
           }
+        }
+
+        // 0b. Bir çizgiye / karta balonla süzülerek iniş
+        if (behavior === 'falling_to_platform') {
+          velocityY = Math.min(2.3, velocityY + 0.08);
+          posY += velocityY;
+          var tgtY = fallPlatformFloorY;
+          if (fallPlatformObj && fallPlatformObj.el) {
+            var fr = fallPlatformObj.el.getBoundingClientRect();
+            tgtY = (fallPlatformObj.useBottom ? fr.bottom : fr.top) - sz.h + 8;
+          }
+          if (posY >= tgtY) {
+            posY = tgtY;
+            velocityY = 0;
+            currentPlatform = fallPlatformObj;
+            shimeji.classList.remove('is-falling');
+            shimeji.classList.add('is-landing');
+            setTimeout(function () { shimeji.classList.remove('is-landing'); }, 380);
+            setLumiMood('mutlu');
+            behavior = 'on_platform';
+            startPlatformTimer();
+          }
+          updateTransform();
+          requestAnimationFrame(physicsStep);
+          return;
         }
 
         // 1. Tavandan rastgele noktaya düşüş modu (Balonla süzülerek iniş)
@@ -1292,7 +1362,7 @@
           posY = climbTargetY;
 
           // Durum A: Hedef en üst tavan (climbTargetY <= 25)
-          if (climbTargetY <= 25) {
+          if (climbTargetY <= getMinY() + 2) {
             behavior = 'hang';
             shimeji.classList.remove('is-climbing', 'climb-left', 'climb-right');
             shimeji.classList.add('is-hanging', 'bubble-below'); // En üst tavanda baloncuk tam altta olsun!
@@ -1341,7 +1411,7 @@
               jumpToTarget(tX, climbTargetY, chosen, 'heyecanli', 'Duvardan çizgiye sıçrıyorum! 🚀');
             }
           } else {
-            climbTargetY = 18; // Hedef yoksa tavana devam et
+            climbTargetY = getMinY(); // Hedef yoksa navbar çizgisine devam et
           }
         }
         updateTransform();
@@ -1429,7 +1499,7 @@
           if (Math.random() < 0.45) {
             showBubble('Uff, ucuz yırttım! 😅', 2000);
           }
-          scheduleBehavior(1000 + Math.random() * 1200);
+          scheduleBehavior(800 + Math.random() * 600);
         }
         updateTransform();
       }
@@ -1524,16 +1594,23 @@
         updateTransform();
       }
 
+      var mYc = getMinY();
+      if (!isDragging && posY < mYc) {
+        posY = mYc;
+        if (velocityY < 0) velocityY = 0;
+        updateTransform();
+      }
+
       requestAnimationFrame(physicsStep);
     }
     requestAnimationFrame(physicsStep);
 
     // Otonom Dengeli Keşif Planlayıcı (Line Hanging & Relaxed Exploration)
     function scheduleBehavior(delay) {
-      if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang' || behavior === 'falling_to_return' || behavior === 'returning_fall' || behavior === 'returning_pause' || behavior === 'returning_run') return;
+      if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang' || behavior === 'falling_to_return' || behavior === 'returning_fall' || behavior === 'returning_pause' || behavior === 'returning_run' || behavior === 'falling_to_platform') return;
       clearTimeout(behaviorTimer);
       behaviorTimer = setTimeout(function () {
-        if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang' || behavior === 'falling_to_return' || behavior === 'returning_fall' || behavior === 'returning_pause' || behavior === 'returning_run') return;
+        if (isDragging || behavior === 'falling' || behavior === 'hop' || behavior === 'climb' || behavior === 'hang' || behavior === 'hover_drop' || behavior === 'jump_hang' || behavior === 'falling_to_return' || behavior === 'returning_fall' || behavior === 'returning_pause' || behavior === 'returning_run' || behavior === 'falling_to_platform') return;
 
         // Dashboard dışındaki sayfalarda:
         if (!isDashboard) {
@@ -1698,7 +1775,7 @@
       currentPlatform = null;
     });
 
-    shimeji.addEventListener('pointermove', function (e) {
+    window.addEventListener('pointermove', function (e) {
       if (!isDragging || e.pointerId !== dragPointerId) return;
 
       var dist = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
@@ -1714,7 +1791,7 @@
       var floorY = getFloorY();
 
       posX = Math.max(8, Math.min(e.clientX - dragOffsetX, maxW));
-      posY = Math.max(8, Math.min(e.clientY - dragOffsetY, floorY));
+      posY = Math.max(getMinY(), Math.min(e.clientY - dragOffsetY, floorY));
 
       updateTransform();
     });
@@ -1734,102 +1811,53 @@
         return;
       }
 
-      // Doğrudan sağ alt köşeye mi bırakıldı?
-      if (!isDashboard && Math.abs(posX - homeX) <= 12 && Math.abs(posY - homeY) <= 16) {
-        posX = homeX;
-        posY = homeY;
-        behavior = 'home_idle';
-        currentPlatform = null;
-        shimeji.classList.remove('is-running', 'is-falling', 'is-landing');
-        shimeji.classList.add('is-home-fixed');
-        setFacing(-1);
-        setLumiMood('normal');
-        updateTransform();
-        scheduleBehavior(3000);
-        return;
-      }
-
-      // Bırakılan noktanın altındaki elemanı ve çizgiyi doğrudan sorgula
-      var probedPlatform = null;
-      var snapTargetY = null;
-      try {
-        shimeji.style.display = 'none';
-        var underEls = document.elementsFromPoint(footX, probeY);
-        shimeji.style.display = '';
-        if (underEls) {
-          for (var u = 0; u < underEls.length; u++) {
-            var uEl = underEls[u];
-            if (root.contains(uEl) || uEl === document.body || uEl === document.documentElement) continue;
-            var uR = uEl.getBoundingClientRect();
-            if (uR.width >= 20 && uR.bottom > 15) {
-              var topY = uR.top - sz.h + 8;
-              var botY = uR.bottom - sz.h + 8;
-              // Bırakılan nokta üst çizgiye veya alt çizgiye yakın mı? (24px snapping menzili)
-              if (Math.abs(posY - topY) <= 24) {
-                snapTargetY = topY;
-                probedPlatform = { el: uEl, top: topY, bottom: uR.bottom, left: uR.left, right: uR.right, width: uR.width, height: uR.height };
-                break;
-              } else if (uR.height >= 24 && Math.abs(posY - botY) <= 24) {
-                snapTargetY = botY;
-                probedPlatform = { el: uEl, top: botY, bottom: uR.bottom, left: uR.left, right: uR.right, width: uR.width, height: uR.height };
-                break;
-              }
-            }
-          }
-        }
-      } catch (_) {
-        shimeji.style.display = '';
-      }
-
-      // 1. Çizgi / platform üzerine doğrudan bırakıldıysa (24px snap menzilinde):
-      if (probedPlatform && snapTargetY !== null) {
-        posY = snapTargetY;
-        currentPlatform = probedPlatform;
-        updateTransform();
-        shimeji.classList.remove('is-home-fixed', 'is-running', 'is-falling');
-        shimeji.classList.add('is-landing');
-        setTimeout(function () { shimeji.classList.remove('is-landing'); }, 380);
-        setLumiMood('mutlu');
-
-        if (!isDashboard) {
-          // Dashboard dışı: 14 saniye çizgide durur, ardından balonla süzülüp sağ alt köşeye döner
-          behavior = 'on_platform';
-          clearTimeout(platformReturnTimer);
-          platformReturnTimer = setTimeout(function () {
-            if (behavior === 'on_platform' && !isDashboard && !isDragging) {
-              currentPlatform = null;
-              shimeji.classList.remove('is-sitting', 'is-waving');
-              shimeji.classList.add('is-hop');
-              behavior = 'returning_fall';
-              velocityY = 0.8;
-              velocityX = (homeX > posX ? 1 : -1) * 0.8;
-              shimeji.classList.add('is-falling');
-              setLumiMood('heyecanli', 1000);
-            }
-          }, 14000); // 14 saniye boyunca çizgide keyifle durur
-          scheduleBehavior(3000);
-        } else {
-          behavior = 'idle';
-          scheduleBehavior(2500);
-        }
-        return;
-      }
-
-      // 2. Çizgi üzerine bırakılmadıysa (BOŞLUĞA / HAVAYA BIRAKILDIYSA):
-      // TÜM SAYFALARDA BALONLA SALLANA SALLANA SÜZÜLEREK İNİŞ!
+      lastInteract = Date.now();
+      var sz = getCharSize();
+      var homeX = Math.max(10, window.innerWidth - sz.w - 28);
+      var homeY = Math.max(10, window.innerHeight - sz.h - 28);
+      var footX = posX + sz.w / 2;
       currentPlatform = null;
+      shimeji.classList.remove('is-walking', 'is-running', 'is-sitting', 'is-hop', 'is-landing', 'is-climbing', 'climb-left', 'climb-right', 'is-hanging', 'is-home-fixed');
+
+      // Bırakılan noktanın biraz yukarısından altındaki ilk çizgiyi/kartı bul (üstüne bırakıldıysa da yakalar)
+      var startY = Math.max(getMinY(), posY - 26);
+      var floorInfo = findFloorUnder(footX, startY);
 
       if (!isDashboard) {
-        // Dashboard dışı: Havada bırakıldıysa yere kadar balonla süzülür, sonra sağ alt köşeye koşar
+        // Doğrudan sağ alt köşeye bırakıldı
+        if (Math.abs(posX - homeX) <= 12 && Math.abs(posY - homeY) <= 16) {
+          posX = homeX; posY = homeY;
+          behavior = 'home_idle';
+          shimeji.classList.remove('is-falling');
+          shimeji.classList.add('is-home-fixed');
+          setFacing(-1);
+          setLumiMood('normal');
+          updateTransform();
+          scheduleBehavior(3000);
+          return;
+        }
+        if (floorInfo.platform && floorInfo.floorY < homeY - 20) {
+          // Çizgiye / karta balonla süzülerek iner, 14 sn durur
+          var pr = floorInfo.platform.el.getBoundingClientRect();
+          var useBottom = Math.abs((pr.top - sz.h + 8) - floorInfo.floorY) > 2;
+          fallPlatformObj = { el: floorInfo.platform.el, useBottom: useBottom, top: pr.top, bottom: pr.bottom, left: pr.left, right: pr.right, width: pr.width, height: pr.height };
+          fallPlatformFloorY = floorInfo.floorY;
+          if (posY > floorInfo.floorY - 40) posY = Math.max(getMinY(), floorInfo.floorY - 40);
+          behavior = 'falling_to_platform';
+          velocityY = 0.6;
+          velocityX = 0;
+          shimeji.classList.add('is-falling');
+          setLumiMood('saskin');
+          updateTransform();
+          return;
+        }
         if (posY < homeY - 15) {
           behavior = 'returning_fall';
-          shimeji.classList.remove('is-walking', 'is-running', 'is-sitting', 'is-hop', 'is-landing', 'is-home-fixed');
           shimeji.classList.add('is-falling');
           velocityY = 0.8;
           velocityX = 0;
           setLumiMood('saskin');
         } else {
-          // Zaten yerdeyse doğrudan sağ alt köşeye koşsun
           posY = homeY;
           behavior = 'returning_run';
           shimeji.classList.add('is-running');
@@ -1838,26 +1866,27 @@
         return;
       }
 
-      // 3. Dashboard: Havada bırakıldıysa BALONLA SÜZÜLEREK DÜŞÜŞ!
-      var floorInfo = findFloorUnder(footX, posY);
-      if (posY < floorInfo.floorY - 15) {
+      // Dashboard: her bırakışta balonlarla altındaki çizgiye / zemine süzülür, sonra kendi kendine gezmeye devam eder
+      if (posY > floorInfo.floorY - 40) posY = Math.max(getMinY(), floorInfo.floorY - 40);
+      if (posY < floorInfo.floorY - 2) {
         behavior = 'falling';
-        shimeji.classList.remove('is-walking', 'is-running', 'is-sitting', 'is-hop', 'is-landing', 'is-climbing');
         shimeji.classList.add('is-falling');
-        velocityY = 0.8;
+        velocityY = 0.6;
         velocityX = 0;
         setLumiMood('saskin');
+        updateTransform();
       } else {
         posY = floorInfo.floorY;
         currentPlatform = floorInfo.platform;
         behavior = 'idle';
+        shimeji.classList.remove('is-falling');
         updateTransform();
-        scheduleBehavior(2000);
+        scheduleBehavior(900);
       }
     }
 
-    shimeji.addEventListener('pointerup', handlePointerUp);
-    shimeji.addEventListener('pointercancel', handlePointerUp);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
 
     // Sayfa Kaydırıldığında: Zemin altından kayınca önce havada asılı kal, sonra aşağı düş!
     window.addEventListener('scroll', function () {
