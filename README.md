@@ -39,3 +39,31 @@ Bilişsel Ayrım ve Hedefler:
 Girişteki Çeldiriciler: Deri koltuk, cam kenarı, sıcak kahve, kalın kaban, çalışan priz.
 Hedef Nesneler: Şemsiye, elma, fotoğraf makinesi, çorap, vida, kalem.
 Soru: Kullanıcı sesi dinledikten sonra masanın üstünde dağınık olduğu belirtilen bu 6 yalın nesneyi ekrandaki kutucuklara yazar. Hatırlanan her doğru kelime için puan verilir.
+
+---
+
+## Puan Algoritması
+
+**1. Soru — Deneysel (Molekül)**
+
+Bu soru doğru mu yanlış mı tipi bir sorudur. Yanlış cevap verilirse direkt 0 puan alır, hiçbir hesap yapılmaz. Doğru cevap verilirse 100 puandan başlanır ve ilk 5 saniye ceza uygulanmaz. Bu ilk 5 saniye, kullanıcının acele etmesini engellemek için bırakılmış bir süredir. 5. saniyeden sonra her geçen saniye için 3 puan kesinti yapılır. Kısmi saniyeler Math.floor ile yuvarlanır, yani 5.9 saniye 5 saniye olarak sayılır. Son olarak Math.max(0, ...) ile puanın hiçbir zaman eksiye düşmesi engellenir. Özetle hızlı ve doğru cevap yüksek puan, yavaş ve doğru cevap orta puan, yanlış cevap ise 0 puan verir.
+
+**2. Soru — Görsel (Hafıza)**
+
+Bu soru göreli sıralama tipidir. Kullanıcı bir diziyi sıralar ve biz bu sıralamadaki komşu çiftlerin kaç tanesinin doğru sırada olduğunu sayarız. Öncelikle hile koruması uygulanır: eğer aynı eleman iki veya daha fazla kez yazılmışsa direkt 0 puan verilir. Bunun sebebi, bir elemanı birkaç kez yazıp diğerlerini atarak kısmi puan kazanmayı engellemektir. Daha sonra komşu çiftler sayılır. Dört eleman varsa üç komşu çifti vardır: birinci ile ikinci, ikinci ile üçüncü, üçüncü ile dördüncü eleman birbirine muhataptır. Her çift için, o elemanın doğru sıralamasındaki bir sonraki elemanın kullanıcının sıralamasındaki bir sonraki elemanla aynı olup olmadığına bakılır. Aynıysa doğru bağ sayacı bir artırılır. Ham puan, doğru bağ sayısının toplam bağ sayısına oranı ile 100 çarpılarak bulunur. Yani üç bağdan ikisi doğruysa puan 66.67 olur. Süre cezası kademeli olarak uygulanır: ilk 5 saniye ceza yoktur, 5 ile 15 saniye arasında her saniye 1 puan kesilir, 15 saniye sonrasında ise 10 sabit puan ve her saniye için ayrıca 3 puan daha kesilir. Bu kademeli yapı, 15 saniyeyi aşmanın ciddi bir zorluk olduğunu ve bu yüzden cezanın ağırlaşması gerektiğini ifade eder.
+
+**3. Soru — Okuma (4 harf sıralama)**
+
+Bu soru da aynı göreli sıralama mantığını kullanır, ancak eleman sayısı sabittir yani dört tanedir. Toplam bağ sayısı üç olarak sabitlenmiştir. Hile koruması aynı şekilde uygulanır ve süre cezası da aynı kademeli yapıyı izler. Tek fark, doğru sıralama dizisinin uzunluğunun tam olarak dört olup olmadığının kontrol edilmesidir. Eğer dörtten farklı bir uzunluk gelirse fonksiyon direkt sıfır döndürür.
+
+**4. Soru — Yazma (2 alt soru)**
+
+Bu soru iki bağımsız doğru yanlış cevabından oluşur ve her biri 50 puan değerindedir. İkisi doğruysa toplam 100 puan, bir tanesi doğruysa 50 puan, ikisi yanlışsa 0 puan elde edilir. Süre cezası yalnızca ham puan sıfırdan büyükse uygulanır, yani ikisi yanlışsa süre cezasına gerek kalmaz çünkü puan zaten sıfırdır. Süre cezasının kendisi yine kademeli olarak hesaplanır: ilk 5 saniye ceza yok, 5 ile 15 saniye arasında her saniye 1 puan, 15 saniye sonrasında 10 sabit puan ve her saniye 3 puan daha kesilir.
+
+**5. Soru — Dinleme (6 kutu)**
+
+Bu soru hatırlama tipidir ve kullanıcının altı nesneden kaçını hatırladığını ölçer. Öncelikle kullanıcı cevapları temizlenir: boş cevaplar atılır, tekrarlar kaldırılır ve tüm cevaplar küçük harfe çevrilip başındaki ve sonundaki boşluklar temizlenir. Daha sonra her cevap için doğruluk kontrolü yapılır. Doğru bir cevap verilirse, hedef cevap sayısına göre hesaplanan eşit bir puan değeri toplam puana eklenir, örneğin altı hedef varsa her doğru cevap 16.67 puan değerindedir. Yanlış cevap verilirse ise ceza uygulanır: ilk altı yanlıştan her biri 3 puan, altıdan sonraki her yanlış ise 5 puan keser. Bunun sebebi, ilk altı yanlışın üretilmiş cevaplar olarak görülmesi ve daha sonraki yanlışların doldurma amaçlı olduğu düşünülmesidir. Son olarak hesaplanan puan, Math.max ve Math.min ile 0 ile 100 arasına sabitlenir, böylece puan hiçbir zaman 100'ü geçemez veya 0'ın altına düşemez.
+
+**Genel Yaklaşım**
+
+Süre cezası yalnızca bilgi tabanlı sorularda uygulanır, çünkü bu sorular ne kadar hızlı hatırlama yaptığını ölçer. Hatırlama sorularında ise süre cezası yoktur çünkü amaç ne kadar hızlı olduğunu değil ne kadar hatırladığını ölçmektir. Hile koruması sıralama sorularında bulunur ve aynı elemanın tekrar yazarak kısmi puan kazanılmasını engeller. Kademeli ceza her yerde aynı mantığı izler: ilk beş saniye bedavadır, beş ile onbeş saniye arası hafif bir ceza uygulanır, onbeş saniye sonrası ise ceza ağırlaşır.
