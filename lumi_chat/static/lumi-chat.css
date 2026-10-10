@@ -626,8 +626,12 @@ html.dark-theme #lumi-root {
 }
 
 .lumi-balloon-group {
-  filter: drop-shadow(10px 10px 0px #111111);
-  transform-origin: 250px 450px;
+  filter: drop-shadow(4px 4px 0px rgba(17,17,17,0.85));
+}
+/* Düşerken gövde zıplamasın: balon, kol ve eller birlikte hareket etsin */
+.lumi-shimeji.is-falling .lumi-character-svg #lumi-master {
+  animation: none !important;
+  transform: none !important;
 }
 
 .lumi-balloon-wrap {
