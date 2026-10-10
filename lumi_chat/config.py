@@ -12,11 +12,14 @@ CONFIG = json.loads((PKG_DIR / "lumi_config.json").read_text(encoding="utf-8"))
 def _load_env():
     """Paket klasöründeki veya bir üst klasördeki .env dosyasını yükler."""
     for env in (PKG_DIR / ".env", PKG_DIR.parent / ".env"):
-        if env.exists():
-            for line in env.read_text(encoding="utf-8").splitlines():
-                if "=" in line and not line.lstrip().startswith("#"):
-                    k, v = line.split("=", 1)
-                    os.environ.setdefault(k.strip(), v.strip().strip("\"'"))
+        try:
+            if env.exists():
+                for line in env.read_text(encoding="utf-8").splitlines():
+                    if "=" in line and not line.lstrip().startswith("#"):
+                        k, v = line.split("=", 1)
+                        os.environ.setdefault(k.strip(), v.strip().strip("\"'"))
+        except Exception:
+            pass
 
 
 _load_env()
